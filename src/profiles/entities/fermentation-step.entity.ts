@@ -1,6 +1,6 @@
 import { Entity, Property, ManyToOne } from '@mikro-orm/core';
 import { FermentationProfile } from './fermentation-profile.entity';
-import { PrimaryKeyUUID } from 'src/database/common/helpers/mikro-orm/PrimaryKeyUUID';
+import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 @Entity()
 export class FermentationStep {

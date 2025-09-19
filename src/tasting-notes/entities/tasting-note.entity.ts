@@ -1,10 +1,10 @@
 import { Entity, Property, ManyToOne, OptionalProps } from '@mikro-orm/core';
 import { User } from 'src/users/entities/user.entity';
 import { Batch } from 'src/batches/entities/batch.entity';
-import { PrimaryKeyUUID } from 'src/database/common/helpers/mikro-orm/PrimaryKeyUUID';
-import { PropertyUpdatedAt } from 'src/database/common/helpers/mikro-orm/PropertyUpdatedAt';
-import { PropertyCreatedAt } from 'src/database/common/helpers/mikro-orm/PropertyCreatedAt';
-import { PropertyDeletedAt } from 'src/database/common/helpers/mikro-orm/PropertyDeletedAt';
+import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
+import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt';
+import { PropertyCreatedAt } from 'src/database/common/helpers/PropertyCreatedAt';
+import { PropertyDeletedAt } from 'src/database/common/helpers/PropertyDeletedAt';
 
 @Entity()
 export class TastingNote {

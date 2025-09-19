@@ -1,5 +1,5 @@
 import { Entity, Property, ManyToOne, Enum } from '@mikro-orm/core';
-import { PrimaryKeyUUID } from 'src/database/common/helpers/mikro-orm/PrimaryKeyUUID';
+import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 import { User } from 'src/users/entities/user.entity';
 
 export enum YeastType {

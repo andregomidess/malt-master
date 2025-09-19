@@ -3,7 +3,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Hop } from 'src/catalog/entities/hop.entity';
 import { Fermentable } from 'src/catalog/entities/fermentable.entity';
 import { Yeast } from 'src/catalog/entities/yeast.entity';
-import { PrimaryKeyUUID } from 'src/database/common/helpers/mikro-orm/PrimaryKeyUUID';
+import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export enum InventoryUnit {
   G = 'g',

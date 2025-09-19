@@ -1,6 +1,6 @@
 import { Entity, Property, ManyToOne, Enum } from '@mikro-orm/core';
 import { User } from 'src/users/entities/user.entity';
-import { PrimaryKeyUUID } from 'src/database/common/helpers/mikro-orm/PrimaryKeyUUID';
+import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export enum FermentableType {
   BASE = 'base',

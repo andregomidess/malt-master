@@ -1,5 +1,5 @@
 import { Entity, Property } from '@mikro-orm/core';
-import { PrimaryKeyUUID } from 'src/database/common/helpers/mikro-orm/PrimaryKeyUUID';
+import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 @Entity()
 export class WaterProfile {

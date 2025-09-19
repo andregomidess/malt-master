@@ -1,6 +1,6 @@
 import { Entity, Property, OneToMany, Collection, Enum } from '@mikro-orm/core';
 import { MashStep } from './mash-step.entity';
-import { PrimaryKeyUUID } from 'src/database/common/helpers/mikro-orm/PrimaryKeyUUID';
+import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export enum MashProfileType {
   INFUSION = 'infusion',

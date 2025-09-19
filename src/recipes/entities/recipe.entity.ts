@@ -8,9 +8,9 @@ import {
 import { User } from 'src/users/entities/user.entity';
 import { BeerStyle } from 'src/catalog/entities/beer-style.entity';
 import { Equipment } from 'src/catalog/entities/equipment.entity';
-import { PropertyCreatedAt } from 'src/database/common/helpers/mikro-orm/PropertyCreatedAt';
-import { PropertyUpdatedAt } from 'src/database/common/helpers/mikro-orm/PropertyUpdatedAt';
-import { PrimaryKeyUUID } from 'src/database/common/helpers/mikro-orm/PrimaryKeyUUID';
+import { PropertyCreatedAt } from 'src/database/common/helpers/PropertyCreatedAt';
+import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt';
+import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export enum RecipeType {
   ALL_GRAIN = 'all_grain',

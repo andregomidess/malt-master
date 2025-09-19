@@ -1,5 +1,5 @@
 import { Entity, Property, Enum } from '@mikro-orm/core';
-import { PrimaryKeyUUID } from 'src/database/common/helpers/mikro-orm/PrimaryKeyUUID';
+import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export enum CarbonationType {
   NATURAL_PRIMING = 'natural_priming',

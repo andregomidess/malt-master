@@ -1,8 +1,8 @@
-import { Entity, OptionalProps, Property } from '@mikro-orm/core';
-import { PropertyCreatedAt } from 'src/database/common/helpers/mikro-orm/PropertyCreatedAt';
-import { PropertyUpdatedAt } from 'src/database/common/helpers/mikro-orm/PropertyUpdatedAt';
-import { PropertyDeletedAt } from 'src/database/common/helpers/mikro-orm/PropertyDeletedAt';
-import { PrimaryKeyUUID } from 'src/database/common/helpers/mikro-orm/PrimaryKeyUUID';
+import { Entity, OptionalProps, Property, Filter } from '@mikro-orm/core';
+import { PropertyCreatedAt } from 'src/database/common/helpers/PropertyCreatedAt';
+import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt';
+import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
+import { PropertyDeletedAt } from 'src/database/common/helpers/PropertyDeletedAt';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -22,6 +22,11 @@ export enum UserGender {
 }
 
 @Entity()
+@Filter({
+  name: 'softDelete',
+  cond: { deletedAt: null },
+  default: true,
+})
 export class User {
   @PrimaryKeyUUID()
   id!: string;
@@ -59,6 +64,15 @@ export class User {
   @Property()
   password!: string;
 
+  @Property({ nullable: true })
+  emailVerificationToken?: string | null;
+
+  @Property({ nullable: true })
+  emailVerifiedAt?: Date | null;
+
+  @Property({ nullable: true })
+  refreshToken?: string | null;
+
   @PropertyCreatedAt()
   createdAt!: Date;
 
@@ -66,7 +80,7 @@ export class User {
   updatedAt!: Date;
 
   @PropertyDeletedAt()
-  deletedAt!: Date;
+  deletedAt!: Date | null;
 
   public readonly [OptionalProps]!: 'updatedAt' | 'deletedAt';
 }

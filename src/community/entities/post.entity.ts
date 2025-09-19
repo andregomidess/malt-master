@@ -1,7 +1,7 @@
 import { Entity, Property, ManyToOne } from '@mikro-orm/core';
 import { User } from 'src/users/entities/user.entity';
-import { PropertyCreatedAt } from 'src/database/common/helpers/mikro-orm/PropertyCreatedAt';
-import { PrimaryKeyUUID } from 'src/database/common/helpers/mikro-orm/PrimaryKeyUUID';
+import { PropertyCreatedAt } from 'src/database/common/helpers/PropertyCreatedAt';
+import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 @Entity()
 export class Post {

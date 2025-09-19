@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { MikroOrmModuleOptions } from '@mikro-orm/nestjs';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { SoftDeleteHandler } from 'mikro-orm-soft-delete';
 
 export const createDatabaseConfig = (
   configService: ConfigService,
@@ -29,17 +30,12 @@ export const createDatabaseConfig = (
     safe: false,
     emit: 'ts',
   },
-
-  // Configuração automática de metadados
   autoLoadEntities: true,
-
-  // Configurações de performance
   pool: {
     min: 2,
     max: 10,
   },
-
-  // Configurações de schema
+  extensions: [SoftDeleteHandler],
   schemaGenerator: {
     disableForeignKeys: false,
     createForeignKeyConstraints: true,

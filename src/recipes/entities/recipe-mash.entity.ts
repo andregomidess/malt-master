@@ -1,7 +1,7 @@
 import { Entity, Property, ManyToOne } from '@mikro-orm/core';
 import { Recipe } from './recipe.entity';
 import { MashProfile } from 'src/profiles/entities/mash-profile.entity';
-import { PrimaryKeyUUID } from 'src/database/common/helpers/mikro-orm/PrimaryKeyUUID';
+import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 @Entity()
 export class RecipeMash {

@@ -2,7 +2,7 @@ import { Entity, Property, ManyToOne, Enum } from '@mikro-orm/core';
 import { User } from 'src/users/entities/user.entity';
 import { Recipe } from 'src/recipes/entities/recipe.entity';
 import { Equipment } from 'src/catalog/entities/equipment.entity';
-import { PrimaryKeyUUID } from 'src/database/common/helpers/mikro-orm/PrimaryKeyUUID';
+import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export enum BatchStatus {
   PLANNED = 'planned',
