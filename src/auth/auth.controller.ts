@@ -37,8 +37,8 @@ export class AuthController {
   }
 
   @Post('refresh')
-  refreshToken(@Body() body: { refreshToken: string }) {
-    return this.authService.refreshAccessToken(body.refreshToken);
+  refreshToken(@Body() body: { refreshToken: string; userId: string }) {
+    return this.authService.refreshAccessToken(body.refreshToken, body.userId);
   }
 
   @Post('logout')
@@ -46,18 +46,4 @@ export class AuthController {
   logout(@Request() req: AuthenticatedRequest) {
     return this.authService.logout(req.user.id);
   }
-
-  // @Get('me')
-  // @UseGuards(JwtAuthGuard)
-  // getProfile(@Request() req: any) {
-  //   return {
-  //     user: {
-  //       id: req.user.id,
-  //       email: req.user.email,
-  //       firstName: req.user.firstName,
-  //       lastName: req.user.lastName,
-  //       status: req.user.status,
-  //     },
-  //   };
-  // }
 }

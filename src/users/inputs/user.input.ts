@@ -43,4 +43,16 @@ export class UserInput {
   @IsString()
   @IsNotEmpty()
   password!: string;
+
+  @IsOptional()
+  @IsString()
+  emailVerificationToken?: string | null;
+
+  @IsOptional()
+  @IsString()
+  emailVerifiedAt?: Date | null;
+
+  @IsOptional()
+  @IsString()
+  refreshToken?: string | null;
 }

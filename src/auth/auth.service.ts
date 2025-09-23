@@ -12,7 +12,7 @@ import argon2 from 'argon2';
 import { AuthLoginInput } from './inputs/AuthLoginInput';
 import { randomBytes } from 'crypto';
 
-interface JwtPayload {
+export interface JwtPayload {
   id: string;
   email: string;
 }
@@ -50,10 +50,10 @@ export class AuthService {
       { expiresIn: '15m' },
     );
 
-    const refreshToken = this.generateRefreshToken();
+    const refreshToken = randomBytes(64).toString('hex');
 
-    // Salvar refresh token no banco
     user.refreshToken = await argon2.hash(refreshToken);
+
     await this.em.persistAndFlush(user);
 
     return {
@@ -81,16 +81,12 @@ export class AuthService {
       parallelism: 1,
     });
 
-    const emailVerificationToken = this.generateEmailVerificationToken();
+    const emailVerificationToken = randomBytes(32).toString('hex');
 
-    const userData = {
-      ...userInput,
-      password: hashedPassword,
-      emailVerificationToken,
-      status: UserStatus.PENDING_VERIFICATION,
-    };
+    userInput.password = hashedPassword;
+    userInput.emailVerificationToken = emailVerificationToken;
 
-    await this.usersService.save(userData);
+    await this.usersService.save(userInput);
 
     // TODO: Enviar email de verificação
     // await this.emailService.sendVerificationEmail(userInput.email, emailVerificationToken);
@@ -98,7 +94,6 @@ export class AuthService {
     return {
       message:
         'User registered successfully. Please check your email to verify your account.',
-      verificationToken: emailVerificationToken, // Remover em produção
     };
   }
 
@@ -112,20 +107,18 @@ export class AuthService {
       throw new BadRequestException('Invalid or expired verification token');
     }
 
-    // Verificar e ativar conta
     user.emailVerifiedAt = new Date();
     user.emailVerificationToken = null;
     user.status = UserStatus.ACTIVE;
 
     await this.em.persistAndFlush(user);
 
-    // Gerar tokens para login automático
     const accessToken = this.jwtService.sign(
       { id: user.id, email: user.email },
       { expiresIn: '15m' },
     );
 
-    const refreshToken = this.generateRefreshToken();
+    const refreshToken = randomBytes(64).toString('hex');
     user.refreshToken = await argon2.hash(refreshToken);
     await this.em.persistAndFlush(user);
 
@@ -143,36 +136,43 @@ export class AuthService {
     };
   }
 
-  async refreshAccessToken(refreshToken: string) {
+  async refreshAccessToken(refreshToken: string, userId: string) {
     if (!refreshToken) {
       throw new UnauthorizedException('Refresh token is required');
     }
 
-    const users = await this.em.find(User, { refreshToken: { $ne: null } });
-    let user: User | null = null;
-
-    for (const u of users) {
-      if (
-        u.refreshToken &&
-        (await argon2.verify(u.refreshToken, refreshToken))
-      ) {
-        user = u;
-        break;
-      }
+    if (!userId) {
+      throw new UnauthorizedException('User ID is required');
     }
 
+    const user = await this.em.findOne(User, {
+      id: userId,
+      status: UserStatus.ACTIVE,
+    });
+
     if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    if (!user.refreshToken) {
+      throw new UnauthorizedException('No refresh token found for user');
+    }
+
+    const isRefreshTokenValid = await argon2.verify(
+      user.refreshToken,
+      refreshToken,
+    );
+
+    if (!isRefreshTokenValid) {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    // Gerar novo access token
     const accessToken = this.jwtService.sign(
       { id: user.id, email: user.email },
       { expiresIn: '15m' },
     );
 
-    // Gerar novo refresh token
-    const newRefreshToken = this.generateRefreshToken();
+    const newRefreshToken = randomBytes(64).toString('hex');
     user.refreshToken = await argon2.hash(newRefreshToken);
     await this.em.persistAndFlush(user);
 
@@ -191,24 +191,10 @@ export class AuthService {
     return { message: 'Logged out successfully' };
   }
 
-  private generateEmailVerificationToken(): string {
-    return randomBytes(32).toString('hex');
-  }
-
-  private generateRefreshToken(): string {
-    return randomBytes(64).toString('hex');
-  }
-
   async validateUser(payload: JwtPayload): Promise<User> {
-    const user = await this.em.findOne(User, {
+    return await this.em.findOneOrFail(User, {
       id: payload.id,
       status: UserStatus.ACTIVE,
     });
-
-    if (!user) {
-      throw new UnauthorizedException('User not found or inactive');
-    }
-
-    return user;
   }
 }
