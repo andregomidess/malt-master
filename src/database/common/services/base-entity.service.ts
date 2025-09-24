@@ -4,18 +4,24 @@ import {
   FilterQuery,
   RequiredEntityData,
 } from '@mikro-orm/core';
+import { BadRequestException } from '@nestjs/common';
 
 interface BaseEntity {
   id?: string;
   createdAt?: Date;
-  updatedAt?: Date;
+  updatedAt?: Date | null;
   deletedAt?: Date | null;
 }
+
+type EntityResolver<T extends BaseEntity> = (
+  data: Partial<T>,
+) => EntityClass<T>;
 
 export abstract class BaseEntityService<T extends BaseEntity> {
   constructor(
     protected readonly em: EntityManager,
     protected readonly entityClass: EntityClass<T>,
+    private readonly entityResolver?: EntityResolver<T>,
   ) {}
 
   async save(data: Partial<T> & { id?: string }): Promise<T> {
@@ -31,8 +37,12 @@ export abstract class BaseEntityService<T extends BaseEntity> {
       }
     }
 
+    const entityClass = this.entityResolver
+      ? this.entityResolver(data)
+      : this.entityClass;
+
     const newEntity = this.em.create(
-      this.entityClass,
+      entityClass,
       data as RequiredEntityData<T>,
     );
 
@@ -50,5 +60,30 @@ export abstract class BaseEntityService<T extends BaseEntity> {
     return await this.em.findOneOrFail(this.entityClass, {
       id,
     } as FilterQuery<T>);
+  }
+
+  async softDelete(id: string): Promise<T> {
+    const entity = await this.findByIdOrFail(id);
+
+    if (entity.deletedAt)
+      throw new BadRequestException('Entity is already deleted');
+    entity.deletedAt = new Date();
+
+    await this.em.persistAndFlush(entity);
+
+    return entity;
+  }
+
+  async recovery(id: string): Promise<T> {
+    const entity = await this.findByIdOrFail(id);
+
+    if (!entity.deletedAt)
+      throw new BadRequestException('Entity is not deleted');
+
+    entity.deletedAt = null;
+
+    await this.em.persistAndFlush(entity);
+
+    return entity;
   }
 }
