@@ -5,8 +5,8 @@ import {
   Get,
   Param,
   Delete,
-  Post,
   UseGuards,
+  Patch,
 } from '@nestjs/common';
 import { EquipmentService } from '../services/equipment.service';
 import { type EquipmentInputUnion } from '../inputs/equipment.input';
@@ -58,7 +58,7 @@ export class EquipmentController {
     return await this.equipmentService.softDelete(id);
   }
 
-  @Post(':id/recovery')
+  @Patch(':id/recovery')
   @UseGuards(JwtAuthGuard)
   async recoveryEquipment(@Param('id') id: string) {
     return await this.equipmentService.recovery(id);

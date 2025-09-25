@@ -1,9 +1,8 @@
 import { Controller } from '@nestjs/common';
-import { TastingNotesService } from './tasting-notes.service';
 
 @Controller('tasting-notes')
 export class TastingNotesController {
-  constructor(private readonly tastingNotesService: TastingNotesService) {}
+  constructor() {}
 
   // TODO: Implementar endpoints de notas de degustação
   // - GET /tasting-notes (listar notas do usuário)

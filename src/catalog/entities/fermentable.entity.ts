@@ -1,4 +1,13 @@
-import { Entity, Property, ManyToOne, Enum } from '@mikro-orm/core';
+import {
+  Entity,
+  Property,
+  ManyToOne,
+  Enum,
+  OptionalProps,
+} from '@mikro-orm/core';
+import { PropertyDeletedAt } from 'src/database/common/helpers/PropertyDeletedAt';
+import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt';
+import { PropertyCreatedAt } from 'src/database/common/helpers/PropertyCreatedAt';
 import { User } from 'src/users/entities/user.entity';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
@@ -22,7 +31,7 @@ export class Fermentable {
   id!: string;
 
   @ManyToOne(() => User, { nullable: true })
-  user!: User;
+  user!: User | null;
 
   @Property({ unique: true })
   name!: string;
@@ -47,4 +56,15 @@ export class Fermentable {
 
   @Property({ type: 'text', nullable: true })
   notes!: string | null;
+
+  @PropertyCreatedAt()
+  createdAt!: Date;
+
+  @PropertyUpdatedAt()
+  updatedAt!: Date | null;
+
+  @PropertyDeletedAt()
+  deletedAt!: Date | null;
+
+  public readonly [OptionalProps]!: 'updatedAt' | 'deletedAt';
 }

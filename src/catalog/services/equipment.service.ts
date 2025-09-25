@@ -40,16 +40,4 @@ export class EquipmentService extends BaseEntityService<Equipment> {
   async findByType<T extends Equipment>(type: EquipmentType): Promise<T[]> {
     return (await this.em.find(Equipment, { type })) as T[];
   }
-
-  override async findById(id: string): Promise<Equipment | null> {
-    return await super.findById(id);
-  }
-
-  override async softDelete(id: string): Promise<Equipment> {
-    return await super.softDelete(id);
-  }
-
-  override async recovery(id: string): Promise<Equipment> {
-    return await super.recovery(id);
-  }
 }

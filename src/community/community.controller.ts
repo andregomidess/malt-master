@@ -1,9 +1,8 @@
 import { Controller } from '@nestjs/common';
-import { CommunityService } from './community.service';
 
 @Controller('community')
 export class CommunityController {
-  constructor(private readonly communityService: CommunityService) {}
+  constructor() {}
 
   // TODO: Implementar endpoints de comunidade
   // - GET /community/posts (listar posts)

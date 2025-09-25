@@ -48,7 +48,7 @@ export enum ChillerType {
   ICE_BATH = 'ice_bath',
 }
 
-@Entity({ abstract: true })
+@Entity()
 export abstract class Equipment {
   @PrimaryKeyUUID()
   id!: string;
@@ -56,7 +56,7 @@ export abstract class Equipment {
   @ManyToOne(() => User, { nullable: true })
   user!: User | null;
 
-  @Property()
+  @Property({ unique: true })
   name!: string;
 
   @Property({ type: 'text', nullable: true })
