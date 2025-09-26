@@ -1,35 +1,33 @@
-import { Entity, Property, ManyToOne, Enum } from '@mikro-orm/core';
+import { Entity, Property, ManyToOne } from '@mikro-orm/core';
 import { User } from 'src/users/entities/user.entity';
+import { Fermentable } from 'src/catalog/entities/fermentable.entity';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 import { PropertyCreatedAt } from 'src/database/common/helpers/PropertyCreatedAt';
 import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt';
 
-export enum InventoryType {
-  HOP = 'hop',
-  FERMENTABLE = 'fermentable',
-  YEAST = 'yeast',
+export enum FermentableInventoryUnit {
+  G = 'g',
+  KG = 'kg',
+  LB = 'lb', // Libras para maltes
+  SACK = 'sack', // Sacos
 }
 
 @Entity()
-export class Inventory {
+export class FermentableInventory {
   @PrimaryKeyUUID()
   id!: string;
 
   @ManyToOne(() => User)
   user!: User;
 
-  @Enum(() => InventoryType)
-  type!: InventoryType;
-
-  // Referência para a entidade específica
-  @Property()
-  specificInventoryId!: string;
+  @ManyToOne(() => Fermentable)
+  fermentable!: Fermentable;
 
   @Property({ type: 'decimal' })
   quantity!: number;
 
   @Property()
-  unit!: string;
+  unit!: FermentableInventoryUnit;
 
   @Property({ type: 'date', nullable: true })
   purchaseDate!: Date | null;
@@ -43,14 +41,22 @@ export class Inventory {
   @Property({ type: 'text', nullable: true })
   notes!: string | null;
 
+  // Propriedades específicas de fermentáveis
+  @Property({ type: 'decimal', nullable: true })
+  extractPotential!: number | null; // Potencial de extração
+
+  @Property({ nullable: true })
+  lotNumber!: string | null;
+
+  @Property({ type: 'decimal', nullable: true })
+  moisture!: number | null; // % de umidade
+
+  @Property({ type: 'decimal', nullable: true })
+  protein!: number | null; // % de proteína
+
   @PropertyCreatedAt()
   createdAt!: Date;
 
   @PropertyUpdatedAt()
   updatedAt!: Date;
-
-  // Método helper para valor total
-  get totalValue(): number {
-    return (this.costPerUnit || 0) * this.quantity;
-  }
 }
