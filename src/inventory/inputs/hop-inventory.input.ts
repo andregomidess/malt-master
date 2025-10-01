@@ -6,13 +6,16 @@ import {
   IsDateString,
   IsString,
   Min,
+  Max,
+  IsInt,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { User } from 'src/users/entities/user.entity';
-import { InventoryType } from '../entities/inventory.entity';
+import { Hop } from 'src/catalog/entities/hop.entity';
+import { HopInventoryUnit } from '../entities/hop-inventory.entity';
 import { TransformIfEntityExists } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
 
-export class InventoryInput {
+export class HopInventoryInput {
   @IsOptional()
   @IsUUID()
   id?: string;
@@ -20,19 +23,16 @@ export class InventoryInput {
   @TransformIfEntityExists({ entity: User })
   user!: User;
 
-  @IsEnum(InventoryType)
-  type!: InventoryType;
-
-  @IsUUID()
-  specificInventoryId!: string;
+  @TransformIfEntityExists({ entity: Hop })
+  hop!: Hop;
 
   @IsNumber({ maxDecimalPlaces: 3 })
   @Min(0)
   @Type(() => Number)
   quantity!: number;
 
-  @IsString()
-  unit!: string;
+  @IsEnum(HopInventoryUnit)
+  unit!: HopInventoryUnit;
 
   @IsOptional()
   @IsDateString()
@@ -51,4 +51,22 @@ export class InventoryInput {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  @Max(30)
+  @Type(() => Number)
+  alphaAcidsAtPurchase?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1900)
+  @Max(new Date().getFullYear() + 1)
+  @Type(() => Number)
+  harvestYear?: number;
+
+  @IsOptional()
+  @IsString()
+  storageCondition?: string;
 }

@@ -10,15 +10,16 @@ import {
   FermentableType,
 } from '../entities/fermentable.entity';
 import { Type } from 'class-transformer';
+import { TransformIfEntityExists } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
+import { User } from 'src/users/entities/user.entity';
 
 export class FermentableInput {
   @IsUUID()
   @IsOptional()
   id?: string;
 
-  @IsUUID()
-  @IsOptional()
-  userId?: string;
+  @TransformIfEntityExists({ entity: User, optional: true })
+  user?: User;
 
   @IsString()
   name!: string;

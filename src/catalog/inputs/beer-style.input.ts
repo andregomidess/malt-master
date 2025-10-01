@@ -7,6 +7,8 @@ import {
   IsUUID,
 } from 'class-validator';
 import { BeerTag, GlasswareType } from '../entities/beer-style.entity';
+import { User } from 'src/users/entities/user.entity';
+import { TransformIfEntityExists } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
 
 export class BeerStyleInput {
   @IsUUID()
@@ -16,9 +18,8 @@ export class BeerStyleInput {
   @IsString()
   name!: string;
 
-  @IsUUID()
-  @IsOptional()
-  userId?: string;
+  @TransformIfEntityExists({ entity: User, optional: true })
+  user?: User;
 
   @IsOptional()
   @IsString()

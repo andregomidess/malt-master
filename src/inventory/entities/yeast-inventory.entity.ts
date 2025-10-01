@@ -41,21 +41,20 @@ export class YeastInventory {
   @Property({ type: 'text', nullable: true })
   notes!: string | null;
 
-  // Propriedades específicas de levedura
   @Property({ type: 'date', nullable: true })
-  productionDate!: Date | null; // Data de produção
+  productionDate!: Date | null;
 
   @Property({ type: 'decimal', nullable: true })
-  viability!: number | null; // % de viabilidade
+  viability!: number | null;
 
   @Property({ type: 'bigint', nullable: true })
-  cellCount!: number | null; // Contagem de células
+  cellCount!: number | null;
 
   @Property({ nullable: true })
-  starter!: boolean | null; // Se precisa de starter
+  starter!: boolean | null;
 
   @Property({ type: 'decimal', nullable: true })
-  pitchingRate!: number | null; // Taxa de inoculação recomendada
+  pitchingRate!: number | null;
 
   @PropertyCreatedAt()
   createdAt!: Date;

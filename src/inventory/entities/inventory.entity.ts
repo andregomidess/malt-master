@@ -21,7 +21,6 @@ export class Inventory {
   @Enum(() => InventoryType)
   type!: InventoryType;
 
-  // Referência para a entidade específica
   @Property()
   specificInventoryId!: string;
 
@@ -49,7 +48,6 @@ export class Inventory {
   @PropertyUpdatedAt()
   updatedAt!: Date;
 
-  // Método helper para valor total
   get totalValue(): number {
     return (this.costPerUnit || 0) * this.quantity;
   }

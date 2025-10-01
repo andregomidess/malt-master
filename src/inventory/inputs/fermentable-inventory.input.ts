@@ -6,13 +6,15 @@ import {
   IsDateString,
   IsString,
   Min,
+  Max,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { User } from 'src/users/entities/user.entity';
-import { InventoryType } from '../entities/inventory.entity';
+import { Fermentable } from 'src/catalog/entities/fermentable.entity';
+import { FermentableInventoryUnit } from '../entities/fermentable-inventory.entity';
 import { TransformIfEntityExists } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
 
-export class InventoryInput {
+export class FermentableInventoryInput {
   @IsOptional()
   @IsUUID()
   id?: string;
@@ -20,19 +22,16 @@ export class InventoryInput {
   @TransformIfEntityExists({ entity: User })
   user!: User;
 
-  @IsEnum(InventoryType)
-  type!: InventoryType;
-
-  @IsUUID()
-  specificInventoryId!: string;
+  @TransformIfEntityExists({ entity: Fermentable })
+  fermentable!: Fermentable;
 
   @IsNumber({ maxDecimalPlaces: 3 })
   @Min(0)
   @Type(() => Number)
   quantity!: number;
 
-  @IsString()
-  unit!: string;
+  @IsEnum(FermentableInventoryUnit)
+  unit!: FermentableInventoryUnit;
 
   @IsOptional()
   @IsDateString()
@@ -51,4 +50,29 @@ export class InventoryInput {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  @Max(100)
+  @Type(() => Number)
+  extractPotential?: number;
+
+  @IsOptional()
+  @IsString()
+  lotNumber?: string;
+
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  @Max(100)
+  @Type(() => Number)
+  moisture?: number;
+
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  @Max(100)
+  @Type(() => Number)
+  protein?: number;
 }

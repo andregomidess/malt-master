@@ -8,8 +8,8 @@ import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt
 export enum FermentableInventoryUnit {
   G = 'g',
   KG = 'kg',
-  LB = 'lb', // Libras para maltes
-  SACK = 'sack', // Sacos
+  LB = 'lb',
+  SACK = 'sack',
 }
 
 @Entity()
@@ -41,18 +41,17 @@ export class FermentableInventory {
   @Property({ type: 'text', nullable: true })
   notes!: string | null;
 
-  // Propriedades específicas de fermentáveis
   @Property({ type: 'decimal', nullable: true })
-  extractPotential!: number | null; // Potencial de extração
+  extractPotential!: number | null;
 
   @Property({ nullable: true })
   lotNumber!: string | null;
 
   @Property({ type: 'decimal', nullable: true })
-  moisture!: number | null; // % de umidade
+  moisture!: number | null;
 
   @Property({ type: 'decimal', nullable: true })
-  protein!: number | null; // % de proteína
+  protein!: number | null;
 
   @PropertyCreatedAt()
   createdAt!: Date;

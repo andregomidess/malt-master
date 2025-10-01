@@ -8,7 +8,7 @@ import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt
 export enum HopInventoryUnit {
   G = 'g',
   KG = 'kg',
-  OZ = 'oz', // Onças para lúpulos
+  OZ = 'oz',
 }
 
 @Entity()
@@ -35,20 +35,19 @@ export class HopInventory {
   bestBeforeDate!: Date | null;
 
   @Property({ type: 'decimal', nullable: true })
-  costPerUnit!: number | null; // Custo por grama/kg
+  costPerUnit!: number | null;
 
   @Property({ type: 'text', nullable: true })
   notes!: string | null;
 
-  // Propriedades específicas de lúpulo
   @Property({ type: 'decimal', nullable: true })
-  alphaAcidsAtPurchase!: number | null; // AA% no momento da compra
+  alphaAcidsAtPurchase!: number | null;
 
   @Property({ nullable: true })
   harvestYear!: number | null;
 
   @Property({ nullable: true })
-  storageCondition!: string | null; // Freezer, geladeira, etc.
+  storageCondition!: string | null;
 
   @PropertyCreatedAt()
   createdAt!: Date;

@@ -8,6 +8,8 @@ import {
 import { Type } from 'class-transformer';
 import { HopForm } from '../entities/hop.entity';
 import { HopUse } from '../entities/hop.entity';
+import { TransformIfEntityExists } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
+import { User } from 'src/users/entities/user.entity';
 
 export class HopInput {
   @IsUUID()
@@ -17,9 +19,8 @@ export class HopInput {
   @IsString()
   name!: string;
 
-  @IsUUID()
-  @IsOptional()
-  userId?: string;
+  @TransformIfEntityExists({ entity: User, optional: true })
+  user?: User;
 
   @Type(() => Number)
   @IsNumber({ maxDecimalPlaces: 2 })
