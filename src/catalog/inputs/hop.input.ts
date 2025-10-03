@@ -8,7 +8,7 @@ import {
 import { Type } from 'class-transformer';
 import { HopForm } from '../entities/hop.entity';
 import { HopUse } from '../entities/hop.entity';
-import { TransformIfEntityExists } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
+import { IsEntity } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
 import { User } from 'src/users/entities/user.entity';
 
 export class HopInput {
@@ -19,7 +19,8 @@ export class HopInput {
   @IsString()
   name!: string;
 
-  @TransformIfEntityExists({ entity: User, optional: true })
+  @IsEntity({ entity: User })
+  @IsOptional()
   user?: User;
 
   @Type(() => Number)

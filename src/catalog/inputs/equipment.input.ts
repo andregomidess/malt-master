@@ -15,14 +15,15 @@ import {
   HeatingSource,
 } from '../entities/equipment.entity';
 import { User } from 'src/users/entities/user.entity';
-import { TransformIfEntityExists } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
+import { IsEntity } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
 
 export class EquipmentInput<TType extends EquipmentType> {
   @IsOptional()
   @IsUUID()
   id?: string;
 
-  @TransformIfEntityExists({ entity: User, optional: true })
+  @IsOptional()
+  @IsEntity({ entity: User })
   user?: User;
 
   @IsString()

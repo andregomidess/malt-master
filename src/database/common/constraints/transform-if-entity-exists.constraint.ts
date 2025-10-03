@@ -8,7 +8,6 @@ import { Injectable } from '@nestjs/common';
 
 export interface TransformIfEntityExistsOptions<Entity extends object> {
   entity: EntityClass<Entity>;
-  optional?: boolean;
 }
 
 @ValidatorConstraint({ name: 'transformIfEntityExists', async: true })

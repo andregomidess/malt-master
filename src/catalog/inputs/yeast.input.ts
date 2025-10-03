@@ -8,7 +8,7 @@ import {
 import { YeastFormat, YeastType } from '../entities/yeast.entity';
 import { Type } from 'class-transformer';
 import { YeastFlocculation } from '../entities/yeast.entity';
-import { TransformIfEntityExists } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
+import { IsEntity } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
 import { User } from 'src/users/entities/user.entity';
 
 export class YeastInput {
@@ -19,7 +19,8 @@ export class YeastInput {
   @IsString()
   name!: string;
 
-  @TransformIfEntityExists({ entity: User, optional: true })
+  @IsEntity({ entity: User })
+  @IsOptional()
   user?: User;
 
   @IsEnum(YeastType)

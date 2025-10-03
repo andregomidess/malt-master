@@ -1,21 +1,14 @@
-import {
-  registerDecorator,
-  ValidationOptions,
-  IsUUID,
-  IsOptional,
-} from 'class-validator';
+import { registerDecorator, ValidationOptions, IsUUID } from 'class-validator';
 import {
   TransformIfEntityExistsConstraint,
   TransformIfEntityExistsOptions,
 } from '../constraints/transform-if-entity-exists.constraint';
 
-export function TransformIfEntityExists<Entity extends object>(
-  options: TransformIfEntityExistsOptions<Entity> & { optional?: boolean },
+export function IsEntity<Entity extends object>(
+  options: TransformIfEntityExistsOptions<Entity>,
   validationOptions?: ValidationOptions,
 ) {
   return function (target: object, propertyName: string) {
-    if (options.optional) IsOptional()(target, propertyName);
-
     IsUUID()(target, propertyName);
 
     registerDecorator({

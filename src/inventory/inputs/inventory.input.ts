@@ -1,54 +1,12 @@
-import {
-  IsOptional,
-  IsUUID,
-  IsNumber,
-  IsEnum,
-  IsDateString,
-  IsString,
-  Min,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsOptional, IsUUID } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
-import { InventoryType } from '../entities/inventory.entity';
-import { TransformIfEntityExists } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
+import { IsEntity } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
 
 export class InventoryInput {
   @IsOptional()
   @IsUUID()
   id?: string;
 
-  @TransformIfEntityExists({ entity: User })
+  @IsEntity({ entity: User })
   user!: User;
-
-  @IsEnum(InventoryType)
-  type!: InventoryType;
-
-  @IsUUID()
-  specificInventoryId!: string;
-
-  @IsNumber({ maxDecimalPlaces: 3 })
-  @Min(0)
-  @Type(() => Number)
-  quantity!: number;
-
-  @IsString()
-  unit!: string;
-
-  @IsOptional()
-  @IsDateString()
-  purchaseDate?: Date;
-
-  @IsOptional()
-  @IsDateString()
-  bestBeforeDate?: Date;
-
-  @IsOptional()
-  @IsNumber({ maxDecimalPlaces: 2 })
-  @Min(0)
-  @Type(() => Number)
-  costPerUnit?: number;
-
-  @IsOptional()
-  @IsString()
-  notes?: string;
 }
