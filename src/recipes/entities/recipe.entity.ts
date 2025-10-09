@@ -4,6 +4,9 @@ import {
   ManyToOne,
   Enum,
   OptionalProps,
+  OneToOne,
+  OneToMany,
+  Collection,
 } from '@mikro-orm/core';
 import { User } from 'src/users/entities/user.entity';
 import { BeerStyle } from 'src/catalog/entities/beer-style.entity';
@@ -11,6 +14,13 @@ import { Equipment } from 'src/catalog/entities/equipment.entity';
 import { PropertyCreatedAt } from 'src/database/common/helpers/PropertyCreatedAt';
 import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
+import { RecipeCarbonation } from './recipe-carbonation.entity';
+import { RecipeFermentation } from './recipe-fermentation.entity';
+import { RecipeMash } from './recipe-mash.entity';
+import { RecipeFermentable } from './recipe-fermentable.entity';
+import { RecipeHop } from './recipe-hop.entity';
+import { RecipeYeast } from './recipe-yeast.entity';
+import { RecipeWater } from './recipe-water.entity';
 
 export enum RecipeType {
   ALL_GRAIN = 'all_grain',
@@ -31,6 +41,47 @@ export class Recipe {
 
   @ManyToOne(() => Equipment, { nullable: true })
   equipment!: Equipment | null;
+
+  @OneToOne(() => RecipeMash, (recipeMash) => recipeMash.recipe, {
+    nullable: true,
+  })
+  mash?: RecipeMash;
+
+  @OneToOne(
+    () => RecipeFermentation,
+    (recipeFermentation) => recipeFermentation.recipe,
+    { nullable: true },
+  )
+  fermentation?: RecipeFermentation;
+
+  @OneToOne(
+    () => RecipeCarbonation,
+    (recipeCarbonation) => recipeCarbonation.recipe,
+    { nullable: true },
+  )
+  carbonation?: RecipeCarbonation;
+
+  @OneToMany(
+    () => RecipeFermentable,
+    (recipeFermentable) => recipeFermentable.recipe,
+    { orphanRemoval: true },
+  )
+  fermentables = new Collection<RecipeFermentable>(this);
+
+  @OneToMany(() => RecipeHop, (recipeHop) => recipeHop.recipe, {
+    orphanRemoval: true,
+  })
+  hops = new Collection<RecipeHop>(this);
+
+  @OneToMany(() => RecipeYeast, (recipeYeast) => recipeYeast.recipe, {
+    orphanRemoval: true,
+  })
+  yeasts = new Collection<RecipeYeast>(this);
+
+  @OneToMany(() => RecipeWater, (recipeWater) => recipeWater.recipe, {
+    orphanRemoval: true,
+  })
+  waters = new Collection<RecipeWater>(this);
 
   @Property()
   name!: string;
@@ -83,5 +134,5 @@ export class Recipe {
   @Property({ type: 'date', nullable: true })
   brewDate!: Date | null;
 
-  public readonly [OptionalProps]!: 'updatedAt';
+  public readonly [OptionalProps]!: 'createdAt' | 'updatedAt';
 }

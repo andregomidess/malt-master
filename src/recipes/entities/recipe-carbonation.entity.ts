@@ -1,4 +1,10 @@
-import { Entity, Property, ManyToOne } from '@mikro-orm/core';
+import {
+  Entity,
+  Property,
+  ManyToOne,
+  OneToOne,
+  Cascade,
+} from '@mikro-orm/core';
 import { Recipe } from './recipe.entity';
 import { CarbonationProfile } from 'src/profiles/entities/carbonation-profile.entity';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
@@ -8,18 +14,18 @@ export class RecipeCarbonation {
   @PrimaryKeyUUID()
   id!: string;
 
-  @ManyToOne(() => Recipe)
+  @OneToOne(() => Recipe, { owner: true, cascade: [Cascade.REMOVE] })
   recipe!: Recipe;
 
   @ManyToOne(() => CarbonationProfile)
-  carbonation_profile!: CarbonationProfile;
+  carbonationProfile!: CarbonationProfile;
 
   @Property({ nullable: true })
-  amount_used!: string | null;
+  amountUsed!: string | null;
 
   @Property({ type: 'decimal', nullable: true })
   temperature!: number | null;
 
   @Property({ type: 'decimal', nullable: true })
-  co2_volumes!: number | null;
+  co2Volumes!: number | null;
 }

@@ -14,10 +14,6 @@ import { HopInventoryItem } from './hop-inventory-item.entity';
 import { YeastInventoryItem } from './yeast-inventory-item.entity';
 import { BaseInventoryItem } from './base-inventory-item.entity';
 
-/**
- * Representa o inventário único de um usuário
- * Contém todos os itens de ingredientes para produção de cerveja
- */
 @Entity()
 export class Inventory {
   @PrimaryKeyUUID()
@@ -49,9 +45,6 @@ export class Inventory {
     | 'itemsNearExpiry'
     | 'expiredItems';
 
-  /**
-   * Calcula o valor total do inventário
-   */
   get totalValue(): number {
     const fermentableValue = this.fermentableItems
       .getItems()
@@ -66,9 +59,6 @@ export class Inventory {
     return fermentableValue + hopValue + yeastValue;
   }
 
-  /**
-   * Conta o total de itens no inventário
-   */
   get totalItems(): number {
     return (
       this.fermentableItems.length +
@@ -77,9 +67,6 @@ export class Inventory {
     );
   }
 
-  /**
-   * Obtém todos os itens próximos do vencimento
-   */
   get itemsNearExpiry(): BaseInventoryItem[] {
     const allItems = [
       ...this.fermentableItems.getItems(),
@@ -90,9 +77,6 @@ export class Inventory {
     return allItems.filter((item) => item.isNearExpiry);
   }
 
-  /**
-   * Obtém todos os itens vencidos
-   */
   get expiredItems(): BaseInventoryItem[] {
     const allItems = [
       ...this.fermentableItems.getItems(),

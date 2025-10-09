@@ -38,7 +38,7 @@ export class InventoryController {
   @Get('search')
   async searchInventoryItems(
     @Request() req: AuthenticatedRequest,
-    @Query('q') searchTerm: string,
+    @Query('search') searchTerm: string,
   ) {
     return await this.inventoryService.searchInventoryItems(
       req.user.id,
@@ -118,6 +118,6 @@ export class InventoryController {
     @Param('id') itemId: string,
   ) {
     await this.inventoryService.removeItem(req.user.id, itemId);
-    return { message: 'Item removido com sucesso' };
+    return { message: 'Item removed successfully' };
   }
 }

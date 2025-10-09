@@ -12,7 +12,7 @@ export class RecipeWater {
   recipe!: Recipe;
 
   @ManyToOne(() => WaterProfile)
-  water_profile!: WaterProfile;
+  waterProfile!: WaterProfile;
 
   @Property({ type: 'decimal', nullable: true })
   volume!: number | null;

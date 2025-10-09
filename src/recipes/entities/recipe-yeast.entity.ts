@@ -24,7 +24,7 @@ export class RecipeYeast {
   amount!: string | null;
 
   @Property({ nullable: true })
-  pitching_rate!: string | null;
+  pitchingRate!: string | null;
 
   @Enum(() => YeastStage)
   stage!: YeastStage;

@@ -24,7 +24,7 @@ export class RecipeHop {
   amount!: number | null;
 
   @Property({ nullable: true })
-  boil_time!: number | null;
+  boilTime!: number | null;
 
   @Enum(() => HopStage)
   stage!: HopStage;

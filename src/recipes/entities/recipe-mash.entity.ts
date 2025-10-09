@@ -1,4 +1,10 @@
-import { Entity, Property, ManyToOne } from '@mikro-orm/core';
+import {
+  Entity,
+  Property,
+  ManyToOne,
+  OneToOne,
+  Cascade,
+} from '@mikro-orm/core';
 import { Recipe } from './recipe.entity';
 import { MashProfile } from 'src/profiles/entities/mash-profile.entity';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
@@ -8,12 +14,12 @@ export class RecipeMash {
   @PrimaryKeyUUID()
   id!: string;
 
-  @ManyToOne(() => Recipe)
+  @OneToOne(() => Recipe, { owner: true, cascade: [Cascade.REMOVE] })
   recipe!: Recipe;
 
   @ManyToOne(() => MashProfile)
-  mash_profile!: MashProfile;
+  mashProfile!: MashProfile;
 
   @Property({ type: 'decimal', nullable: true })
-  actual_efficiency!: number | null;
+  actualEfficiency!: number | null;
 }
