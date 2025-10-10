@@ -42,7 +42,18 @@ export class RecipesController {
     return await this.em.findOneOrFail(
       Recipe,
       { id, user: req.user.id },
-      { populate: ['fermentables', 'hops', 'yeasts', 'waters'] },
+      {
+        populate: [
+          'fermentables',
+          'fermentables.fermentable',
+          'hops',
+          'hops.hop',
+          'yeasts',
+          'yeasts.yeast',
+          'waters',
+          'waters.waterProfile',
+        ],
+      },
     );
   }
 

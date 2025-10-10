@@ -14,29 +14,25 @@ export class RecipeUpsertInput {
   @Type(() => RecipeInput)
   recipe!: RecipeInput;
 
-  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => RecipeFermentableInput)
-  fermentables?: RecipeFermentableInput[];
+  fermentables: RecipeFermentableInput[] = [];
 
-  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => RecipeHopInput)
-  hops?: RecipeHopInput[];
+  hops: RecipeHopInput[] = [];
 
-  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => RecipeYeastInput)
-  yeasts?: RecipeYeastInput[];
+  yeasts: RecipeYeastInput[] = [];
 
-  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => RecipeWaterInput)
-  waters?: RecipeWaterInput[];
+  waters: RecipeWaterInput[] = [];
 
   @IsOptional()
   @ValidateNested()

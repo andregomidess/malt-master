@@ -4,7 +4,6 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsUUID,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { RecipeType } from '../entities/recipe.entity';
@@ -12,10 +11,10 @@ import { IsEntity } from 'src/database/common/decorators/transform-if-entity-exi
 import { User } from 'src/users/entities/user.entity';
 import { BeerStyle } from 'src/catalog/entities/beer-style.entity';
 import { Equipment } from 'src/catalog/entities/equipment.entity';
+import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export class RecipeInput {
-  @IsUUID()
-  @IsOptional()
+  @PrimaryKeyUUID()
   id?: string;
 
   @IsEntity({ entity: User })
