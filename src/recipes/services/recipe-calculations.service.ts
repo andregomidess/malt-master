@@ -2,32 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Recipe } from '../entities/recipe.entity';
 import { RecipeFermentable } from '../entities/recipe-fermentable.entity';
 import { RecipeHop, HopStage } from '../entities/recipe-hop.entity';
-
-const BREWING_CONSTANTS = {
-  DEFAULT_EFFICIENCY: 70,
-
-  DEFAULT_VOLUME: 20,
-
-  DEFAULT_YIELD: 14,
-
-  GRAVITY_POINTS_DIVISOR: 1000,
-
-  SPECIFIC_GRAVITY_BASE: 1,
-
-  TYPICAL_ATTENUATION_PERCENTAGE: 0.75,
-
-  MAX_HOP_UTILIZATION: 0.25,
-
-  POST_BOIL_HOP_UTILIZATION: 0.05,
-
-  MAX_BOIL_TIME_MINUTES: 60,
-
-  IBU_CONVERSION_FACTOR: 10,
-
-  DEFAULT_COLOR_LOVIBOND: 2,
-
-  ABV_CONVERSION_FACTOR: 131.25,
-} as const;
+import { BREWING_CONSTANTS } from '../helpers/recipe.constants';
 
 type MaybeCollection<T> = T[] | { getItems(): T[] };
 
@@ -40,7 +15,7 @@ export class RecipeCalculationsService {
     },
   ): void {
     const { og, fg } = this.calculateGravities(recipe);
-    const ibu = this.calculateBitterness(recipe);
+    const ibu = this.calculateBitterness(recipe, og);
     const color = this.calculateColor(recipe);
     const abv = this.calculateAlcoholContent(og, fg);
 
@@ -67,41 +42,52 @@ export class RecipeCalculationsService {
 
   calculateBitterness(
     recipe: Recipe & { hops?: MaybeCollection<RecipeHop> },
+    originalGravity: number | null,
   ): number | null {
     const volume = recipe.plannedVolume ?? BREWING_CONSTANTS.DEFAULT_VOLUME;
     const hops = this.toArray(recipe.hops);
 
-    const totalBitterness = hops.reduce((total, hop) => {
-      const utilization = this.calculateHopUtilization(hop);
-      const bitterness = this.calculateHopBitterness(hop, utilization);
-      return total + bitterness;
+    const totalAlphaAcidMass = hops.reduce((total, hop) => {
+      const utilization = this.calculateHopUtilization(hop, originalGravity);
+      const alphaAcidContribution = this.calculateHopBitterness(
+        hop,
+        utilization,
+      );
+      return total + alphaAcidContribution;
     }, 0);
 
-    return this.normalizeIbu(totalBitterness, volume);
+    return this.normalizeIbu(totalAlphaAcidMass, volume);
   }
 
   calculateColor(
     recipe: Recipe & { fermentables?: MaybeCollection<RecipeFermentable> },
   ): number | null {
     const fermentables = this.toArray(recipe.fermentables);
-    const volume = recipe.plannedVolume ?? BREWING_CONSTANTS.DEFAULT_VOLUME;
+    const volumeLiters =
+      recipe.plannedVolume ?? BREWING_CONSTANTS.DEFAULT_VOLUME;
 
-    const totalColorUnits = fermentables.reduce((total, recipeFermentable) => {
-      const amount = recipeFermentable.amount ?? 0;
+    const volumeGallons =
+      volumeLiters * BREWING_CONSTANTS.COLOR_CONVERSIONS.LITERS_TO_GALLONS;
+
+    const mcu = fermentables.reduce((total, recipeFermentable) => {
+      const amountKg = recipeFermentable.amount ?? 0;
       const colorLovibond =
         recipeFermentable.fermentable?.color ??
         BREWING_CONSTANTS.DEFAULT_COLOR_LOVIBOND;
-      return total + amount * colorLovibond;
+
+      const amountLbs =
+        amountKg * BREWING_CONSTANTS.COLOR_CONVERSIONS.KG_TO_LBS;
+
+      return total + (amountLbs * colorLovibond) / volumeGallons;
     }, 0);
 
-    const srm = totalColorUnits / volume;
+    const srm = this.calculateMoreySRM(mcu);
+
     return this.roundToPrecision(srm, 1);
   }
 
   calculateAlcoholContent(og: number | null, fg: number | null): number | null {
-    if (!this.isValidGravity(og) || !this.isValidGravity(fg)) {
-      return null;
-    }
+    if (!this.isValidGravity(og) || !this.isValidGravity(fg)) return null;
 
     const abv = (og - fg) * BREWING_CONSTANTS.ABV_CONVERSION_FACTOR;
     return this.roundToPrecision(abv, 2);
@@ -112,9 +98,13 @@ export class RecipeCalculationsService {
   ): number {
     return fermentables.reduce((total, recipeFermentable) => {
       const amount = recipeFermentable.amount ?? 0;
-      const yieldValue =
+      const yieldPPG =
         recipeFermentable.fermentable?.yield ?? BREWING_CONSTANTS.DEFAULT_YIELD;
-      return total + amount * yieldValue;
+
+      const gravityPoints =
+        amount * yieldPPG * BREWING_CONSTANTS.PPG_TO_METRIC_CONVERSION;
+
+      return total + gravityPoints;
     }, 0);
   }
 
@@ -139,8 +129,6 @@ export class RecipeCalculationsService {
   private estimateFinalGravity(og: number | null): number | null {
     if (!og) return null;
 
-    // Fórmula correta: FG = 1 + ((OG - 1) × (1 - atenuação))
-    // Exemplo: OG=1.050, atenuação=75% → FG = 1 + (0.050 × 0.25) = 1.0125
     const gravityPoints = og - BREWING_CONSTANTS.SPECIFIC_GRAVITY_BASE;
     const remainingPoints =
       gravityPoints * (1 - BREWING_CONSTANTS.TYPICAL_ATTENUATION_PERCENTAGE);
@@ -149,27 +137,59 @@ export class RecipeCalculationsService {
     return this.roundToPrecision(fg, 3);
   }
 
-  private calculateHopUtilization(hop: RecipeHop): number {
-    if (hop.stage !== HopStage.BOIL) {
+  private calculateHopUtilization(
+    hop: RecipeHop,
+    originalGravity: number | null,
+  ): number {
+    if (hop.stage !== HopStage.BOIL)
       return BREWING_CONSTANTS.POST_BOIL_HOP_UTILIZATION;
-    }
 
     const boilTime = this.getBoilTime(hop);
-    const utilizationRatio =
-      Math.min(boilTime, BREWING_CONSTANTS.MAX_BOIL_TIME_MINUTES) /
-      BREWING_CONSTANTS.MAX_BOIL_TIME_MINUTES;
+    const og = originalGravity ?? BREWING_CONSTANTS.SPECIFIC_GRAVITY_BASE;
 
-    return utilizationRatio * BREWING_CONSTANTS.MAX_HOP_UTILIZATION;
+    const gravityFactor = this.calculateTinsethGravityFactor(og);
+    const timeFactor = this.calculateTinsethTimeFactor(boilTime);
+
+    return gravityFactor * timeFactor;
+  }
+
+  private calculateTinsethGravityFactor(og: number): number {
+    const { GRAVITY_COEFFICIENT, GRAVITY_BASE } = BREWING_CONSTANTS.TINSETH;
+    const gravityPoints = og - BREWING_CONSTANTS.SPECIFIC_GRAVITY_BASE;
+
+    return GRAVITY_COEFFICIENT * Math.pow(GRAVITY_BASE, gravityPoints);
+  }
+
+  private calculateTinsethTimeFactor(boilTimeMinutes: number): number {
+    const { TIME_COEFFICIENT, TIME_DIVISOR } = BREWING_CONSTANTS.TINSETH;
+    const exponentialDecay = 1 - Math.exp(-TIME_COEFFICIENT * boilTimeMinutes);
+
+    return exponentialDecay / TIME_DIVISOR;
+  }
+
+  private calculateMoreySRM(mcu: number): number {
+    const { COEFFICIENT, EXPONENT } = BREWING_CONSTANTS.MOREY;
+
+    return COEFFICIENT * Math.pow(mcu, EXPONENT);
   }
 
   private calculateHopBitterness(hop: RecipeHop, utilization: number): number {
-    return (hop.amount ?? 0) * utilization;
+    const hopAmount = hop.amount ?? 0;
+    const alphaAcidPercentage =
+      hop.hop?.alphaAcids ?? BREWING_CONSTANTS.DEFAULT_ALPHA_ACIDS;
+
+    const alphaAcidMass = hopAmount * (alphaAcidPercentage / 100);
+
+    return alphaAcidMass * utilization;
   }
 
-  private normalizeIbu(totalBitterness: number, volume: number): number | null {
+  private normalizeIbu(
+    totalAlphaAcidMass: number,
+    volume: number,
+  ): number | null {
     const ibu =
-      (totalBitterness / Math.max(volume, 1)) *
-      BREWING_CONSTANTS.IBU_CONVERSION_FACTOR;
+      (totalAlphaAcidMass / Math.max(volume, 1)) *
+      BREWING_CONSTANTS.IBU_METRIC_CONVERSION_FACTOR;
 
     return this.roundToPrecision(ibu, 1);
   }
