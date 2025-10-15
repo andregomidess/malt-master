@@ -8,16 +8,34 @@ export class FermentationStep {
   id!: string;
 
   @ManyToOne(() => FermentationProfile)
-  fermentation_profile!: FermentationProfile;
+  fermentationProfile!: FermentationProfile;
 
   @Property()
   stepOrder!: number;
+
+  @Property()
+  name!: string;
 
   @Property({ type: 'decimal' })
   temperature!: number;
 
   @Property()
   duration!: number;
+
+  @Property({ type: 'decimal', nullable: true })
+  targetGravity!: number | null;
+
+  @Property({ type: 'decimal', nullable: true })
+  pressureControl!: number | null;
+
+  @Property({ default: false })
+  isRamping!: boolean;
+
+  @Property({ nullable: true })
+  rampTime!: number | null;
+
+  @Property({ type: 'decimal', nullable: true })
+  rampToTemperature!: number | null;
 
   @Property({ nullable: true })
   description!: string | null;
