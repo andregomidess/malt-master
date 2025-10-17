@@ -1,4 +1,4 @@
-import { Entity, Property, Enum } from '@mikro-orm/core';
+import { Entity, Property, Enum, OptionalProps } from '@mikro-orm/core';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 import { PropertyCreatedAt } from 'src/database/common/helpers/PropertyCreatedAt';
 import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt';

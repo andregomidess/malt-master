@@ -32,73 +32,34 @@ export class MashProfileService extends BaseEntityService<MashProfile> {
   }
 
   async saveProfile(input: MashProfileInput): Promise<MashProfile> {
-    let profile: MashProfile;
+    const { steps: stepsInput, ...profileData } = input;
+
+    const profile = await this.save(profileData);
 
     if (input.id) {
-      profile = await this.em.findOneOrFail(MashProfile, input.id, {
-        populate: ['steps'],
-      });
-
-      // Atualiza os campos principais
-      profile.name = input.name;
-      profile.type = input.type;
-      profile.estimatedEfficiency = input.estimatedEfficiency ?? null;
-      profile.grainTemperature = input.grainTemperature;
-      profile.tunTemperature = input.tunTemperature;
-      profile.spargeTemperature = input.spargeTemperature;
-      profile.tunWeight = input.tunWeight ?? null;
-      profile.tunSpecificHeat = input.tunSpecificHeat;
-      profile.mashThickness = input.mashThickness;
-      profile.observations = input.observations ?? null;
-      profile.isPublic = input.isPublic;
-
-      // Remove steps antigos e adiciona novos
-      profile.steps.removeAll();
+      const existingProfile = await this.em.findOneOrFail(
+        MashProfile,
+        input.id,
+        {
+          populate: ['steps'],
+        },
+      );
+      existingProfile.steps.removeAll();
       await this.em.flush();
-
-      // Adiciona novos steps
-      for (const stepInput of input.steps) {
-        const step = this.em.create(MashStep, {
-          ...stepInput,
-          mashProfile: profile,
-        });
-        profile.steps.add(step);
-      }
-    } else {
-      // Cria novo profile
-      profile = this.em.create(MashProfile, {
-        name: input.name,
-        type: input.type,
-        estimatedEfficiency: input.estimatedEfficiency ?? null,
-        grainTemperature: input.grainTemperature,
-        tunTemperature: input.tunTemperature,
-        spargeTemperature: input.spargeTemperature,
-        tunWeight: input.tunWeight ?? null,
-        tunSpecificHeat: input.tunSpecificHeat,
-        mashThickness: input.mashThickness,
-        observations: input.observations ?? null,
-        isPublic: input.isPublic,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-
-      // Adiciona steps
-      for (const stepInput of input.steps) {
-        const step = this.em.create(MashStep, {
-          ...stepInput,
-          mashProfile: profile,
-        });
-        profile.steps.add(step);
-      }
     }
 
-    await this.em.persistAndFlush(profile);
+    for (const stepInput of stepsInput) {
+      const step = this.em.create(MashStep, {
+        ...stepInput,
+        mashProfile: profile,
+      });
+      profile.steps.add(step);
+    }
+
+    await this.em.flush();
     return profile;
   }
 
-  /**
-   * Calcula o volume de água necessário para uma infusão
-   */
   calculateInfusionVolume(
     currentTemp: number,
     targetTemp: number,
@@ -107,8 +68,8 @@ export class MashProfileService extends BaseEntityService<MashProfile> {
     tunSpecificHeat: number,
     waterTemp: number = 100,
   ): number {
-    const grainHeatCapacity = 0.4; // cal/g·°C
-    const waterHeatCapacity = 1.0; // cal/g·°C
+    const grainHeatCapacity = 0.4;
+    const waterHeatCapacity = 1.0;
 
     const heatNeeded =
       (targetTemp - currentTemp) *
