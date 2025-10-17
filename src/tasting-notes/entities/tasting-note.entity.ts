@@ -9,7 +9,7 @@ import { PropertyDeletedAt } from 'src/database/common/helpers/PropertyDeletedAt
 @Entity()
 export class TastingNote {
   @PrimaryKeyUUID()
-  tastingNoteId!: string;
+  id!: string;
 
   @ManyToOne(() => Batch)
   batch!: Batch;
