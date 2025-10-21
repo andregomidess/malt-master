@@ -1,30 +1,35 @@
-/* eslint-disable @typescript-eslint/require-await */
 import { Migration } from '@mikro-orm/migrations';
 
-export class Migration20250926002605_InitialMigration extends Migration {
-  override async up(): Promise<void> {
+export class Migration20251021004419_InitialMigration extends Migration {
+  override up(): void {
     this.addSql(
-      `create table "carbonation_profile" ("id" uuid not null default uuid_generate_v4(), "name" varchar(255) not null, "type" text check ("type" in ('natural_priming', 'forced_co2')) not null, "recommended_amount" varchar(255) null, "observations" text null, constraint "carbonation_profile_pkey" primary key ("id"));`,
+      `create table "carbonation_profile" ("id" uuid not null default uuid_generate_v4(), "name" varchar(255) not null, "type" text check ("type" in ('natural_priming', 'forced_co2', 'bottle_conditioning')) not null, "target_co2volumes" numeric(10,0) not null, "serving_temperature" numeric(10,0) not null default 4, "priming_sugar_type" text check ("priming_sugar_type" in ('table_sugar', 'corn_sugar', 'dme', 'honey', 'maple_syrup')) not null, "priming_sugar_amount" numeric(10,0) null, "keg_pressure" numeric(10,0) null, "carbonation_time" varchar(255) null, "carbonation_method" varchar(255) null, "observations" text null, "is_public" boolean not null default false, "created_at" timestamptz not null default CURRENT_TIMESTAMP, "updated_at" timestamptz not null default CURRENT_TIMESTAMP, constraint "carbonation_profile_pkey" primary key ("id"));`,
     );
 
     this.addSql(
-      `create table "fermentation_profile" ("id" uuid not null default uuid_generate_v4(), "name" varchar(255) not null, "type" text check ("type" in ('primary', 'secondary', 'lagering', 'conditioning')) not null, "observations" text null, constraint "fermentation_profile_pkey" primary key ("id"));`,
+      `create table "fermentation_profile" ("id" uuid not null default uuid_generate_v4(), "name" varchar(255) not null, "type" text check ("type" in ('primary', 'secondary', 'lagering', 'conditioning', 'bottle_conditioning', 'keg_conditioning')) not null, "yeast_strain" varchar(255) null, "target_final_gravity" numeric(10,0) null, "estimated_attenuation" numeric(10,0) null, "is_multi_stage" boolean not null default false, "observations" text null, "is_public" boolean not null default false, "created_at" timestamptz not null default CURRENT_TIMESTAMP, "updated_at" timestamptz not null default CURRENT_TIMESTAMP, constraint "fermentation_profile_pkey" primary key ("id"));`,
     );
 
     this.addSql(
-      `create table "fermentation_step" ("id" uuid not null default uuid_generate_v4(), "fermentation_profile_id" uuid not null, "step_order" int not null, "temperature" numeric(10,0) not null, "duration" int not null, "description" varchar(255) null, constraint "fermentation_step_pkey" primary key ("id"));`,
+      `create table "fermentation_step" ("id" uuid not null default uuid_generate_v4(), "fermentation_profile_id" uuid not null, "step_order" int not null, "name" varchar(255) not null, "temperature" numeric(10,0) not null, "duration" int not null, "target_gravity" numeric(10,0) null, "pressure_control" numeric(10,0) null, "is_ramping" boolean not null default false, "ramp_time" varchar(255) null, "ramp_to_temperature" numeric(10,0) null, "description" varchar(255) null, constraint "fermentation_step_pkey" primary key ("id"));`,
     );
 
     this.addSql(
-      `create table "mash_profile" ("id" uuid not null default uuid_generate_v4(), "name" varchar(255) not null, "type" text check ("type" in ('infusion', 'decoction', 'step_mash')) not null, "estimated_efficiency" numeric(10,0) null, "observations" text null, constraint "mash_profile_pkey" primary key ("id"));`,
+      `create table "mash_profile" ("id" uuid not null default uuid_generate_v4(), "name" varchar(255) not null, "type" text check ("type" in ('infusion', 'decoction', 'step_mash', 'biab')) not null, "estimated_efficiency" numeric(10,0) null, "grain_temperature" numeric(10,0) not null default 20, "tun_temperature" numeric(10,0) not null default 20, "sparge_temperature" numeric(10,0) not null default 78, "tun_weight" numeric(10,0) null, "tun_specific_heat" numeric(10,0) not null default 0.3, "mash_thickness" numeric(10,0) not null default 3, "observations" text null, "is_public" boolean not null default false, "created_at" timestamptz not null default CURRENT_TIMESTAMP, "updated_at" timestamptz not null default CURRENT_TIMESTAMP, constraint "mash_profile_pkey" primary key ("id"));`,
     );
 
     this.addSql(
-      `create table "mash_step" ("id" uuid not null default uuid_generate_v4(), "mash_profile_id" uuid not null, "step_order" int not null, "temperature" numeric(10,0) not null, "duration" int not null, "description" varchar(255) null, constraint "mash_step_pkey" primary key ("id"));`,
+      `create table "mash_step" ("id" uuid not null default uuid_generate_v4(), "mash_profile_id" uuid not null, "step_order" int not null, "name" varchar(255) not null, "step_type" text check ("step_type" in ('infusion', 'temperature', 'decoction')) not null, "temperature" numeric(10,0) not null, "duration" int not null, "infusion_amount" numeric(10,0) null, "infusion_temp" numeric(10,0) null, "decoction_amount" numeric(10,0) null, "ramp_time" varchar(255) null, "description" varchar(255) null, constraint "mash_step_pkey" primary key ("id"));`,
     );
 
     this.addSql(
-      `create table "user" ("id" uuid not null default uuid_generate_v4(), "first_name" varchar(255) not null, "last_name" varchar(255) not null, "picture_url" varchar(255) not null, "city" varchar(255) not null, "state" varchar(255) not null, "country" varchar(255) not null, "role" varchar(255) not null default 'user', "status" varchar(255) not null default 'pending_verification', "gender" varchar(255) not null, "email" varchar(255) not null, "password" varchar(255) not null, "email_verification_token" varchar(255) null, "email_verified_at" varchar(255) null, "refresh_token" varchar(255) null, "created_at" timestamptz not null default CURRENT_TIMESTAMP, "updated_at" timestamptz not null default CURRENT_TIMESTAMP, "deleted_at" timestamptz null, constraint "user_pkey" primary key ("id"));`,
+      `create table "user" ("id" uuid not null default uuid_generate_v4(), "username" varchar(255) not null, "picture_url" varchar(255) null, "country" varchar(255) not null, "role" varchar(255) not null default 'user', "status" varchar(255) not null default 'pending_verification', "gender" varchar(255) not null, "email" varchar(255) not null, "password" varchar(255) not null, "email_verification_token" varchar(255) null, "email_verified_at" varchar(255) null, "refresh_token" varchar(255) null, "created_at" timestamptz not null default CURRENT_TIMESTAMP, "updated_at" timestamptz not null default CURRENT_TIMESTAMP, "deleted_at" timestamptz null, constraint "user_pkey" primary key ("id"));`,
+    );
+    this.addSql(
+      `alter table "user" add constraint "user_username_unique" unique ("username");`,
+    );
+    this.addSql(
+      `alter table "user" add constraint "user_email_unique" unique ("email");`,
     );
 
     this.addSql(
@@ -39,10 +44,21 @@ export class Migration20250926002605_InitialMigration extends Migration {
     );
 
     this.addSql(
+      `create table "inventory" ("id" uuid not null default uuid_generate_v4(), "user_id" uuid not null, "created_at" timestamptz not null default CURRENT_TIMESTAMP, "updated_at" timestamptz not null default CURRENT_TIMESTAMP, constraint "inventory_pkey" primary key ("id"));`,
+    );
+    this.addSql(
+      `alter table "inventory" add constraint "inventory_user_id_unique" unique ("user_id");`,
+    );
+
+    this.addSql(
       `create table "hop" ("id" uuid not null default uuid_generate_v4(), "user_id" uuid null, "name" varchar(255) not null, "alpha_acids" numeric(5,2) not null, "beta_acids" numeric(5,2) not null, "cohumulone" numeric(5,2) null, "total_oils" numeric(4,2) null, "form" text check ("form" in ('pellet', 'leaf', 'cryo', 'extract')) not null, "uses" jsonb not null, "aroma_flavor" text null, "harvest_year" smallint null, "storage_condition" varchar(255) null, "hsi" numeric(3,2) null, "cost_per_kilogram" numeric(7,2) null, "notes" text null, "origin" varchar(255) null, "supplier" varchar(255) null, "created_at" timestamptz not null default CURRENT_TIMESTAMP, "updated_at" timestamptz not null default CURRENT_TIMESTAMP, "deleted_at" timestamptz null, constraint "hop_pkey" primary key ("id"));`,
     );
     this.addSql(
       `alter table "hop" add constraint "hop_name_unique" unique ("name");`,
+    );
+
+    this.addSql(
+      `create table "hop_inventory_item" ("id" uuid not null default uuid_generate_v4(), "inventory_id" uuid not null, "type" text check ("type" in ('fermentable', 'hop', 'yeast')) not null, "quantity" numeric(10,0) not null, "purchase_date" date null, "best_before_date" date null, "cost_per_unit" numeric(10,0) null, "notes" text null, "created_at" timestamptz not null default CURRENT_TIMESTAMP, "updated_at" timestamptz not null default CURRENT_TIMESTAMP, "hop_id" uuid not null, "unit" varchar(255) not null, "alpha_acids_at_purchase" numeric(10,0) null, "harvest_year" varchar(255) null, "storage_condition" varchar(255) null, constraint "hop_inventory_item_pkey" primary key ("id"));`,
     );
 
     this.addSql(
@@ -57,6 +73,10 @@ export class Migration20250926002605_InitialMigration extends Migration {
     );
     this.addSql(
       `alter table "fermentable" add constraint "fermentable_name_unique" unique ("name");`,
+    );
+
+    this.addSql(
+      `create table "fermentable_inventory_item" ("id" uuid not null default uuid_generate_v4(), "inventory_id" uuid not null, "type" text check ("type" in ('fermentable', 'hop', 'yeast')) not null, "quantity" numeric(10,0) not null, "purchase_date" date null, "best_before_date" date null, "cost_per_unit" numeric(10,0) null, "notes" text null, "created_at" timestamptz not null default CURRENT_TIMESTAMP, "updated_at" timestamptz not null default CURRENT_TIMESTAMP, "fermentable_id" uuid not null, "unit" varchar(255) not null, "extract_potential" numeric(10,0) null, "lot_number" varchar(255) null, "moisture" numeric(10,0) null, "protein" numeric(10,0) null, constraint "fermentable_inventory_item_pkey" primary key ("id"));`,
     );
 
     this.addSql(
@@ -85,7 +105,10 @@ export class Migration20250926002605_InitialMigration extends Migration {
     );
 
     this.addSql(
-      `create table "recipe_mash" ("id" uuid not null default uuid_generate_v4(), "recipe_id" uuid not null, "mash_profile_id" uuid not null, "actual_efficiency" numeric(10,0) null, constraint "recipe_mash_pkey" primary key ("id"));`,
+      `create table "recipe_mash" ("id" uuid not null default uuid_generate_v4(), "recipe_id" uuid null, "mash_profile_id" uuid not null, "actual_efficiency" numeric(10,0) null, constraint "recipe_mash_pkey" primary key ("id"));`,
+    );
+    this.addSql(
+      `alter table "recipe_mash" add constraint "recipe_mash_recipe_id_unique" unique ("recipe_id");`,
     );
 
     this.addSql(
@@ -93,7 +116,10 @@ export class Migration20250926002605_InitialMigration extends Migration {
     );
 
     this.addSql(
-      `create table "recipe_fermentation" ("id" uuid not null default uuid_generate_v4(), "recipe_id" uuid not null, "fermentation_profile_id" uuid not null, "actual_attenuation" numeric(10,0) null, "final_abv" numeric(10,0) null, "observations" text null, constraint "recipe_fermentation_pkey" primary key ("id"));`,
+      `create table "recipe_fermentation" ("id" uuid not null default uuid_generate_v4(), "recipe_id" uuid null, "fermentation_profile_id" uuid not null, "actual_attenuation" numeric(10,0) null, "final_abv" numeric(10,0) null, "observations" text null, constraint "recipe_fermentation_pkey" primary key ("id"));`,
+    );
+    this.addSql(
+      `alter table "recipe_fermentation" add constraint "recipe_fermentation_recipe_id_unique" unique ("recipe_id");`,
     );
 
     this.addSql(
@@ -101,7 +127,10 @@ export class Migration20250926002605_InitialMigration extends Migration {
     );
 
     this.addSql(
-      `create table "recipe_carbonation" ("id" uuid not null default uuid_generate_v4(), "recipe_id" uuid not null, "carbonation_profile_id" uuid not null, "amount_used" varchar(255) null, "temperature" numeric(10,0) null, "co2_volumes" numeric(10,0) null, constraint "recipe_carbonation_pkey" primary key ("id"));`,
+      `create table "recipe_carbonation" ("id" uuid not null default uuid_generate_v4(), "recipe_id" uuid null, "carbonation_profile_id" uuid not null, "amount_used" varchar(255) null, "temperature" numeric(10,0) null, "co2volumes" numeric(10,0) null, constraint "recipe_carbonation_pkey" primary key ("id"));`,
+    );
+    this.addSql(
+      `alter table "recipe_carbonation" add constraint "recipe_carbonation_recipe_id_unique" unique ("recipe_id");`,
     );
 
     this.addSql(
@@ -109,7 +138,7 @@ export class Migration20250926002605_InitialMigration extends Migration {
     );
 
     this.addSql(
-      `create table "tasting_note" ("tasting_note_id" uuid not null default uuid_generate_v4(), "batch_id" uuid not null, "user_id" uuid not null, "tasting_date" date not null default 'now()', "appearance_score" numeric(10,0) null, "aroma_score" numeric(10,0) null, "flavor_score" numeric(10,0) null, "mouthfeel_score" numeric(10,0) null, "overall_score" numeric(10,0) not null, "pros" text null, "cons" text null, "general_notes" text null, "created_at" timestamptz not null default CURRENT_TIMESTAMP, "updated_at" timestamptz not null default CURRENT_TIMESTAMP, "deleted_at" timestamptz null, constraint "tasting_note_pkey" primary key ("tasting_note_id"));`,
+      `create table "tasting_note" ("id" uuid not null default uuid_generate_v4(), "batch_id" uuid not null, "user_id" uuid not null, "tasting_date" date not null default 'now()', "appearance_score" numeric(10,0) null, "aroma_score" numeric(10,0) null, "flavor_score" numeric(10,0) null, "mouthfeel_score" numeric(10,0) null, "overall_score" numeric(10,0) not null, "pros" text null, "cons" text null, "general_notes" text null, "created_at" timestamptz not null default CURRENT_TIMESTAMP, "updated_at" timestamptz not null default CURRENT_TIMESTAMP, "deleted_at" timestamptz null, constraint "tasting_note_pkey" primary key ("id"));`,
     );
 
     this.addSql(
@@ -135,7 +164,7 @@ export class Migration20250926002605_InitialMigration extends Migration {
     );
 
     this.addSql(
-      `create table "inventory" ("id" uuid not null default uuid_generate_v4(), "user_id" uuid not null, "hop_id" uuid null, "fermentable_id" uuid null, "yeast_id" uuid null, "quantity" numeric(10,0) not null, "unit" text check ("unit" in ('g', 'kg', 'unit', 'pkg', 'ml')) not null, "purchase_date" date null, "best_before_date" date null, "cost" numeric(10,0) null, "notes" text null, constraint "inventory_pkey" primary key ("id"));`,
+      `create table "yeast_inventory_item" ("id" uuid not null default uuid_generate_v4(), "inventory_id" uuid not null, "type" text check ("type" in ('fermentable', 'hop', 'yeast')) not null, "quantity" numeric(10,0) not null, "purchase_date" date null, "best_before_date" date null, "cost_per_unit" numeric(10,0) null, "notes" text null, "created_at" timestamptz not null default CURRENT_TIMESTAMP, "updated_at" timestamptz not null default CURRENT_TIMESTAMP, "yeast_id" uuid not null, "unit" varchar(255) not null, "production_date" date null, "viability" numeric(10,0) null, "cell_count" bigint null, "starter" varchar(255) null, "pitching_rate" numeric(10,0) null, constraint "yeast_inventory_item_pkey" primary key ("id"));`,
     );
 
     this.addSql(
@@ -155,7 +184,18 @@ export class Migration20250926002605_InitialMigration extends Migration {
     );
 
     this.addSql(
+      `alter table "inventory" add constraint "inventory_user_id_foreign" foreign key ("user_id") references "user" ("id") on update cascade;`,
+    );
+
+    this.addSql(
       `alter table "hop" add constraint "hop_user_id_foreign" foreign key ("user_id") references "user" ("id") on update cascade on delete set null;`,
+    );
+
+    this.addSql(
+      `alter table "hop_inventory_item" add constraint "hop_inventory_item_inventory_id_foreign" foreign key ("inventory_id") references "inventory" ("id") on update cascade;`,
+    );
+    this.addSql(
+      `alter table "hop_inventory_item" add constraint "hop_inventory_item_hop_id_foreign" foreign key ("hop_id") references "hop" ("id") on update cascade;`,
     );
 
     this.addSql(
@@ -164,6 +204,13 @@ export class Migration20250926002605_InitialMigration extends Migration {
 
     this.addSql(
       `alter table "fermentable" add constraint "fermentable_user_id_foreign" foreign key ("user_id") references "user" ("id") on update cascade on delete set null;`,
+    );
+
+    this.addSql(
+      `alter table "fermentable_inventory_item" add constraint "fermentable_inventory_item_inventory_id_foreign" foreign key ("inventory_id") references "inventory" ("id") on update cascade;`,
+    );
+    this.addSql(
+      `alter table "fermentable_inventory_item" add constraint "fermentable_inventory_item_fermentable_id_foreign" foreign key ("fermentable_id") references "fermentable" ("id") on update cascade;`,
     );
 
     this.addSql(
@@ -189,7 +236,7 @@ export class Migration20250926002605_InitialMigration extends Migration {
     );
 
     this.addSql(
-      `alter table "recipe_mash" add constraint "recipe_mash_recipe_id_foreign" foreign key ("recipe_id") references "recipe" ("id") on update cascade;`,
+      `alter table "recipe_mash" add constraint "recipe_mash_recipe_id_foreign" foreign key ("recipe_id") references "recipe" ("id") on delete cascade;`,
     );
     this.addSql(
       `alter table "recipe_mash" add constraint "recipe_mash_mash_profile_id_foreign" foreign key ("mash_profile_id") references "mash_profile" ("id") on update cascade;`,
@@ -203,7 +250,7 @@ export class Migration20250926002605_InitialMigration extends Migration {
     );
 
     this.addSql(
-      `alter table "recipe_fermentation" add constraint "recipe_fermentation_recipe_id_foreign" foreign key ("recipe_id") references "recipe" ("id") on update cascade;`,
+      `alter table "recipe_fermentation" add constraint "recipe_fermentation_recipe_id_foreign" foreign key ("recipe_id") references "recipe" ("id") on delete cascade;`,
     );
     this.addSql(
       `alter table "recipe_fermentation" add constraint "recipe_fermentation_fermentation_profile_id_foreign" foreign key ("fermentation_profile_id") references "fermentation_profile" ("id") on update cascade;`,
@@ -217,7 +264,7 @@ export class Migration20250926002605_InitialMigration extends Migration {
     );
 
     this.addSql(
-      `alter table "recipe_carbonation" add constraint "recipe_carbonation_recipe_id_foreign" foreign key ("recipe_id") references "recipe" ("id") on update cascade;`,
+      `alter table "recipe_carbonation" add constraint "recipe_carbonation_recipe_id_foreign" foreign key ("recipe_id") references "recipe" ("id") on delete cascade;`,
     );
     this.addSql(
       `alter table "recipe_carbonation" add constraint "recipe_carbonation_carbonation_profile_id_foreign" foreign key ("carbonation_profile_id") references "carbonation_profile" ("id") on update cascade;`,
@@ -259,20 +306,14 @@ export class Migration20250926002605_InitialMigration extends Migration {
     );
 
     this.addSql(
-      `alter table "inventory" add constraint "inventory_user_id_foreign" foreign key ("user_id") references "user" ("id") on update cascade;`,
+      `alter table "yeast_inventory_item" add constraint "yeast_inventory_item_inventory_id_foreign" foreign key ("inventory_id") references "inventory" ("id") on update cascade;`,
     );
     this.addSql(
-      `alter table "inventory" add constraint "inventory_hop_id_foreign" foreign key ("hop_id") references "hop" ("id") on update cascade on delete set null;`,
-    );
-    this.addSql(
-      `alter table "inventory" add constraint "inventory_fermentable_id_foreign" foreign key ("fermentable_id") references "fermentable" ("id") on update cascade on delete set null;`,
-    );
-    this.addSql(
-      `alter table "inventory" add constraint "inventory_yeast_id_foreign" foreign key ("yeast_id") references "yeast" ("id") on update cascade on delete set null;`,
+      `alter table "yeast_inventory_item" add constraint "yeast_inventory_item_yeast_id_foreign" foreign key ("yeast_id") references "yeast" ("id") on update cascade;`,
     );
   }
 
-  override async down(): Promise<void> {
+  override down(): void {
     this.addSql(
       `alter table "recipe_carbonation" drop constraint "recipe_carbonation_carbonation_profile_id_foreign";`,
     );
@@ -297,6 +338,10 @@ export class Migration20250926002605_InitialMigration extends Migration {
 
     this.addSql(
       `alter table "kettle_equipment" drop constraint "kettle_equipment_user_id_foreign";`,
+    );
+
+    this.addSql(
+      `alter table "inventory" drop constraint "inventory_user_id_foreign";`,
     );
 
     this.addSql(`alter table "hop" drop constraint "hop_user_id_foreign";`);
@@ -334,7 +379,19 @@ export class Migration20250926002605_InitialMigration extends Migration {
     this.addSql(`alter table "yeast" drop constraint "yeast_user_id_foreign";`);
 
     this.addSql(
-      `alter table "inventory" drop constraint "inventory_user_id_foreign";`,
+      `alter table "hop_inventory_item" drop constraint "hop_inventory_item_inventory_id_foreign";`,
+    );
+
+    this.addSql(
+      `alter table "fermentable_inventory_item" drop constraint "fermentable_inventory_item_inventory_id_foreign";`,
+    );
+
+    this.addSql(
+      `alter table "yeast_inventory_item" drop constraint "yeast_inventory_item_inventory_id_foreign";`,
+    );
+
+    this.addSql(
+      `alter table "hop_inventory_item" drop constraint "hop_inventory_item_hop_id_foreign";`,
     );
 
     this.addSql(
@@ -342,15 +399,11 @@ export class Migration20250926002605_InitialMigration extends Migration {
     );
 
     this.addSql(
-      `alter table "inventory" drop constraint "inventory_hop_id_foreign";`,
+      `alter table "fermentable_inventory_item" drop constraint "fermentable_inventory_item_fermentable_id_foreign";`,
     );
 
     this.addSql(
       `alter table "recipe_fermentable" drop constraint "recipe_fermentable_fermentable_id_foreign";`,
-    );
-
-    this.addSql(
-      `alter table "inventory" drop constraint "inventory_fermentable_id_foreign";`,
     );
 
     this.addSql(
@@ -410,7 +463,7 @@ export class Migration20250926002605_InitialMigration extends Migration {
     );
 
     this.addSql(
-      `alter table "inventory" drop constraint "inventory_yeast_id_foreign";`,
+      `alter table "yeast_inventory_item" drop constraint "yeast_inventory_item_yeast_id_foreign";`,
     );
   }
 }

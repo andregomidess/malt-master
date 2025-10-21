@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
 
 import { BeerStyleController } from './controllers/beer-style.controller';
 import { EquipmentController } from './controllers/equipment.controller';
@@ -14,8 +15,24 @@ import { HopService } from './services/hop.service';
 import { WaterProfileService } from './services/water-profile.service';
 import { YeastService } from './services/yeast.service';
 
+import { BeerStyle } from './entities/beer-style.entity';
+import { Equipment } from './entities/equipment.entity';
+import { Fermentable } from './entities/fermentable.entity';
+import { Hop } from './entities/hop.entity';
+import { WaterProfile } from './entities/water-profile.entity';
+import { Yeast } from './entities/yeast.entity';
+
 @Module({
-  imports: [],
+  imports: [
+    MikroOrmModule.forFeature([
+      BeerStyle,
+      Equipment,
+      Fermentable,
+      Hop,
+      WaterProfile,
+      Yeast,
+    ]),
+  ],
   controllers: [
     BeerStyleController,
     EquipmentController,

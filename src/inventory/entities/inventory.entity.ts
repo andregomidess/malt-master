@@ -9,10 +9,10 @@ import { User } from 'src/users/entities/user.entity';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 import { PropertyCreatedAt } from 'src/database/common/helpers/PropertyCreatedAt';
 import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt';
-import { FermentableInventoryItem } from './fermentable-inventory-item.entity';
-import { HopInventoryItem } from './hop-inventory-item.entity';
-import { YeastInventoryItem } from './yeast-inventory-item.entity';
-import { BaseInventoryItem } from './base-inventory-item.entity';
+import type { FermentableInventoryItem } from './fermentable-inventory-item.entity';
+import type { HopInventoryItem } from './hop-inventory-item.entity';
+import type { YeastInventoryItem } from './yeast-inventory-item.entity';
+import type { BaseInventoryItem } from './base-inventory-item.entity';
 
 @Entity()
 export class Inventory {
@@ -22,13 +22,16 @@ export class Inventory {
   @ManyToOne(() => User, { unique: true })
   user!: User;
 
-  @OneToMany(() => FermentableInventoryItem, 'inventory')
+  @OneToMany({
+    entity: () => 'FermentableInventoryItem',
+    mappedBy: 'inventory',
+  })
   fermentableItems = new Collection<FermentableInventoryItem>(this);
 
-  @OneToMany(() => HopInventoryItem, 'inventory')
+  @OneToMany({ entity: () => 'HopInventoryItem', mappedBy: 'inventory' })
   hopItems = new Collection<HopInventoryItem>(this);
 
-  @OneToMany(() => YeastInventoryItem, 'inventory')
+  @OneToMany({ entity: () => 'YeastInventoryItem', mappedBy: 'inventory' })
   yeastItems = new Collection<YeastInventoryItem>(this);
 
   @PropertyCreatedAt()

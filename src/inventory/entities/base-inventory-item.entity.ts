@@ -2,7 +2,7 @@ import { Entity, Property, ManyToOne, Enum } from '@mikro-orm/core';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 import { PropertyCreatedAt } from 'src/database/common/helpers/PropertyCreatedAt';
 import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt';
-import { Inventory } from './inventory.entity';
+import type { Inventory } from './inventory.entity';
 
 export enum InventoryItemType {
   FERMENTABLE = 'fermentable',
@@ -15,7 +15,7 @@ export abstract class BaseInventoryItem {
   @PrimaryKeyUUID()
   id!: string;
 
-  @ManyToOne(() => Inventory)
+  @ManyToOne({ entity: () => 'Inventory' })
   inventory!: Inventory;
 
   @Enum(() => InventoryItemType)
@@ -42,16 +42,10 @@ export abstract class BaseInventoryItem {
   @PropertyUpdatedAt()
   updatedAt!: Date;
 
-  /**
-   * Calcula o valor total do item no inventário
-   */
   get totalValue(): number {
     return (this.costPerUnit || 0) * this.quantity;
   }
 
-  /**
-   * Verifica se o item está próximo do vencimento (30 dias)
-   */
   get isNearExpiry(): boolean {
     if (!this.bestBeforeDate) return false;
     const thirtyDaysFromNow = new Date();
@@ -59,17 +53,11 @@ export abstract class BaseInventoryItem {
     return this.bestBeforeDate <= thirtyDaysFromNow;
   }
 
-  /**
-   * Verifica se o item está vencido
-   */
   get isExpired(): boolean {
     if (!this.bestBeforeDate) return false;
     return this.bestBeforeDate < new Date();
   }
 
-  /**
-   * Calcula quantos dias restam até o vencimento
-   */
   get daysUntilExpiry(): number | null {
     if (!this.bestBeforeDate) return null;
     const today = new Date();

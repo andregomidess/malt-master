@@ -37,21 +37,14 @@ export class FermentableInventoryItem extends BaseInventoryItem {
     this.type = InventoryItemType.FERMENTABLE;
   }
 
-  /**
-   * Calcula o potencial de extração ajustado pela umidade
-   */
   get adjustedExtractPotential(): number | null {
     if (!this.extractPotential || !this.moisture) return this.extractPotential;
-    // Ajuste baseado na umidade: potencial * (1 - umidade/100)
     return this.extractPotential * (1 - this.moisture / 100);
   }
 
-  /**
-   * Verifica se o fermentável está dentro dos padrões de qualidade
-   */
   get isQualityAcceptable(): boolean {
-    if (this.moisture && this.moisture > 15) return false; // Umidade muito alta
-    if (this.protein && this.protein > 13) return false; // Proteína muito alta para alguns estilos
+    if (this.moisture && this.moisture > 15) return false;
+    if (this.protein && this.protein > 13) return false;
     return true;
   }
 }

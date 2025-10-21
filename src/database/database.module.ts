@@ -7,7 +7,6 @@ import mikroOrmConfig from './config/mikro-orm.config';
     MikroOrmModule.forRoot({
       ...mikroOrmConfig,
       allowGlobalContext: true,
-      autoLoadEntities: true,
       pool: {
         min: 2,
         max: 10,

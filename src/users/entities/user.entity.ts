@@ -1,4 +1,4 @@
-import { Entity, OptionalProps, Property, Filter } from '@mikro-orm/core';
+import { Entity, OptionalProps, Property } from '@mikro-orm/core';
 import { PropertyCreatedAt } from 'src/database/common/helpers/PropertyCreatedAt';
 import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
@@ -22,29 +22,15 @@ export enum UserGender {
 }
 
 @Entity()
-@Filter({
-  name: 'softDelete',
-  cond: { deletedAt: null },
-  default: true,
-})
 export class User {
   @PrimaryKeyUUID()
   id!: string;
 
-  @Property()
-  firstName!: string;
+  @Property({ unique: true })
+  username!: string;
 
-  @Property()
-  lastName!: string;
-
-  @Property()
+  @Property({ nullable: true })
   pictureUrl!: string | null;
-
-  @Property()
-  city!: string;
-
-  @Property()
-  state!: string;
 
   @Property()
   country!: string;
@@ -58,7 +44,7 @@ export class User {
   @Property()
   gender!: UserGender;
 
-  @Property()
+  @Property({ unique: true })
   email!: string;
 
   @Property()

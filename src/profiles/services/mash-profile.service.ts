@@ -81,9 +81,6 @@ export class MashProfileService extends BaseEntityService<MashProfile> {
     return Math.max(0, waterVolume);
   }
 
-  /**
-   * Calcula a temperatura de strike water
-   */
   calculateStrikeTemp(
     grainTemp: number,
     targetTemp: number,

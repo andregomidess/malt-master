@@ -11,6 +11,7 @@ import { UsersService } from 'src/users/users.service';
 import argon2 from 'argon2';
 import { AuthLoginInput } from './inputs/AuthLoginInput';
 import { randomBytes } from 'crypto';
+import { MailService } from 'src/mail/mail.service';
 
 export interface JwtPayload {
   id: string;
@@ -23,6 +24,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly em: EntityManager,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
   async login(userInput: AuthLoginInput) {
@@ -60,8 +62,7 @@ export class AuthService {
       user: {
         id: user.id,
         email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        username: user.username,
         status: user.status,
       },
       accessToken,
@@ -70,9 +71,18 @@ export class AuthService {
   }
 
   async registerUser(userInput: UserInput) {
-    await this.em.findOneOrFail(User, { email: userInput.email }).catch(() => {
-      throw new BadRequestException('Email already in use');
+    const existingEmail = await this.em.findOne(User, {
+      email: userInput.email,
     });
+
+    if (existingEmail) throw new BadRequestException('Email already in use');
+
+    const existingUsername = await this.em.findOne(User, {
+      username: userInput.username,
+    });
+
+    if (existingUsername)
+      throw new BadRequestException('Username already in use');
 
     const hashedPassword = await argon2.hash(userInput.password, {
       type: argon2.argon2id,
@@ -88,8 +98,11 @@ export class AuthService {
 
     await this.usersService.save(userInput);
 
-    // TODO: Enviar email de verificação
-    // await this.emailService.sendVerificationEmail(userInput.email, emailVerificationToken);
+    await this.mailService.sendVerificationEmail(
+      userInput.email,
+      userInput.username,
+      emailVerificationToken,
+    );
 
     return {
       message:
@@ -127,8 +140,7 @@ export class AuthService {
       user: {
         id: user.id,
         email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        username: user.username,
         status: user.status,
       },
       accessToken,

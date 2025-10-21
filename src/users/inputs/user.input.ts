@@ -7,20 +7,11 @@ export class UserInput {
   id?: string;
 
   @IsString()
-  firstName!: string;
-
-  @IsString()
-  lastName!: string;
+  username!: string;
 
   @IsOptional()
   @IsString()
   pictureUrl?: string | null;
-
-  @IsString()
-  city!: string;
-
-  @IsString()
-  state!: string;
 
   @IsString()
   country!: string;

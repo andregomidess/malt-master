@@ -15,7 +15,6 @@ export default defineConfig({
   highlighter: new SqlHighlighter(),
 
   entities: ['dist/**/*.entity.js'],
-  entitiesTs: ['src/**/*.entity.ts'],
 
   migrations: {
     path: 'dist/database/migrations',
