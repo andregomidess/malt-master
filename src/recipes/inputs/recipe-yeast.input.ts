@@ -5,6 +5,7 @@ import { YeastStage } from '../entities/recipe-yeast.entity';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export class RecipeYeastInput {
+  @IsOptional()
   @PrimaryKeyUUID()
   id?: string;
 

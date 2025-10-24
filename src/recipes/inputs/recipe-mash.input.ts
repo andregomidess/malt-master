@@ -5,6 +5,7 @@ import { MashProfile } from 'src/profiles/entities/mash-profile.entity';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export class RecipeMashInput {
+  @IsOptional()
   @PrimaryKeyUUID()
   id?: string;
 

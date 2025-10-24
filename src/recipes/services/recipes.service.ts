@@ -97,6 +97,7 @@ export class RecipesService extends BaseEntityService<Recipe> {
       { id: recipeId, user: userId },
       {
         populate: [
+          'equipment',
           'fermentables',
           'fermentables.fermentable',
           'hops',
@@ -105,6 +106,8 @@ export class RecipesService extends BaseEntityService<Recipe> {
           'yeasts.yeast',
           'waters',
           'waters.waterProfile',
+          'mash',
+          'mash.mashProfile',
         ],
       },
     );

@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 export class MailService {
   constructor(
     private readonly mailer: MailerService,
-    private readonly cfg: ConfigService,
+    private readonly configService: ConfigService,
   ) {}
 
   async sendVerificationEmail(
@@ -14,7 +14,7 @@ export class MailService {
     username: string,
     token: string,
   ): Promise<void> {
-    const appUrl = this.cfg.get<string>('APP_URL') ?? 'http://localhost:3000';
+    const appUrl = this.configService.get<string>('APP_URL');
     const verifyUrl = `${appUrl}/auth/verify?token=${encodeURIComponent(token)}`;
 
     await this.mailer.sendMail({

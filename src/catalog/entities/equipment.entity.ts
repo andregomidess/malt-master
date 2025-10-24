@@ -84,6 +84,22 @@ export abstract class Equipment {
   deletedAt!: Date | null;
 
   public readonly [OptionalProps]!: 'updatedAt' | 'deletedAt';
+
+  public isKettle(): this is KettleEquipment {
+    return this.type === EquipmentType.KETTLE;
+  }
+
+  public isFermenter(): this is FermenterEquipment {
+    return this.type === EquipmentType.FERMENTER;
+  }
+
+  public isChiller(): this is ChillerEquipment {
+    return this.type === EquipmentType.CHILLER;
+  }
+
+  public isEquipment(): this is Equipment {
+    return this.isKettle() || this.isFermenter() || this.isChiller();
+  }
 }
 
 @Entity()

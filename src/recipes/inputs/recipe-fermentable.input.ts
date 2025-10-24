@@ -5,6 +5,7 @@ import { Fermentable } from 'src/catalog/entities/fermentable.entity';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export class RecipeFermentableInput {
+  @IsOptional()
   @PrimaryKeyUUID()
   id?: string;
 

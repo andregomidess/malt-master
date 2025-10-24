@@ -6,6 +6,7 @@ import { HopStage } from '../entities/recipe-hop.entity';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export class RecipeHopInput {
+  @IsOptional()
   @PrimaryKeyUUID()
   id?: string;
 

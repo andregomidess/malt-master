@@ -5,6 +5,7 @@ import { FermentationProfile } from 'src/profiles/entities/fermentation-profile.
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export class RecipeFermentationInput {
+  @IsOptional()
   @PrimaryKeyUUID()
   id?: string;
 

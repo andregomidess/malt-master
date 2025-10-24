@@ -1,7 +1,9 @@
 import { BaseEntityService } from 'src/database/common/services/base-entity.service';
 import { WaterProfile } from '../entities/water-profile.entity';
 import { EntityManager } from '@mikro-orm/core';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class WaterProfileService extends BaseEntityService<WaterProfile> {
   constructor(em: EntityManager) {
     super(em, WaterProfile);

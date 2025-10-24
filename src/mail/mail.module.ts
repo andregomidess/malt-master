@@ -14,12 +14,8 @@ import { MailService } from './mail.service';
       useFactory: (configService: ConfigService): MailerOptions => ({
         transport: {
           host: configService.get<string>('SMTP_HOST'),
-          port: Number.parseInt(
-            configService.get<string>('SMTP_PORT') ?? '587',
-            10,
-          ),
-          secure:
-            (configService.get<string>('SMTP_SECURE') ?? 'false') === 'true',
+          port: configService.get<number>('SMTP_PORT'),
+          secure: configService.get<boolean>('SMTP_SECURE'),
           auth: {
             user: configService.get<string>('SMTP_USER'),
             pass: configService.get<string>('SMTP_PASS'),
@@ -27,8 +23,7 @@ import { MailService } from './mail.service';
           tls: { rejectUnauthorized: false },
         },
         defaults: {
-          from:
-            configService.get<string>('EMAIL_FROM') ?? 'noreply@example.com',
+          from: configService.get<string>('EMAIL_FROM'),
         },
         template: {
           dir: join(__dirname, '..', '..', 'templates'),

@@ -116,9 +116,8 @@ export class AuthService {
       status: UserStatus.PENDING_VERIFICATION,
     });
 
-    if (!user) {
+    if (!user)
       throw new BadRequestException('Invalid or expired verification token');
-    }
 
     user.emailVerifiedAt = new Date();
     user.emailVerificationToken = null;
@@ -149,35 +148,28 @@ export class AuthService {
   }
 
   async refreshAccessToken(refreshToken: string, userId: string) {
-    if (!refreshToken) {
+    if (!refreshToken)
       throw new UnauthorizedException('Refresh token is required');
-    }
 
-    if (!userId) {
-      throw new UnauthorizedException('User ID is required');
-    }
+    if (!userId) throw new UnauthorizedException('User ID is required');
 
     const user = await this.em.findOne(User, {
       id: userId,
       status: UserStatus.ACTIVE,
     });
 
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
+    if (!user) throw new UnauthorizedException('User not found');
 
-    if (!user.refreshToken) {
+    if (!user.refreshToken)
       throw new UnauthorizedException('No refresh token found for user');
-    }
 
     const isRefreshTokenValid = await argon2.verify(
       user.refreshToken,
       refreshToken,
     );
 
-    if (!isRefreshTokenValid) {
+    if (!isRefreshTokenValid)
       throw new UnauthorizedException('Invalid refresh token');
-    }
 
     const accessToken = this.jwtService.sign(
       { id: user.id, email: user.email },

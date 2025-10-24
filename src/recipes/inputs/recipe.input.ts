@@ -14,18 +14,19 @@ import { Equipment } from 'src/catalog/entities/equipment.entity';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export class RecipeInput {
+  @IsOptional()
   @PrimaryKeyUUID()
   id?: string;
 
-  @IsEntity({ entity: User })
   @IsOptional()
+  @IsEntity({ entity: User })
   user?: User;
 
   @IsEntity({ entity: BeerStyle })
   beerStyle!: BeerStyle;
 
-  @IsEntity({ entity: Equipment })
   @IsOptional()
+  @IsEntity({ entity: Equipment })
   equipment?: Equipment | null;
 
   @IsString()

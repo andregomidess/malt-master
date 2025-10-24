@@ -3,8 +3,14 @@ import { Recipe } from '../entities/recipe.entity';
 import { RecipeFermentable } from '../entities/recipe-fermentable.entity';
 import { RecipeHop, HopStage } from '../entities/recipe-hop.entity';
 import { BREWING_CONSTANTS } from '../helpers/recipe.constants';
+import { Equipment } from 'src/catalog/entities/equipment.entity';
 
 type MaybeCollection<T> = T[] | { getItems(): T[] };
+
+const MINUTES_IN_HOUR = 60;
+const PERCENT_TO_DECIMAL = 0.01;
+const MAX_EVAPORATION_FRACTION = 0.9;
+const MIN_REMAINING_VOLUME_FRACTION = 0.1;
 
 @Injectable()
 export class RecipeCalculationsService {
@@ -14,8 +20,10 @@ export class RecipeCalculationsService {
       hops?: MaybeCollection<RecipeHop>;
     },
   ): void {
-    const { og, fg } = this.calculateGravities(recipe);
-    const ibu = this.calculateBitterness(recipe, og);
+    const volumes = this.getBoilAndFermenterVolumes(recipe);
+
+    const { og, fg } = this.calculateGravities(recipe, volumes);
+    const ibu = this.calculateBitterness(recipe, og, volumes);
     const color = this.calculateColor(recipe);
     const abv = this.calculateAlcoholContent(og, fg);
 
@@ -24,10 +32,10 @@ export class RecipeCalculationsService {
 
   calculateGravities(
     recipe: Recipe & { fermentables?: MaybeCollection<RecipeFermentable> },
+    volumes: VolumeModel,
   ): GravityResult {
-    const efficiency =
-      recipe.plannedEfficiency ?? BREWING_CONSTANTS.DEFAULT_EFFICIENCY;
-    const volume = recipe.plannedVolume ?? BREWING_CONSTANTS.DEFAULT_VOLUME;
+    const efficiency = this.getEffectiveEfficiency(recipe);
+    const volume = volumes.fermenterTargetVolume;
     const fermentables = this.toArray(recipe.fermentables);
 
     const totalGravityPoints = this.calculateTotalGravityPoints(fermentables);
@@ -43,8 +51,9 @@ export class RecipeCalculationsService {
   calculateBitterness(
     recipe: Recipe & { hops?: MaybeCollection<RecipeHop> },
     originalGravity: number | null,
+    volumes: VolumeModel,
   ): number | null {
-    const volume = recipe.plannedVolume ?? BREWING_CONSTANTS.DEFAULT_VOLUME;
+    const volume = volumes.fermenterTargetVolume;
     const hops = this.toArray(recipe.hops);
 
     const totalAlphaAcidMass = hops.reduce((total, hop) => {
@@ -63,8 +72,7 @@ export class RecipeCalculationsService {
     recipe: Recipe & { fermentables?: MaybeCollection<RecipeFermentable> },
   ): number | null {
     const fermentables = this.toArray(recipe.fermentables);
-    const volumeLiters =
-      recipe.plannedVolume ?? BREWING_CONSTANTS.DEFAULT_VOLUME;
+    const volumeLiters = this.getEffectiveVolume(recipe);
 
     const volumeGallons =
       volumeLiters * BREWING_CONSTANTS.COLOR_CONVERSIONS.LITERS_TO_GALLONS;
@@ -229,7 +237,156 @@ export class RecipeCalculationsService {
     if (!collection) return [];
     return Array.isArray(collection) ? collection : collection.getItems();
   }
+
+  private getEffectiveEfficiency(recipe: Recipe): number {
+    if (recipe.plannedEfficiency && recipe.plannedEfficiency > 0)
+      return recipe.plannedEfficiency;
+
+    const estimatedEfficiency = recipe.mash?.mashProfile?.estimatedEfficiency;
+
+    if (estimatedEfficiency && estimatedEfficiency > 0)
+      return estimatedEfficiency;
+
+    return BREWING_CONSTANTS.DEFAULT_EFFICIENCY;
+  }
+
+  private getEffectiveVolume(recipe: Recipe): number {
+    const planned = recipe.plannedVolume;
+
+    if (planned && planned > 0) return planned;
+
+    return recipe.equipment?.usableVolume ?? BREWING_CONSTANTS.DEFAULT_VOLUME;
+  }
+
+  private getBoilAndFermenterVolumes(recipe: Recipe): VolumeModel {
+    const fermenterTargetVolume = this.getEffectiveVolume(recipe);
+    const boilMinutes = this.getBoilDurationMinutes(recipe);
+    const boilHours = boilMinutes / MINUTES_IN_HOUR;
+
+    const { kettleLoss, fermenterLoss, boilOffRate, evaporationRate } =
+      this._getEquipmentParameters(recipe.equipment);
+
+    const postBoilVolumeNeeded = fermenterTargetVolume + fermenterLoss;
+
+    const preBoilVolume = this._calculatePreBoilVolume(
+      postBoilVolumeNeeded,
+      kettleLoss,
+      boilHours,
+      boilOffRate,
+      evaporationRate,
+    );
+
+    const totalBoilLoss = this._calculateTotalBoilLoss(
+      preBoilVolume,
+      boilHours,
+      boilOffRate,
+      evaporationRate,
+    );
+
+    const postBoilVolume = Math.max(
+      0,
+      preBoilVolume - kettleLoss - totalBoilLoss,
+    );
+
+    return {
+      preBoilVolume: this.roundToPrecision(preBoilVolume, 3),
+      postBoilVolume: this.roundToPrecision(postBoilVolume, 3),
+      fermenterTargetVolume: this.roundToPrecision(fermenterTargetVolume, 3),
+      boilMinutes,
+    };
+  }
+
+  private _getEquipmentParameters(equipment: Equipment | null) {
+    let kettleLoss = 0;
+    let fermenterLoss = 0;
+    let boilOffRate: number | undefined;
+    let evaporationRate: number | undefined;
+
+    if (equipment?.isKettle()) {
+      kettleLoss = equipment.kettleLoss ?? 0;
+      evaporationRate = equipment.evaporationRate;
+      boilOffRate = equipment.boilOffRate;
+    }
+    if (equipment?.isFermenter()) {
+      fermenterLoss = equipment.fermenterLoss ?? 0;
+    }
+
+    return { kettleLoss, fermenterLoss, boilOffRate, evaporationRate };
+  }
+
+  private _calculatePreBoilVolume(
+    postBoilVolumeNeeded: number,
+    kettleLoss: number,
+    boilHours: number,
+    boilOffRate?: number,
+    evaporationRate?: number,
+  ): number {
+    const volumeBeforeBoilOff = postBoilVolumeNeeded + kettleLoss;
+
+    if (typeof boilOffRate === 'number' && boilOffRate > 0) {
+      return volumeBeforeBoilOff + boilOffRate * boilHours;
+    }
+
+    if (typeof evaporationRate === 'number' && evaporationRate > 0) {
+      const evapFraction = evaporationRate * boilHours * PERCENT_TO_DECIMAL;
+
+      const clampedEvapFraction = Math.min(
+        MAX_EVAPORATION_FRACTION,
+        evapFraction,
+      );
+
+      const safeRemainingVolumeFraction = Math.max(
+        MIN_REMAINING_VOLUME_FRACTION,
+        1 - clampedEvapFraction,
+      );
+
+      return volumeBeforeBoilOff / safeRemainingVolumeFraction;
+    }
+
+    return volumeBeforeBoilOff;
+  }
+
+  private _calculateTotalBoilLoss(
+    preBoilVolume: number,
+    boilHours: number,
+    boilOffRate?: number,
+    evaporationRate?: number,
+  ): number {
+    if (typeof boilOffRate === 'number' && boilOffRate > 0) {
+      return boilOffRate * boilHours;
+    }
+
+    if (typeof evaporationRate === 'number' && evaporationRate > 0) {
+      const evaporationLoss =
+        preBoilVolume * (evaporationRate * boilHours * PERCENT_TO_DECIMAL);
+      return evaporationLoss;
+    }
+
+    return 0;
+  }
+
+  private getBoilDurationMinutes(
+    recipe: Recipe & { hops?: MaybeCollection<RecipeHop> },
+  ): number {
+    const allHops = this.toArray(recipe.hops);
+
+    const boilStageHops = allHops.filter((hop) => hop.stage === HopStage.BOIL);
+
+    const maxBoilTime = boilStageHops.reduce((currentMax, hop) => {
+      const hopBoilTime = typeof hop.boilTime === 'number' ? hop.boilTime : 0;
+      return Math.max(currentMax, hopBoilTime);
+    }, 0);
+
+    return maxBoilTime || 60;
+  }
 }
+
+type VolumeModel = {
+  preBoilVolume: number;
+  postBoilVolume: number;
+  fermenterTargetVolume: number;
+  boilMinutes: number;
+};
 
 type GravityResult = {
   og: number | null;

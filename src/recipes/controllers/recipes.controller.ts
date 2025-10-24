@@ -44,6 +44,7 @@ export class RecipesController {
       { id, user: req.user.id },
       {
         populate: [
+          'equipment',
           'fermentables',
           'fermentables.fermentable',
           'hops',
@@ -52,6 +53,8 @@ export class RecipesController {
           'yeasts.yeast',
           'waters',
           'waters.waterProfile',
+          'mash',
+          'mash.mashProfile',
         ],
       },
     );
@@ -62,7 +65,21 @@ export class RecipesController {
     @Request() req: AuthenticatedRequest,
     @Body() input: RecipeUpsertInput,
   ) {
-    return await this.recipesService.createRecipe(req.user.id, input);
+    const recipe = await this.recipesService.createRecipe(req.user.id, input);
+
+    return {
+      id: recipe.id,
+      name: recipe.name,
+      type: recipe.type,
+      originalGravity: recipe.originalGravity,
+      finalGravity: recipe.finalGravity,
+      estimatedIbu: recipe.estimatedIbu,
+      estimatedColor: recipe.estimatedColor,
+      estimatedAbv: recipe.estimatedAbv,
+      plannedVolume: recipe.plannedVolume,
+      plannedEfficiency: recipe.plannedEfficiency,
+      createdAt: recipe.createdAt,
+    };
   }
 
   @Put(':id')

@@ -5,6 +5,7 @@ import { WaterProfile } from 'src/catalog/entities/water-profile.entity';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export class RecipeWaterInput {
+  @IsOptional()
   @PrimaryKeyUUID()
   id?: string;
 

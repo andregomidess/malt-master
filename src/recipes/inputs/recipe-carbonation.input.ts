@@ -5,6 +5,7 @@ import { CarbonationProfile } from 'src/profiles/entities/carbonation-profile.en
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 
 export class RecipeCarbonationInput {
+  @IsOptional()
   @PrimaryKeyUUID()
   id?: string;
 
