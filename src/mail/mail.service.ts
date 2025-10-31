@@ -24,4 +24,19 @@ export class MailService {
       context: { username, verifyUrl },
     });
   }
+
+  async sendForgotPasswordEmail(
+    to: string,
+    username: string,
+    token: string,
+  ): Promise<void> {
+    const appUrl = this.configService.get<string>('APP_URL');
+    const forgotPasswordUrl = `${appUrl}/auth/forgot-password?token=${encodeURIComponent(token)}`;
+    await this.mailer.sendMail({
+      to,
+      subject: 'Recuperação de senha',
+      template: 'forgot-password',
+      context: { username, forgotPasswordUrl },
+    });
+  }
 }

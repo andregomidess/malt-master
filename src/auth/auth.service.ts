@@ -96,7 +96,7 @@ export class AuthService {
     userInput.password = hashedPassword;
     userInput.emailVerificationToken = emailVerificationToken;
 
-    await this.usersService.save(userInput);
+    const user = await this.usersService.save(userInput);
 
     await this.mailService.sendVerificationEmail(
       userInput.email,
@@ -105,9 +105,70 @@ export class AuthService {
     );
 
     return {
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+      },
       message:
         'User registered successfully. Please check your email to verify your account.',
     };
+  }
+
+  async forgotPassword(email: string) {
+    const user = await this.em.findOne(User, { email });
+
+    if (!user) throw new BadRequestException('User not found');
+
+    // Gera um token seguro para reset de senha
+    const resetToken = randomBytes(32).toString('hex');
+
+    // Define expiração de 1 hora
+    const resetExpiry = new Date();
+    resetExpiry.setHours(resetExpiry.getHours() + 1);
+
+    user.passwordResetToken = resetToken;
+    user.passwordResetExpiry = resetExpiry;
+
+    await this.em.persistAndFlush(user);
+
+    await this.mailService.sendForgotPasswordEmail(
+      user.email,
+      user.username,
+      resetToken,
+    );
+    return { message: 'Recovery email sent successfully' };
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    const user = await this.em.findOne(User, {
+      passwordResetToken: token,
+    });
+
+    if (!user) {
+      throw new BadRequestException('Invalid or expired reset token');
+    }
+
+    // Verifica se o token expirou
+    if (!user.passwordResetExpiry || user.passwordResetExpiry < new Date()) {
+      throw new BadRequestException('Reset token has expired');
+    }
+
+    // Hash da nova senha
+    const hashedPassword = await argon2.hash(newPassword, {
+      type: argon2.argon2id,
+      memoryCost: 2 ** 13,
+      timeCost: 3,
+      parallelism: 1,
+    });
+
+    user.password = hashedPassword;
+    user.passwordResetToken = null;
+    user.passwordResetExpiry = null;
+
+    await this.em.persistAndFlush(user);
+
+    return { message: 'Password reset successfully' };
   }
 
   async verifyEmail(token: string) {

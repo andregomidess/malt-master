@@ -59,6 +59,12 @@ export class User {
   @Property({ nullable: true })
   refreshToken?: string | null;
 
+  @Property({ nullable: true })
+  passwordResetToken?: string | null;
+
+  @Property({ nullable: true, type: 'datetime' })
+  passwordResetExpiry?: Date | null;
+
   @PropertyCreatedAt()
   createdAt!: Date;
 
