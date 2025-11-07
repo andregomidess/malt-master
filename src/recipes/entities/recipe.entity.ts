@@ -33,8 +33,8 @@ export class Recipe {
   @PrimaryKeyUUID()
   id!: string;
 
-  @ManyToOne(() => User)
-  user!: User;
+  @ManyToOne(() => User, { nullable: true })
+  user!: User | null;
 
   @ManyToOne(() => BeerStyle)
   beerStyle!: BeerStyle;

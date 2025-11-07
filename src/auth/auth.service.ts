@@ -120,10 +120,8 @@ export class AuthService {
 
     if (!user) throw new BadRequestException('User not found');
 
-    // Gera um token seguro para reset de senha
     const resetToken = randomBytes(32).toString('hex');
 
-    // Define expiração de 1 hora
     const resetExpiry = new Date();
     resetExpiry.setHours(resetExpiry.getHours() + 1);
 
@@ -149,12 +147,10 @@ export class AuthService {
       throw new BadRequestException('Invalid or expired reset token');
     }
 
-    // Verifica se o token expirou
     if (!user.passwordResetExpiry || user.passwordResetExpiry < new Date()) {
       throw new BadRequestException('Reset token has expired');
     }
 
-    // Hash da nova senha
     const hashedPassword = await argon2.hash(newPassword, {
       type: argon2.argon2id,
       memoryCost: 2 ** 13,
