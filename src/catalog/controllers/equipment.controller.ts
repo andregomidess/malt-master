@@ -7,10 +7,16 @@ import {
   Delete,
   UseGuards,
   Patch,
+  Query,
 } from '@nestjs/common';
-import { EquipmentService } from '../services/equipment.service';
+import {
+  EquipmentService,
+  PaginatedResult,
+} from '../services/equipment.service';
 import { type EquipmentInputUnion } from '../inputs/equipment.input';
+import { EquipmentQueryInput } from '../inputs/equipment-query.input';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Equipment } from '../entities/equipment.entity';
 
 @Controller('equipments')
 export class EquipmentController {
@@ -18,8 +24,10 @@ export class EquipmentController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async findAll() {
-    return await this.equipmentService.findAll();
+  async findAll(
+    @Query() query: EquipmentQueryInput,
+  ): Promise<PaginatedResult<Equipment>> {
+    return await this.equipmentService.findAll(query);
   }
 
   @Put()
@@ -30,20 +38,26 @@ export class EquipmentController {
 
   @Get('kettles')
   @UseGuards(JwtAuthGuard)
-  async findKettles() {
-    return await this.equipmentService.findKettles();
+  async findKettles(
+    @Query() query: EquipmentQueryInput,
+  ): Promise<PaginatedResult<Equipment>> {
+    return await this.equipmentService.findKettles(query);
   }
 
   @Get('fermenters')
   @UseGuards(JwtAuthGuard)
-  async findFermenters() {
-    return await this.equipmentService.findFermenters();
+  async findFermenters(
+    @Query() query: EquipmentQueryInput,
+  ): Promise<PaginatedResult<Equipment>> {
+    return await this.equipmentService.findFermenters(query);
   }
 
   @Get('chillers')
   @UseGuards(JwtAuthGuard)
-  async findChillers() {
-    return await this.equipmentService.findChillers();
+  async findChillers(
+    @Query() query: EquipmentQueryInput,
+  ): Promise<PaginatedResult<Equipment>> {
+    return await this.equipmentService.findChillers(query);
   }
 
   @Get(':id')

@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { InventoryService } from '../services/inventory.service';
 import { type BaseInventoryItemInputUnion } from '../inputs/base-inventory-item.input';
+import { InventoryPaginationQuery } from '../queries/inventory.query';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/users/entities/user.entity';
 import { InventoryItemType } from '../entities/base-inventory-item.entity';
@@ -47,7 +48,20 @@ export class InventoryController {
   }
 
   @Get('items')
-  async getAllInventoryItems(@Request() req: AuthenticatedRequest) {
+  async getAllInventoryItems(
+    @Request() req: AuthenticatedRequest,
+    @Query() query: InventoryPaginationQuery,
+  ) {
+    if (query.page && query.take) {
+      return await this.inventoryService.getAllInventoryItemsPaginated(
+        req.user.id,
+        query.page,
+        query.take,
+        query.type,
+        query.search,
+      );
+    }
+
     return await this.inventoryService.getAllInventoryItems(req.user.id);
   }
 
