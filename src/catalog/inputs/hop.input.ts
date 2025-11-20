@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsEnum,
   IsNumber,
   IsOptional,
@@ -46,7 +47,8 @@ export class HopInput {
   form?: HopForm;
 
   @IsOptional()
-  @IsEnum(HopUse)
+  @IsArray()
+  @IsEnum(HopUse, { each: true })
   uses?: HopUse[];
 
   @IsOptional()

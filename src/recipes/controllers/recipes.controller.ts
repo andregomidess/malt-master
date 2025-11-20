@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/users/entities/user.entity';
 import { RecipesService } from '../services/recipes.service';
 import { RecipeUpsertInput } from '../inputs/recipe-upsert.input';
+import { RecipeQueryInput } from '../queries/recipe.query';
 import { Recipe } from '../entities/recipe.entity';
 
 interface AuthenticatedRequest extends Request {
@@ -29,19 +31,27 @@ export class RecipesController {
   ) {}
 
   @Get()
-  async list(@Request() req: AuthenticatedRequest) {
-    return await this.em.find(
-      Recipe,
-      { user: req.user.id },
-      { orderBy: { createdAt: 'desc' } },
-    );
+  async list(
+    @Request() req: AuthenticatedRequest,
+    @Query() query: RecipeQueryInput,
+  ) {
+    if (query.page && query.take) {
+      return await this.recipesService.findAllPaginatedByUser(
+        req.user.id,
+        query,
+      );
+    }
+    return await this.recipesService.findAllByUser(req.user.id);
   }
 
   @Get(':id')
   async getOne(@Request() req: AuthenticatedRequest, @Param('id') id: string) {
     return await this.em.findOneOrFail(
       Recipe,
-      { id, user: req.user.id },
+      {
+        id,
+        $or: [{ user: { id: req.user.id } }, { user: null }],
+      },
       {
         populate: [
           'equipment',

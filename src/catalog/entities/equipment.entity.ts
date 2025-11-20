@@ -48,7 +48,14 @@ export enum ChillerType {
   ICE_BATH = 'ice_bath',
 }
 
-@Entity()
+@Entity({
+  discriminatorColumn: 'type',
+  discriminatorMap: {
+    [EquipmentType.KETTLE]: 'KettleEquipment',
+    [EquipmentType.FERMENTER]: 'FermenterEquipment',
+    [EquipmentType.CHILLER]: 'ChillerEquipment',
+  },
+})
 export abstract class Equipment {
   @PrimaryKeyUUID()
   id!: string;
@@ -102,6 +109,7 @@ export abstract class Equipment {
   }
 }
 
+// Com STI, todas as propriedades ficam na mesma tabela 'equipment'
 @Entity()
 export class KettleEquipment extends Equipment {
   @Property({ type: 'decimal', precision: 8, scale: 2 })
@@ -125,6 +133,7 @@ export class KettleEquipment extends Equipment {
   }
 }
 
+// Com STI, todas as propriedades ficam na mesma tabela 'equipment'
 @Entity()
 export class FermenterEquipment extends Equipment {
   @Property({ type: 'decimal', precision: 8, scale: 2 })
@@ -154,6 +163,7 @@ export class FermenterEquipment extends Equipment {
   }
 }
 
+// Com STI, todas as propriedades ficam na mesma tabela 'equipment'
 @Entity()
 export class ChillerEquipment extends Equipment {
   @Property({ type: 'decimal', precision: 8, scale: 0 })

@@ -46,22 +46,43 @@ export abstract class BaseInventoryItem {
     return (this.costPerUnit || 0) * this.quantity;
   }
 
+  private getBestBeforeDateAsDate(): Date | null {
+    if (!this.bestBeforeDate) return null;
+    if (this.bestBeforeDate instanceof Date) return this.bestBeforeDate;
+    return new Date(this.bestBeforeDate);
+  }
+
+  protected getPurchaseDateAsDate(): Date | null {
+    if (!this.purchaseDate) return null;
+    if (this.purchaseDate instanceof Date) return this.purchaseDate;
+    return new Date(this.purchaseDate);
+  }
+
+  protected getDateAsDate(date: Date | string | null): Date | null {
+    if (!date) return null;
+    if (date instanceof Date) return date;
+    return new Date(date);
+  }
+
   get isNearExpiry(): boolean {
-    if (!this.bestBeforeDate) return false;
+    const bestBeforeDate = this.getBestBeforeDateAsDate();
+    if (!bestBeforeDate) return false;
     const thirtyDaysFromNow = new Date();
     thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30);
-    return this.bestBeforeDate <= thirtyDaysFromNow;
+    return bestBeforeDate <= thirtyDaysFromNow;
   }
 
   get isExpired(): boolean {
-    if (!this.bestBeforeDate) return false;
-    return this.bestBeforeDate < new Date();
+    const bestBeforeDate = this.getBestBeforeDateAsDate();
+    if (!bestBeforeDate) return false;
+    return bestBeforeDate < new Date();
   }
 
   get daysUntilExpiry(): number | null {
-    if (!this.bestBeforeDate) return null;
+    const bestBeforeDate = this.getBestBeforeDateAsDate();
+    if (!bestBeforeDate) return null;
     const today = new Date();
-    const diffTime = this.bestBeforeDate.getTime() - today.getTime();
+    const diffTime = bestBeforeDate.getTime() - today.getTime();
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
 }

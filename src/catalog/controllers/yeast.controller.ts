@@ -7,10 +7,18 @@ import {
   Param,
   Patch,
   Put,
+  Query,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { YeastInput } from '../inputs/yeast.input';
+import { YeastQueryInput } from '../queries/yeast.query';
 import { YeastService } from '../services/yeast.service';
+import { User } from 'src/users/entities/user.entity';
+
+interface AuthenticatedRequest extends Request {
+  user: User;
+}
 
 @Controller('yeasts')
 export class YeastController {
@@ -18,14 +26,26 @@ export class YeastController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async findAll() {
-    return await this.yeastService.findAll();
+  async findAll(
+    @Query() query: YeastQueryInput,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    if (query.page && query.take) {
+      return await this.yeastService.findAllPaginated(query, req.user);
+    }
+    return await this.yeastService.findAll(req.user);
   }
 
   @Put()
   @UseGuards(JwtAuthGuard)
-  async save(@Body() yeastInput: YeastInput) {
-    return await this.yeastService.save(yeastInput);
+  async save(
+    @Body() yeastInput: YeastInput,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    return await this.yeastService.save({
+      ...yeastInput,
+      user: req.user,
+    });
   }
 
   @Get(':id')

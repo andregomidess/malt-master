@@ -44,10 +44,13 @@ export class YeastInventoryItem extends BaseInventoryItem {
    * Calcula a viabilidade atual baseada na idade do fermento
    */
   get currentViability(): number | null {
-    if (!this.viability || !this.productionDate) return this.viability;
+    if (!this.viability) return this.viability;
+
+    const productionDate = this.getDateAsDate(this.productionDate);
+    if (!productionDate) return this.viability;
 
     const monthsOld =
-      (new Date().getTime() - this.productionDate.getTime()) /
+      (new Date().getTime() - productionDate.getTime()) /
       (1000 * 60 * 60 * 24 * 30);
 
     // Degradação da viabilidade: aproximadamente 20% por mês para fermento líquido

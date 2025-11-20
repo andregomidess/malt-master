@@ -1,8 +1,9 @@
-import { Entity, OptionalProps, Property } from '@mikro-orm/core';
+import { Entity, ManyToOne, OptionalProps, Property } from '@mikro-orm/core';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 import { PropertyCreatedAt } from 'src/database/common/helpers/PropertyCreatedAt';
 import { PropertyDeletedAt } from 'src/database/common/helpers/PropertyDeletedAt';
 import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class WaterProfile {
@@ -11,6 +12,9 @@ export class WaterProfile {
 
   @Property({ unique: true })
   name!: string;
+
+  @ManyToOne(() => User, { nullable: true })
+  user!: User | null;
 
   @Property({ nullable: true })
   origin!: string | null;

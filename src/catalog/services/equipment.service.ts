@@ -5,13 +5,7 @@ import {
   type QueryOrderMap,
 } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
-import {
-  Equipment,
-  KettleEquipment,
-  FermenterEquipment,
-  ChillerEquipment,
-  EquipmentType,
-} from '../entities/equipment.entity';
+import { Equipment, EquipmentType } from '../entities/equipment.entity';
 import { BaseEntityService } from 'src/database/common/services/base-entity.service';
 import { equipmentResolver } from '../resolvers/equipment.resolver';
 import { type EquipmentInputUnion } from '../inputs/equipment.input';
@@ -20,6 +14,7 @@ import {
   EquipmentSortBy,
   SortOrder,
 } from '../inputs/equipment-query.input';
+import { User } from 'src/users/entities/user.entity';
 
 export interface PaginatedResult<T> {
   data: T[];
@@ -40,15 +35,29 @@ export class EquipmentService extends BaseEntityService<Equipment> {
 
   async findAll(
     query: EquipmentQueryInput,
+    user: User,
   ): Promise<PaginatedResult<Equipment>> {
     const where: FilterQuery<Equipment> = {};
-    if (query.type) where.type = query.type;
 
     if (query.search) {
-      where.$or = [
-        { name: { $ilike: `%${query.search}%` } },
-        { description: { $ilike: `%${query.search}%` } },
+      const userCondition: FilterQuery<Equipment> = {
+        $or: [{ user }, { user: null }],
+      };
+      if (query.type) {
+        userCondition.type = query.type;
+      }
+      where.$and = [
+        userCondition,
+        {
+          $or: [
+            { name: { $ilike: `%${query.search}%` } },
+            { description: { $ilike: `%${query.search}%` } },
+          ],
+        },
       ];
+    } else {
+      where.$or = [{ user }, { user: null }];
+      if (query.type) where.type = query.type;
     }
 
     const sortField = query.sortBy || EquipmentSortBy.NAME;
@@ -75,33 +84,48 @@ export class EquipmentService extends BaseEntityService<Equipment> {
 
   async findKettles(
     query: EquipmentQueryInput,
-  ): Promise<PaginatedResult<KettleEquipment>> {
-    return this.findByTypeWithPagination(EquipmentType.KETTLE, query);
+    user: User,
+  ): Promise<PaginatedResult<Equipment>> {
+    return this.findByTypeWithPagination(EquipmentType.KETTLE, query, user);
   }
 
   async findFermenters(
     query: EquipmentQueryInput,
-  ): Promise<PaginatedResult<FermenterEquipment>> {
-    return this.findByTypeWithPagination(EquipmentType.FERMENTER, query);
+    user: User,
+  ): Promise<PaginatedResult<Equipment>> {
+    return this.findByTypeWithPagination(EquipmentType.FERMENTER, query, user);
   }
 
   async findChillers(
     query: EquipmentQueryInput,
-  ): Promise<PaginatedResult<ChillerEquipment>> {
-    return this.findByTypeWithPagination(EquipmentType.CHILLER, query);
+    user: User,
+  ): Promise<PaginatedResult<Equipment>> {
+    return this.findByTypeWithPagination(EquipmentType.CHILLER, query, user);
   }
 
-  private async findByTypeWithPagination<T extends Equipment>(
+  private async findByTypeWithPagination(
     type: EquipmentType,
     query: EquipmentQueryInput,
-  ): Promise<PaginatedResult<T>> {
-    const where: FilterQuery<Equipment> = { type };
+    user: User,
+  ): Promise<PaginatedResult<Equipment>> {
+    const where: FilterQuery<Equipment> = {};
 
     if (query.search) {
-      where.$or = [
-        { name: { $ilike: `%${query.search}%` } },
-        { description: { $ilike: `%${query.search}%` } },
+      where.$and = [
+        {
+          type,
+          $or: [{ user }, { user: null }],
+        },
+        {
+          $or: [
+            { name: { $ilike: `%${query.search}%` } },
+            { description: { $ilike: `%${query.search}%` } },
+          ],
+        },
       ];
+    } else {
+      where.type = type;
+      where.$or = [{ user }, { user: null }];
     }
 
     const sortField = query.sortBy || EquipmentSortBy.NAME;
@@ -119,14 +143,14 @@ export class EquipmentService extends BaseEntityService<Equipment> {
     });
 
     return {
-      data: data as T[],
+      data,
       total,
       page: query.page,
       totalPages: Math.ceil(total / query.take),
     };
   }
 
-  async findByType<T extends Equipment>(type: EquipmentType): Promise<T[]> {
-    return (await this.em.find(Equipment, { type })) as T[];
+  async findByType(type: EquipmentType): Promise<Equipment[]> {
+    return await this.em.find(Equipment, { type });
   }
 }

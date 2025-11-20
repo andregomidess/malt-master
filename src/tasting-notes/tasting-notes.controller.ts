@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { TastingNotesService } from './tasting-notes.service';
 import { TastingNoteInput } from './inputs/tasting-note.input';
+import { TastingNoteQueryInput } from './queries/tasting-note.query';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/users/entities/user.entity';
 
@@ -21,7 +22,16 @@ export class TastingNotesController {
   constructor(private readonly tastingNotesService: TastingNotesService) {}
 
   @Get()
-  async findAllByUser(@Request() req: Request & { user: User }) {
+  async findAllByUser(
+    @Request() req: Request & { user: User },
+    @Query() query: TastingNoteQueryInput,
+  ) {
+    if (query.page && query.take) {
+      return await this.tastingNotesService.findAllPaginatedByUser(
+        req.user.id,
+        query,
+      );
+    }
     return await this.tastingNotesService.findAllByUser(req.user.id);
   }
 

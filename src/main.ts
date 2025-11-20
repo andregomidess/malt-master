@@ -2,9 +2,19 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { useContainer } from 'class-validator';
+import { MikroORM } from '@mikro-orm/core';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const orm = app.get(MikroORM);
+  try {
+    const migrator = orm.getMigrator();
+    await migrator.up();
+    console.log('✅ Migrações executadas com sucesso');
+  } catch (error) {
+    console.error('❌ Erro ao executar migrações:', error);
+  }
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
@@ -25,7 +35,10 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: [
+      'http://localhost:5173',
+      'https://malt-master-interface.vercel.app',
+    ],
     credentials: true,
   });
 

@@ -15,7 +15,8 @@ import { User } from 'src/users/entities/user.entity';
 import { BatchesService } from './batches.service';
 import { BatchInput } from './inputs/batch.input';
 import { Batch } from './entities/batch.entity';
-import { PaginationSearchableQuery } from 'src/database/common/queries/pagination.query';
+import { BatchQueryInput } from './queries/batch.query';
+import { PaginatedResult } from './batches.service';
 
 interface AuthenticatedRequest extends Request {
   user: User;
@@ -32,20 +33,15 @@ export class BatchesController {
   @Get()
   async list(
     @Request() req: AuthenticatedRequest,
-    @Query() query: PaginationSearchableQuery,
-  ) {
-    const [batches, count] = await this.em.findAndCount(
-      Batch,
-      { user: req.user.id },
-      {
-        orderBy: { brewDate: 'desc' },
-        populate: ['recipe', 'equipment'],
-        limit: query.limit,
-        offset: query.offset,
-      },
-    );
-
-    return { count, batches };
+    @Query() query: BatchQueryInput,
+  ): Promise<PaginatedResult<Batch> | Batch[]> {
+    if (query.page && query.take) {
+      return await this.batchesService.findAllPaginatedByUser(
+        req.user.id,
+        query,
+      );
+    }
+    return await this.batchesService.findAllByUser(req.user.id);
   }
 
   @Get(':id')

@@ -58,6 +58,16 @@ export class RecipeInput {
   finalVolume?: number | null;
 
   @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 3 })
+  @IsOptional()
+  mashVolume?: number | null;
+
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 0 })
+  @IsOptional()
+  boilTime?: number | null;
+
+  @Type(() => Number)
   @IsNumber({ maxDecimalPlaces: 4 })
   @IsOptional()
   originalGravity?: number | null;

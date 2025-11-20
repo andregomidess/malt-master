@@ -37,11 +37,13 @@ export class HopInventoryItem extends BaseInventoryItem {
    * Calcula a degradação dos ácidos alfa baseada no tempo e condições de armazenamento
    */
   get currentAlphaAcids(): number | null {
-    if (!this.alphaAcidsAtPurchase || !this.purchaseDate)
-      return this.alphaAcidsAtPurchase;
+    if (!this.alphaAcidsAtPurchase) return this.alphaAcidsAtPurchase;
+
+    const purchaseDate = this.getPurchaseDateAsDate();
+    if (!purchaseDate) return this.alphaAcidsAtPurchase;
 
     const monthsStored =
-      (new Date().getTime() - this.purchaseDate.getTime()) /
+      (new Date().getTime() - purchaseDate.getTime()) /
       (1000 * 60 * 60 * 24 * 30);
 
     // Taxa de degradação baseada nas condições de armazenamento
@@ -61,10 +63,11 @@ export class HopInventoryItem extends BaseInventoryItem {
    * Verifica se o lúpulo ainda está em boas condições baseado na idade e armazenamento
    */
   get isStillFresh(): boolean {
-    if (!this.purchaseDate) return true;
+    const purchaseDate = this.getPurchaseDateAsDate();
+    if (!purchaseDate) return true;
 
     const monthsStored =
-      (new Date().getTime() - this.purchaseDate.getTime()) /
+      (new Date().getTime() - purchaseDate.getTime()) /
       (1000 * 60 * 60 * 24 * 30);
 
     // Critérios baseados no armazenamento

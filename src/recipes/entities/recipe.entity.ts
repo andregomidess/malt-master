@@ -105,6 +105,12 @@ export class Recipe {
   finalVolume!: number | null;
 
   @Property({ type: 'decimal', nullable: true })
+  mashVolume!: number | null;
+
+  @Property({ type: 'decimal', nullable: true })
+  boilTime!: number | null;
+
+  @Property({ type: 'decimal', nullable: true })
   originalGravity!: number | null;
 
   @Property({ type: 'decimal', nullable: true })

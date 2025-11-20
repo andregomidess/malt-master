@@ -19,6 +19,7 @@ export class BeerStyleInput {
   name!: string;
 
   @IsEntity({ entity: User })
+  @IsOptional()
   user?: User;
 
   @IsOptional()

@@ -1,5 +1,10 @@
+import {
+  EntityManager,
+  QueryOrder,
+  type FilterQuery,
+  type QueryOrderMap,
+} from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
-import { EntityManager } from '@mikro-orm/core';
 import { BaseEntityService } from 'src/database/common/services/base-entity.service';
 import { Recipe } from '../entities/recipe.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -19,6 +24,18 @@ import type { RecipeWaterInput } from '../inputs/recipe-water.input';
 import type { RecipeMashInput } from '../inputs/recipe-mash.input';
 import type { RecipeFermentationInput } from '../inputs/recipe-fermentation.input';
 import type { RecipeCarbonationInput } from '../inputs/recipe-carbonation.input';
+import {
+  RecipeQueryInput,
+  RecipeSortBy,
+  SortOrder,
+} from '../queries/recipe.query';
+
+export interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
 
 @Injectable()
 export class RecipesService extends BaseEntityService<Recipe> {
@@ -29,18 +46,86 @@ export class RecipesService extends BaseEntityService<Recipe> {
     super(em, Recipe);
   }
 
+  async findAllByUser(userId: string): Promise<Recipe[]> {
+    return await this.em.find(
+      Recipe,
+      {
+        $or: [{ user: { id: userId } }, { user: null }],
+      },
+      { orderBy: { createdAt: 'desc' } },
+    );
+  }
+
+  async findAllPaginatedByUser(
+    userId: string,
+    query: RecipeQueryInput,
+  ): Promise<PaginatedResult<Recipe>> {
+    const where: FilterQuery<Recipe> = {
+      $or: [{ user: { id: userId } }, { user: null }],
+    };
+
+    if (query.type) {
+      where.type = query.type;
+    }
+
+    if (query.search) {
+      const searchConditions = [
+        { name: { $ilike: `%${query.search}%` } },
+        { about: { $ilike: `%${query.search}%` } },
+        { notes: { $ilike: `%${query.search}%` } },
+      ];
+
+      // Combinar condições de user com condições de busca
+      where.$and = [
+        {
+          $or: [{ user: { id: userId } }, { user: null }],
+        },
+        {
+          $or: searchConditions,
+        },
+      ];
+      delete where.$or;
+    }
+
+    const sortField = query.sortBy || RecipeSortBy.CREATED_AT;
+    const sortOrder =
+      query.order === SortOrder.ASC ? QueryOrder.ASC : QueryOrder.DESC;
+
+    const orderBy: QueryOrderMap<Recipe> = {
+      [sortField]: sortOrder,
+    } as QueryOrderMap<Recipe>;
+
+    const [data, total] = await this.em.findAndCount(Recipe, where, {
+      orderBy,
+      limit: query.limit,
+      offset: query.offset,
+      populate: ['beerStyle', 'equipment'],
+    });
+
+    return {
+      data,
+      total,
+      page: query.page,
+      totalPages: Math.ceil(total / query.take),
+    };
+  }
+
   async createRecipe(
     userId: string,
     input: RecipeUpsertInput,
   ): Promise<Recipe> {
     return await this.em.transactional(async (em) => {
-      const recipe = this.createRecipeEntity(em, userId, input);
+      const recipe = this.createRecipeEntity(
+        em as EntityManager,
+        userId,
+        input,
+      );
       em.persist(recipe);
 
-      this.createCollectionRelations(em, recipe, input);
-      this.createOneToOneRelations(em, recipe, input);
+      this.createCollectionRelations(em as EntityManager, recipe, input);
+      this.createOneToOneRelations(em as EntityManager, recipe, input);
 
-      await this.flushAndRecalculate(em, recipe);
+      await this.flushAndRecalculate(em as EntityManager, recipe);
 
       return recipe;
     });
@@ -52,13 +137,17 @@ export class RecipesService extends BaseEntityService<Recipe> {
     input: RecipeUpsertInput,
   ): Promise<Recipe> {
     return await this.em.transactional(async (em) => {
-      const recipe = await this.loadRecipeForUpdate(em, userId, recipeId);
+      const recipe = await this.loadRecipeForUpdate(
+        em as EntityManager,
+        userId,
+        recipeId,
+      );
 
-      this.updateRecipeProperties(em, recipe, input);
-      this.replaceCollectionRelations(recipe, input, em);
-      this.createOneToOneRelations(em, recipe, input);
+      this.updateRecipeProperties(em as EntityManager, recipe, input);
+      this.replaceCollectionRelations(recipe, input, em as EntityManager);
+      this.createOneToOneRelations(em as EntityManager, recipe, input);
 
-      await this.flushAndRecalculate(em, recipe);
+      await this.flushAndRecalculate(em as EntityManager, recipe);
 
       return recipe;
     });
@@ -81,8 +170,10 @@ export class RecipesService extends BaseEntityService<Recipe> {
     input: RecipeUpsertInput,
   ): Recipe {
     const userRef = em.getReference(User, userId);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { user, ...recipeData } = input.recipe;
     return em.create(Recipe, {
-      ...input.recipe,
+      ...recipeData,
       user: userRef,
     });
   }
@@ -119,7 +210,9 @@ export class RecipesService extends BaseEntityService<Recipe> {
     input: RecipeUpsertInput,
   ): void {
     if (input.recipe) {
-      em.assign(recipe, input.recipe);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { user, ...recipeData } = input.recipe;
+      em.assign(recipe, recipeData);
     }
   }
 

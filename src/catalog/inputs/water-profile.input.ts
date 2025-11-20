@@ -1,10 +1,17 @@
 import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsEntity } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
+import { User } from 'src/users/entities/user.entity';
 
 export class WaterProfileInput {
   @IsUUID()
   @IsOptional()
   id?: string;
+
+  @IsEntity({ entity: User })
+  @IsOptional()
+  @IsUUID()
+  user?: User;
 
   @IsString()
   name!: string;

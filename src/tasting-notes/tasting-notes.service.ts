@@ -1,7 +1,24 @@
+import {
+  EntityManager,
+  QueryOrder,
+  type FilterQuery,
+  type QueryOrderMap,
+} from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { BaseEntityService } from 'src/database/common/services/base-entity.service';
 import { TastingNote } from './entities/tasting-note.entity';
-import { EntityManager } from '@mikro-orm/core';
+import {
+  TastingNoteQueryInput,
+  TastingNoteSortBy,
+  SortOrder,
+} from './queries/tasting-note.query';
+
+export interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
 
 @Injectable()
 export class TastingNotesService extends BaseEntityService<TastingNote> {
@@ -18,6 +35,49 @@ export class TastingNotesService extends BaseEntityService<TastingNote> {
         populate: ['batch', 'user'],
       },
     );
+  }
+
+  async findAllPaginatedByUser(
+    userId: string,
+    query: TastingNoteQueryInput,
+  ): Promise<PaginatedResult<TastingNote>> {
+    const where: FilterQuery<TastingNote> = {
+      user: { id: userId },
+    };
+
+    if (query.batchId) {
+      where.batch = { id: query.batchId };
+    }
+
+    if (query.search) {
+      where.$or = [
+        { pros: { $ilike: `%${query.search}%` } },
+        { cons: { $ilike: `%${query.search}%` } },
+        { generalNotes: { $ilike: `%${query.search}%` } },
+      ];
+    }
+
+    const sortField = query.sortBy || TastingNoteSortBy.TASTING_DATE;
+    const sortOrder =
+      query.order === SortOrder.ASC ? QueryOrder.ASC : QueryOrder.DESC;
+
+    const orderBy: QueryOrderMap<TastingNote> = {
+      [sortField]: sortOrder,
+    } as QueryOrderMap<TastingNote>;
+
+    const [data, total] = await this.em.findAndCount(TastingNote, where, {
+      orderBy,
+      limit: query.limit,
+      offset: query.offset,
+      populate: ['batch', 'user'],
+    });
+
+    return {
+      data,
+      total,
+      page: query.page,
+      totalPages: Math.ceil(total / query.take),
+    };
   }
 
   async findAllByBatch(batchId: string): Promise<TastingNote[]> {

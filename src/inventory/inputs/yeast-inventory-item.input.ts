@@ -6,6 +6,7 @@ import {
   Min,
   Max,
   IsBoolean,
+  IsUUID,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Yeast } from 'src/catalog/entities/yeast.entity';
@@ -16,6 +17,7 @@ import { BaseInventoryItemInput } from './base-inventory-item.input';
 
 export class YeastInventoryItemInput extends BaseInventoryItemInput<InventoryItemType.YEAST> {
   @IsEntity({ entity: Yeast })
+  @IsUUID()
   yeast!: Yeast;
 
   @IsEnum(YeastInventoryUnit)

@@ -6,11 +6,19 @@ import {
   Param,
   Patch,
   Put,
+  Query,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { BeerStyleService } from '../services/beer-style.service';
 import { BeerStyleInput } from '../inputs/beer-style.input';
+import { BeerStyleQueryInput } from '../queries/beer-style.query';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { User } from 'src/users/entities/user.entity';
+
+interface AuthenticatedRequest extends Request {
+  user: User;
+}
 
 @Controller('beer-styles')
 export class BeerStyleController {
@@ -18,14 +26,26 @@ export class BeerStyleController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async findAll() {
-    return await this.beerStyleService.findAll();
+  async findAll(
+    @Query() query: BeerStyleQueryInput,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    if (query.page && query.take) {
+      return await this.beerStyleService.findAllPaginated(query, req.user);
+    }
+    return await this.beerStyleService.findAll(req.user);
   }
 
   @Put()
   @UseGuards(JwtAuthGuard)
-  async saveBeerStyle(@Body() beerStyleInput: BeerStyleInput) {
-    return await this.beerStyleService.save(beerStyleInput);
+  async saveBeerStyle(
+    @Body() beerStyleInput: BeerStyleInput,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    return await this.beerStyleService.save({
+      ...beerStyleInput,
+      user: req.user,
+    });
   }
 
   @Get(':id')
