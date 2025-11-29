@@ -1,5 +1,5 @@
 import { UserRole, UserStatus, UserGender } from '../entities/user.entity';
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class UserInput {
   @IsOptional()
@@ -28,12 +28,13 @@ export class UserInput {
   @IsEnum(UserGender)
   gender!: UserGender;
 
+  @IsOptional()
   @IsString()
-  email!: string;
+  email?: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  password!: string;
+  password?: string;
 
   @IsOptional()
   @IsString()

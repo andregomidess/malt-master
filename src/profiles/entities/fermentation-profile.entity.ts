@@ -1,8 +1,16 @@
-import { Entity, Property, OneToMany, Collection, Enum } from '@mikro-orm/core';
+import {
+  Entity,
+  Property,
+  OneToMany,
+  Collection,
+  Enum,
+  ManyToOne,
+} from '@mikro-orm/core';
 import { FermentationStep } from './fermentation-step.entity';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 import { PropertyCreatedAt } from 'src/database/common/helpers/PropertyCreatedAt';
 import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt';
+import { User } from 'src/users/entities/user.entity';
 
 export enum FermentationProfileType {
   PRIMARY = 'primary',
@@ -21,12 +29,16 @@ export class FermentationProfile {
   @Property()
   name!: string;
 
+  @ManyToOne(() => User, { nullable: true })
+  user!: User | null;
+
   @Enum(() => FermentationProfileType)
   type!: FermentationProfileType;
 
   @OneToMany(
     () => FermentationStep,
     (fermentationStep) => fermentationStep.fermentationProfile,
+    { orphanRemoval: true },
   )
   steps = new Collection<FermentationStep>(this);
 

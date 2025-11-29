@@ -1,7 +1,14 @@
-import { Entity, Property, Enum, OptionalProps } from '@mikro-orm/core';
+import {
+  Entity,
+  Property,
+  Enum,
+  OptionalProps,
+  ManyToOne,
+} from '@mikro-orm/core';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
 import { PropertyCreatedAt } from 'src/database/common/helpers/PropertyCreatedAt';
 import { PropertyUpdatedAt } from 'src/database/common/helpers/PropertyUpdatedAt';
+import { User } from 'src/users/entities/user.entity';
 
 export enum CarbonationType {
   NATURAL_PRIMING = 'natural_priming',
@@ -24,6 +31,9 @@ export class CarbonationProfile {
 
   @Property()
   name!: string;
+
+  @ManyToOne(() => User)
+  user!: User;
 
   @Enum(() => CarbonationType)
   type!: CarbonationType;

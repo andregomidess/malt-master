@@ -7,10 +7,17 @@ import {
   Patch,
   Put,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { FermentationProfileService } from '../services/fermentation-profile.service';
 import { FermentationProfileInput } from '../inputs/fermentation-profile.input';
+import { FermentationProfile } from '../entities/fermentation-profile.entity';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { User } from 'src/users/entities/user.entity';
+
+interface AuthenticatedRequest extends Request {
+  user: User;
+}
 
 @Controller('fermentation-profiles')
 export class FermentationProfileController {
@@ -20,28 +27,40 @@ export class FermentationProfileController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async findAll() {
-    return await this.fermentationProfileService.findAll();
+  async findAll(
+    @Request() req: AuthenticatedRequest,
+  ): Promise<FermentationProfile[]> {
+    return await this.fermentationProfileService.findAllByUser(req.user.id);
   }
 
   @Get('public')
   @UseGuards(JwtAuthGuard)
-  async findPublic() {
+  async findPublic(): Promise<FermentationProfile[]> {
     return await this.fermentationProfileService.findPublic();
   }
 
   @Put()
   @UseGuards(JwtAuthGuard)
-  async save(@Body() fermentationProfileInput: FermentationProfileInput) {
-    return await this.fermentationProfileService.saveProfile(
-      fermentationProfileInput,
-    );
+  async save(
+    @Request() req: AuthenticatedRequest,
+    @Body() fermentationProfileInput: FermentationProfileInput,
+  ): Promise<FermentationProfile> {
+    return await this.fermentationProfileService.saveProfile({
+      ...fermentationProfileInput,
+      user: req.user,
+    });
   }
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  async findById(@Param('id') id: string) {
-    return await this.fermentationProfileService.findById(id);
+  async findById(
+    @Request() req: AuthenticatedRequest,
+    @Param('id') id: string,
+  ): Promise<FermentationProfile | null> {
+    return await this.fermentationProfileService.findByIdForUser(
+      id,
+      req.user.id,
+    );
   }
 
   @Delete(':id')

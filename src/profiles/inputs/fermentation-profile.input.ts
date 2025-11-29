@@ -12,6 +12,8 @@ import {
 import { Type } from 'class-transformer';
 import { FermentationProfileType } from '../entities/fermentation-profile.entity';
 import { FermentationStepInput } from './fermentation-step.input';
+import { IsEntity } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
+import { User } from 'src/users/entities/user.entity';
 
 export class FermentationProfileInput {
   @IsUUID()
@@ -20,6 +22,11 @@ export class FermentationProfileInput {
 
   @IsString()
   name!: string;
+
+  @IsEntity({ entity: User })
+  @IsUUID()
+  @IsOptional()
+  user?: User;
 
   @IsEnum(FermentationProfileType)
   type!: FermentationProfileType;

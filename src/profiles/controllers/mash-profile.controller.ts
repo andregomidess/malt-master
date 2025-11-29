@@ -7,10 +7,17 @@ import {
   Patch,
   Put,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { MashProfileService } from '../services/mash-profile.service';
 import { MashProfileInput } from '../inputs/mash-profile.input';
+import { MashProfile } from '../entities/mash-profile.entity';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { User } from 'src/users/entities/user.entity';
+
+interface AuthenticatedRequest extends Request {
+  user: User;
+}
 
 @Controller('mash-profiles')
 export class MashProfileController {
@@ -18,26 +25,35 @@ export class MashProfileController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async findAll() {
-    return await this.mashProfileService.findAll();
+  async findAll(@Request() req: AuthenticatedRequest): Promise<MashProfile[]> {
+    return await this.mashProfileService.findAllByUser(req.user.id);
   }
 
   @Get('public')
   @UseGuards(JwtAuthGuard)
-  async findPublic() {
+  async findPublic(): Promise<MashProfile[]> {
     return await this.mashProfileService.findPublic();
   }
 
   @Put()
   @UseGuards(JwtAuthGuard)
-  async save(@Body() mashProfileInput: MashProfileInput) {
-    return await this.mashProfileService.saveProfile(mashProfileInput);
+  async save(
+    @Request() req: AuthenticatedRequest,
+    @Body() mashProfileInput: MashProfileInput,
+  ): Promise<MashProfile> {
+    return await this.mashProfileService.saveProfile({
+      ...mashProfileInput,
+      user: req.user,
+    });
   }
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  async findById(@Param('id') id: string) {
-    return await this.mashProfileService.findById(id);
+  async findById(
+    @Request() req: AuthenticatedRequest,
+    @Param('id') id: string,
+  ): Promise<MashProfile | null> {
+    return await this.mashProfileService.findByIdForUser(id, req.user.id);
   }
 
   @Delete(':id')

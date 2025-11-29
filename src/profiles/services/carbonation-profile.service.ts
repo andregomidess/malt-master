@@ -13,22 +13,30 @@ export class CarbonationProfileService extends BaseEntityService<CarbonationProf
     super(em, CarbonationProfile);
   }
 
-  async findAll(): Promise<CarbonationProfile[]> {
+  async findAllByUser(userId: string): Promise<CarbonationProfile[]> {
     return await this.em.find(
       CarbonationProfile,
-      {},
+      {
+        $or: [{ user: { id: userId } }, { user: null }],
+      },
       { orderBy: { createdAt: 'DESC' } },
     );
   }
 
-  override async findById(id: string): Promise<CarbonationProfile | null> {
-    return await this.em.findOne(CarbonationProfile, { id });
+  async findByIdForUser(
+    id: string,
+    userId: string,
+  ): Promise<CarbonationProfile | null> {
+    return await this.em.findOne(CarbonationProfile, {
+      id,
+      $or: [{ user: { id: userId } }, { user: null }],
+    });
   }
 
   async findPublic(): Promise<CarbonationProfile[]> {
     return await this.em.find(
       CarbonationProfile,
-      { isPublic: true },
+      { isPublic: true, user: null },
       { orderBy: { createdAt: 'DESC' } },
     );
   }

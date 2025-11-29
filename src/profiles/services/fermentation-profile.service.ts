@@ -11,18 +11,26 @@ export class FermentationProfileService extends BaseEntityService<FermentationPr
     super(em, FermentationProfile);
   }
 
-  async findAll(): Promise<FermentationProfile[]> {
+  async findAllByUser(userId: string): Promise<FermentationProfile[]> {
     return await this.em.find(
       FermentationProfile,
-      {},
+      {
+        $or: [{ user: { id: userId } }, { user: null }],
+      },
       { populate: ['steps'], orderBy: { createdAt: 'DESC' } },
     );
   }
 
-  override async findById(id: string): Promise<FermentationProfile | null> {
+  async findByIdForUser(
+    id: string,
+    userId: string,
+  ): Promise<FermentationProfile | null> {
     return await this.em.findOne(
       FermentationProfile,
-      { id },
+      {
+        id,
+        $or: [{ user: { id: userId } }, { user: null }],
+      },
       { populate: ['steps'] },
     );
   }
@@ -30,7 +38,7 @@ export class FermentationProfileService extends BaseEntityService<FermentationPr
   async findPublic(): Promise<FermentationProfile[]> {
     return await this.em.find(
       FermentationProfile,
-      { isPublic: true },
+      { isPublic: true, user: null },
       { populate: ['steps'], orderBy: { createdAt: 'DESC' } },
     );
   }

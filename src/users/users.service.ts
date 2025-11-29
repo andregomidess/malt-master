@@ -16,16 +16,63 @@ export class UsersService extends BaseEntityService<User> {
     super(em, User);
   }
 
+  private excludeSensitiveFields(
+    user: User,
+  ): Omit<
+    User,
+    | 'password'
+    | 'refreshToken'
+    | 'emailVerificationToken'
+    | 'passwordResetToken'
+    | 'passwordResetExpiry'
+  > {
+    const sensitiveFields = [
+      'password',
+      'refreshToken',
+      'emailVerificationToken',
+      'passwordResetToken',
+      'passwordResetExpiry',
+    ];
+    const userWithoutSensitiveFields = Object.fromEntries(
+      Object.entries(user).filter(([key]) => !sensitiveFields.includes(key)),
+    ) as Omit<
+      User,
+      | 'password'
+      | 'refreshToken'
+      | 'emailVerificationToken'
+      | 'passwordResetToken'
+      | 'passwordResetExpiry'
+    >;
+    return userWithoutSensitiveFields;
+  }
+
   async updateUser(userInput: UserInput): Promise<User> {
-    return await this.save(userInput);
+    if (userInput.id) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, email, ...userDataWithoutPassword } = userInput;
+
+      if (!userInput.password) {
+        const savedUser = await this.save(userDataWithoutPassword);
+        return this.excludeSensitiveFields(savedUser) as User;
+      }
+
+      const savedUser = await this.save(userInput);
+      return this.excludeSensitiveFields(savedUser) as User;
+    }
+
+    const savedUser = await this.save(userInput);
+    return this.excludeSensitiveFields(savedUser) as User;
   }
 
   async getUser(id: string): Promise<User | null> {
-    return await this.findById(id);
+    const user = await this.findById(id);
+    if (!user) return null;
+    return this.excludeSensitiveFields(user) as User;
   }
 
   async getUsers(): Promise<User[]> {
-    return await this.em.find(User, {});
+    const users = await this.em.find(User, {});
+    return users.map((user) => this.excludeSensitiveFields(user) as User);
   }
 
   async deleteUser(id: string): Promise<User> {
@@ -35,7 +82,7 @@ export class UsersService extends BaseEntityService<User> {
 
     await this.em.transactional((em) => em.remove(user));
 
-    return user;
+    return this.excludeSensitiveFields(user) as User;
   }
 
   async getUserMetrics(userId: string) {
@@ -83,6 +130,6 @@ export class UsersService extends BaseEntityService<User> {
 
     await this.em.flush();
 
-    return user;
+    return this.excludeSensitiveFields(user) as User;
   }
 }

@@ -13,6 +13,8 @@ import {
   CarbonationType,
   PrimingSugarType,
 } from '../entities/carbonation-profile.entity';
+import { IsEntity } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
+import { User } from 'src/users/entities/user.entity';
 
 export class CarbonationProfileInput {
   @IsUUID()
@@ -21,6 +23,11 @@ export class CarbonationProfileInput {
 
   @IsString()
   name!: string;
+
+  @IsEntity({ entity: User })
+  @IsUUID()
+  @IsOptional()
+  user?: User;
 
   @IsEnum(CarbonationType)
   type!: CarbonationType;

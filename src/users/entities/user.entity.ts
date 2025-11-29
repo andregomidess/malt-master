@@ -29,7 +29,7 @@ export class User {
   @Property({ unique: true })
   username!: string;
 
-  @Property({ nullable: true })
+  @Property({ type: 'text', nullable: true })
   pictureUrl!: string | null;
 
   @Property()

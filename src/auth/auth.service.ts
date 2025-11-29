@@ -71,6 +71,14 @@ export class AuthService {
   }
 
   async registerUser(userInput: UserInput) {
+    if (!userInput.password) {
+      throw new BadRequestException('Password is required');
+    }
+
+    if (!userInput.email) {
+      throw new BadRequestException('Email is required');
+    }
+
     const existingEmail = await this.em.findOne(User, {
       email: userInput.email,
     });

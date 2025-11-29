@@ -7,10 +7,17 @@ import {
   Patch,
   Put,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { CarbonationProfileService } from '../services/carbonation-profile.service';
 import { CarbonationProfileInput } from '../inputs/carbonation-profile.input';
+import { CarbonationProfile } from '../entities/carbonation-profile.entity';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { User } from 'src/users/entities/user.entity';
+
+interface AuthenticatedRequest extends Request {
+  user: User;
+}
 
 @Controller('carbonation-profiles')
 export class CarbonationProfileController {
@@ -20,28 +27,40 @@ export class CarbonationProfileController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async findAll() {
-    return await this.carbonationProfileService.findAll();
+  async findAll(
+    @Request() req: AuthenticatedRequest,
+  ): Promise<CarbonationProfile[]> {
+    return await this.carbonationProfileService.findAllByUser(req.user.id);
   }
 
   @Get('public')
   @UseGuards(JwtAuthGuard)
-  async findPublic() {
+  async findPublic(): Promise<CarbonationProfile[]> {
     return await this.carbonationProfileService.findPublic();
   }
 
   @Put()
   @UseGuards(JwtAuthGuard)
-  async save(@Body() carbonationProfileInput: CarbonationProfileInput) {
-    return await this.carbonationProfileService.saveProfile(
-      carbonationProfileInput,
-    );
+  async save(
+    @Request() req: AuthenticatedRequest,
+    @Body() carbonationProfileInput: CarbonationProfileInput,
+  ): Promise<CarbonationProfile> {
+    return await this.carbonationProfileService.saveProfile({
+      ...carbonationProfileInput,
+      user: req.user,
+    });
   }
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  async findById(@Param('id') id: string) {
-    return await this.carbonationProfileService.findById(id);
+  async findById(
+    @Request() req: AuthenticatedRequest,
+    @Param('id') id: string,
+  ): Promise<CarbonationProfile | null> {
+    return await this.carbonationProfileService.findByIdForUser(
+      id,
+      req.user.id,
+    );
   }
 
   @Delete(':id')

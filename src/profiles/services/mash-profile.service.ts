@@ -11,22 +11,34 @@ export class MashProfileService extends BaseEntityService<MashProfile> {
     super(em, MashProfile);
   }
 
-  async findAll(): Promise<MashProfile[]> {
+  async findAllByUser(userId: string): Promise<MashProfile[]> {
     return await this.em.find(
       MashProfile,
-      {},
+      {
+        $or: [{ user: { id: userId } }, { user: null }],
+      },
       { populate: ['steps'], orderBy: { createdAt: 'DESC' } },
     );
   }
 
-  override async findById(id: string): Promise<MashProfile | null> {
-    return await this.em.findOne(MashProfile, { id }, { populate: ['steps'] });
+  async findByIdForUser(
+    id: string,
+    userId: string,
+  ): Promise<MashProfile | null> {
+    return await this.em.findOne(
+      MashProfile,
+      {
+        id,
+        $or: [{ user: { id: userId } }, { user: null }],
+      },
+      { populate: ['steps'] },
+    );
   }
 
   async findPublic(): Promise<MashProfile[]> {
     return await this.em.find(
       MashProfile,
-      { isPublic: true },
+      { isPublic: true, user: null },
       { populate: ['steps'], orderBy: { createdAt: 'DESC' } },
     );
   }
