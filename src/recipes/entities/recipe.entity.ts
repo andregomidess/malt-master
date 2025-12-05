@@ -86,7 +86,7 @@ export class Recipe {
   @Property()
   name!: string;
 
-  @Property({ nullable: true })
+  @Property({ type: 'text', nullable: true })
   imageUrl!: string | null;
 
   @Property({ type: 'text', nullable: true })

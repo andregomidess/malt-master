@@ -32,8 +32,8 @@ export class CarbonationProfile {
   @Property()
   name!: string;
 
-  @ManyToOne(() => User)
-  user!: User;
+  @ManyToOne(() => User, { nullable: true })
+  user!: User | null;
 
   @Enum(() => CarbonationType)
   type!: CarbonationType;
