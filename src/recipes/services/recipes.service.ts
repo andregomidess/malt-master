@@ -212,7 +212,83 @@ export class RecipesService extends BaseEntityService<Recipe> {
     if (input.recipe) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { user, ...recipeData } = input.recipe;
-      em.assign(recipe, recipeData);
+
+      if (recipeData.name !== undefined) {
+        recipe.name = recipeData.name;
+      }
+      if (recipeData.imageUrl !== undefined) {
+        recipe.imageUrl = recipeData.imageUrl;
+      }
+      if (recipeData.about !== undefined) {
+        recipe.about = recipeData.about;
+      }
+      if (recipeData.notes !== undefined) {
+        recipe.notes = recipeData.notes;
+      }
+      if (recipeData.type !== undefined) {
+        recipe.type = recipeData.type;
+      }
+      if (recipeData.beerStyle !== undefined) {
+        recipe.beerStyle = recipeData.beerStyle;
+      }
+      if (recipeData.equipment !== undefined) {
+        recipe.equipment = recipeData.equipment;
+      }
+      if (recipeData.brewDate !== undefined) {
+        recipe.brewDate = recipeData.brewDate
+          ? new Date(recipeData.brewDate)
+          : null;
+      }
+
+      const convertToNumber = (value: unknown): number | null => {
+        if (value === null || value === undefined) {
+          return null;
+        }
+        if (typeof value === 'number') {
+          return value;
+        }
+        if (typeof value === 'string') {
+          const numValue = parseFloat(value);
+          return isNaN(numValue) ? null : numValue;
+        }
+        return null;
+      };
+
+      if (recipeData.plannedVolume !== undefined) {
+        recipe.plannedVolume = convertToNumber(recipeData.plannedVolume);
+      }
+      if (recipeData.finalVolume !== undefined) {
+        recipe.finalVolume = convertToNumber(recipeData.finalVolume);
+      }
+      if (recipeData.mashVolume !== undefined) {
+        recipe.mashVolume = convertToNumber(recipeData.mashVolume);
+      }
+      if (recipeData.boilTime !== undefined) {
+        recipe.boilTime = convertToNumber(recipeData.boilTime);
+      }
+      if (recipeData.originalGravity !== undefined) {
+        recipe.originalGravity = convertToNumber(recipeData.originalGravity);
+      }
+      if (recipeData.finalGravity !== undefined) {
+        recipe.finalGravity = convertToNumber(recipeData.finalGravity);
+      }
+      if (recipeData.estimatedIbu !== undefined) {
+        recipe.estimatedIbu = convertToNumber(recipeData.estimatedIbu);
+      }
+      if (recipeData.estimatedColor !== undefined) {
+        recipe.estimatedColor = convertToNumber(recipeData.estimatedColor);
+      }
+      if (recipeData.estimatedAbv !== undefined) {
+        recipe.estimatedAbv = convertToNumber(recipeData.estimatedAbv);
+      }
+      if (recipeData.plannedEfficiency !== undefined) {
+        recipe.plannedEfficiency = convertToNumber(
+          recipeData.plannedEfficiency,
+        );
+      }
+      if (recipeData.actualEfficiency !== undefined) {
+        recipe.actualEfficiency = convertToNumber(recipeData.actualEfficiency);
+      }
     }
   }
 

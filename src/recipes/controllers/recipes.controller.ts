@@ -54,6 +54,7 @@ export class RecipesController {
       },
       {
         populate: [
+          'beerStyle',
           'equipment',
           'fermentables',
           'fermentables.fermentable',
