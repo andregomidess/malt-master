@@ -26,8 +26,44 @@ export class TastingNotesService extends BaseEntityService<TastingNote> {
     super(em, TastingNote);
   }
 
+  private transformDecimalFields(note: TastingNote): TastingNote {
+    if (!note) return note;
+
+    return {
+      ...note,
+      appearanceScore:
+        note.appearanceScore !== null && note.appearanceScore !== undefined
+          ? typeof note.appearanceScore === 'string'
+            ? parseFloat(note.appearanceScore)
+            : note.appearanceScore
+          : null,
+      aromaScore:
+        note.aromaScore !== null && note.aromaScore !== undefined
+          ? typeof note.aromaScore === 'string'
+            ? parseFloat(note.aromaScore)
+            : note.aromaScore
+          : null,
+      flavorScore:
+        note.flavorScore !== null && note.flavorScore !== undefined
+          ? typeof note.flavorScore === 'string'
+            ? parseFloat(note.flavorScore)
+            : note.flavorScore
+          : null,
+      mouthfeelScore:
+        note.mouthfeelScore !== null && note.mouthfeelScore !== undefined
+          ? typeof note.mouthfeelScore === 'string'
+            ? parseFloat(note.mouthfeelScore)
+            : note.mouthfeelScore
+          : null,
+      overallScore:
+        typeof note.overallScore === 'string'
+          ? parseFloat(note.overallScore)
+          : note.overallScore,
+    };
+  }
+
   async findAllByUser(userId: string): Promise<TastingNote[]> {
-    return await this.em.find(
+    const notes = await this.em.find(
       TastingNote,
       { user: { id: userId } },
       {
@@ -35,6 +71,7 @@ export class TastingNotesService extends BaseEntityService<TastingNote> {
         populate: ['batch', 'user'],
       },
     );
+    return notes.map((note) => this.transformDecimalFields(note));
   }
 
   async findAllPaginatedByUser(
@@ -73,7 +110,7 @@ export class TastingNotesService extends BaseEntityService<TastingNote> {
     });
 
     return {
-      data,
+      data: data.map((note) => this.transformDecimalFields(note)),
       total,
       page: query.page,
       totalPages: Math.ceil(total / query.take),
@@ -81,7 +118,7 @@ export class TastingNotesService extends BaseEntityService<TastingNote> {
   }
 
   async findAllByBatch(batchId: string): Promise<TastingNote[]> {
-    return await this.em.find(
+    const notes = await this.em.find(
       TastingNote,
       { batch: { id: batchId } },
       {
@@ -89,14 +126,16 @@ export class TastingNotesService extends BaseEntityService<TastingNote> {
         populate: ['batch', 'user'],
       },
     );
+    return notes.map((note) => this.transformDecimalFields(note));
   }
 
   override async findById(id: string): Promise<TastingNote | null> {
-    return await this.em.findOne(
+    const note = await this.em.findOne(
       TastingNote,
       { id },
       { populate: ['batch', 'user'] },
     );
+    return note ? this.transformDecimalFields(note) : null;
   }
 
   async calculateBatchAverageScores(batchId: string) {
@@ -169,7 +208,7 @@ export class TastingNotesService extends BaseEntityService<TastingNote> {
     userId: string,
     limit: number = 5,
   ): Promise<TastingNote[]> {
-    return await this.em.find(
+    const notes = await this.em.find(
       TastingNote,
       { user: { id: userId } },
       {
@@ -178,5 +217,23 @@ export class TastingNotesService extends BaseEntityService<TastingNote> {
         limit,
       },
     );
+    return notes.map((note) => this.transformDecimalFields(note));
+  }
+
+  override async save(
+    data: Partial<TastingNote> & { id?: string },
+  ): Promise<TastingNote> {
+    const savedNote = await super.save(data);
+    return this.transformDecimalFields(savedNote);
+  }
+
+  override async softDelete(id: string): Promise<TastingNote> {
+    const deletedNote = await super.softDelete(id);
+    return this.transformDecimalFields(deletedNote);
+  }
+
+  override async recovery(id: string): Promise<TastingNote> {
+    const recoveredNote = await super.recovery(id);
+    return this.transformDecimalFields(recoveredNote);
   }
 }
