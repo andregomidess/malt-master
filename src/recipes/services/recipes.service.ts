@@ -16,7 +16,6 @@ import { RecipeWater } from '../entities/recipe-water.entity';
 import { RecipeMash } from '../entities/recipe-mash.entity';
 import { RecipeFermentation } from '../entities/recipe-fermentation.entity';
 import { RecipeCarbonation } from '../entities/recipe-carbonation.entity';
-import { RecipeCalculationsService } from './recipe-calculations.service';
 import type { RecipeFermentableInput } from '../inputs/recipe-fermentable.input';
 import type { RecipeHopInput } from '../inputs/recipe-hop.input';
 import type { RecipeYeastInput } from '../inputs/recipe-yeast.input';
@@ -39,10 +38,7 @@ export interface PaginatedResult<T> {
 
 @Injectable()
 export class RecipesService extends BaseEntityService<Recipe> {
-  constructor(
-    em: EntityManager,
-    private readonly recipeCalculations: RecipeCalculationsService,
-  ) {
+  constructor(em: EntityManager) {
     super(em, Recipe);
   }
 
@@ -75,7 +71,6 @@ export class RecipesService extends BaseEntityService<Recipe> {
         { notes: { $ilike: `%${query.search}%` } },
       ];
 
-      // Combinar condições de user com condições de busca
       where.$and = [
         {
           $or: [{ user: { id: userId } }, { user: null }],
@@ -114,7 +109,7 @@ export class RecipesService extends BaseEntityService<Recipe> {
     userId: string,
     input: RecipeUpsertInput,
   ): Promise<Recipe> {
-    return await this.em.transactional(async (em) => {
+    return this.em.transactional((em) => {
       const recipe = this.createRecipeEntity(
         em as EntityManager,
         userId,
@@ -124,8 +119,6 @@ export class RecipesService extends BaseEntityService<Recipe> {
 
       this.createCollectionRelations(em as EntityManager, recipe, input);
       this.createOneToOneRelations(em as EntityManager, recipe, input);
-
-      await this.flushAndRecalculate(em as EntityManager, recipe);
 
       return recipe;
     });
@@ -146,8 +139,6 @@ export class RecipesService extends BaseEntityService<Recipe> {
       this.updateRecipeProperties(em as EntityManager, recipe, input);
       this.replaceCollectionRelations(recipe, input, em as EntityManager);
       this.createOneToOneRelations(em as EntityManager, recipe, input);
-
-      await this.flushAndRecalculate(em as EntityManager, recipe);
 
       return recipe;
     });
@@ -290,15 +281,6 @@ export class RecipesService extends BaseEntityService<Recipe> {
         recipe.actualEfficiency = convertToNumber(recipeData.actualEfficiency);
       }
     }
-  }
-
-  private async flushAndRecalculate(
-    em: EntityManager,
-    recipe: Recipe,
-  ): Promise<void> {
-    await em.flush();
-    this.recipeCalculations.recalcAll(recipe);
-    await em.flush();
   }
 
   private createCollectionRelations(

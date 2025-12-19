@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { RecipesService } from './services/recipes.service';
 import { RecipesController } from './controllers/recipes.controller';
-import { RecipeCalculationsService } from './services/recipe-calculations.service';
 import { Recipe } from './entities/recipe.entity';
 import { RecipeFermentable } from './entities/recipe-fermentable.entity';
 import { RecipeHop } from './entities/recipe-hop.entity';
@@ -26,6 +25,6 @@ import { RecipeWater } from './entities/recipe-water.entity';
     ]),
   ],
   controllers: [RecipesController],
-  providers: [RecipesService, RecipeCalculationsService],
+  providers: [RecipesService],
 })
 export class RecipesModule {}
