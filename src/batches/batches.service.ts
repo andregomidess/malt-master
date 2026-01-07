@@ -56,7 +56,7 @@ export class BatchesService extends BaseEntityService<Batch> {
       orderBy,
       limit: query.limit,
       offset: query.offset,
-      populate: ['recipe', 'equipment'],
+      populate: ['recipe', 'recipe.beerStyle', 'equipment'],
     });
 
     return {
@@ -73,13 +73,21 @@ export class BatchesService extends BaseEntityService<Batch> {
       { user: { id: userId } },
       {
         orderBy: { brewDate: 'desc' },
-        populate: ['recipe', 'equipment'],
+        populate: ['recipe', 'recipe.beerStyle', 'equipment'],
       },
     );
   }
 
   async upsertBatch(input: BatchInput): Promise<Batch> {
-    return await this.save(input);
+    const saved = await this.save(input);
+    // Recarregar com todos os relacionamentos populados
+    await this.em.populate(saved, [
+      'recipe',
+      'recipe.beerStyle',
+      'equipment',
+      'user',
+    ]);
+    return saved;
   }
 
   async deleteBatch(userId: string, batchId: string): Promise<void> {

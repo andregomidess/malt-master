@@ -101,6 +101,39 @@ export class BatchInput {
   @IsNumber()
   actualCarbonation?: number | null;
 
+  // Valores medidos durante a sessão
+  @IsOptional()
+  @IsNumber()
+  mashPh?: number | null;
+
+  @IsOptional()
+  @IsNumber()
+  preBoilGravity?: number | null;
+
+  @IsOptional()
+  @IsNumber()
+  preBoilVolume?: number | null;
+
+  @IsOptional()
+  @IsNumber()
+  postBoilVolume?: number | null;
+
+  @IsOptional()
+  @IsNumber()
+  waterInFermenter?: number | null;
+
+  @IsOptional()
+  @IsNumber()
+  fermenterVolume?: number | null;
+
+  @IsOptional()
+  @IsNumber()
+  peakFermentationTemp?: number | null;
+
+  @IsOptional()
+  @IsNumber()
+  bottlingVolume?: number | null;
+
   @IsOptional()
   @IsString()
   observations?: string | null;

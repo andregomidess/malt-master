@@ -31,7 +31,7 @@ export abstract class BaseEntityService<T extends BaseEntity> {
       } as FilterQuery<T>);
 
       if (existingEntity) {
-        Object.assign(existingEntity, data);
+        this.em.assign(existingEntity, data as any);
         await this.em.flush();
         return existingEntity;
       }

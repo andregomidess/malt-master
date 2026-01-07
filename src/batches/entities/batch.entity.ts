@@ -77,6 +77,31 @@ export class Batch {
   @Property({ type: 'decimal', nullable: true })
   actualCarbonation!: number | null;
 
+  // Valores medidos durante a sessão
+  @Property({ type: 'decimal', nullable: true })
+  mashPh!: number | null;
+
+  @Property({ type: 'decimal', nullable: true })
+  preBoilGravity!: number | null;
+
+  @Property({ type: 'decimal', nullable: true })
+  preBoilVolume!: number | null;
+
+  @Property({ type: 'decimal', nullable: true })
+  postBoilVolume!: number | null;
+
+  @Property({ type: 'decimal', nullable: true })
+  waterInFermenter!: number | null;
+
+  @Property({ type: 'decimal', nullable: true })
+  fermenterVolume!: number | null;
+
+  @Property({ type: 'decimal', nullable: true })
+  peakFermentationTemp!: number | null;
+
+  @Property({ type: 'decimal', nullable: true })
+  bottlingVolume!: number | null;
+
   @Property({ type: 'text', nullable: true })
   observations!: string | null;
 }

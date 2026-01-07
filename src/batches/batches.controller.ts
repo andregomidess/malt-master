@@ -52,6 +52,7 @@ export class BatchesController {
       {
         populate: [
           'recipe',
+          'recipe.beerStyle',
           'equipment',
           'user',
           'recipe.mash',
