@@ -65,34 +65,34 @@ export class BeerStyle {
   @Property({ nullable: true })
   subCategory!: string | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   minAbv!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   maxAbv!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   minOg!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   maxOg!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   minFg!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   maxFg!: number | null;
 
-  @Property({ nullable: true })
+  @Property({ type: 'double', nullable: true })
   minIbu!: number | null;
 
-  @Property({ nullable: true })
+  @Property({ type: 'double', nullable: true })
   maxIbu!: number | null;
 
-  @Property({ nullable: true })
+  @Property({ type: 'double', nullable: true })
   minColorEbc!: number | null;
 
-  @Property({ nullable: true })
+  @Property({ type: 'double', nullable: true })
   maxColorEbc!: number | null;
 
   @Property({ type: 'text', nullable: true })

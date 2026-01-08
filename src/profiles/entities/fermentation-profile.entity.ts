@@ -45,10 +45,10 @@ export class FermentationProfile {
   @Property({ nullable: true })
   yeastStrain!: string | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   targetFinalGravity!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   estimatedAttenuation!: number | null;
 
   @Property({ default: false })

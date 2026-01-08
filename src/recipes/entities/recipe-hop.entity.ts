@@ -20,7 +20,7 @@ export class RecipeHop {
   @ManyToOne(() => Hop)
   hop!: Hop;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   amount!: number | null;
 
   @Property({ nullable: true })

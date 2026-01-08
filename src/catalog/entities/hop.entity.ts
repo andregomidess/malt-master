@@ -36,16 +36,16 @@ export class Hop {
   @Property({ unique: true })
   name!: string;
 
-  @Property({ type: 'decimal', precision: 5, scale: 2 })
+  @Property({ type: 'double', precision: 5, scale: 2 })
   alphaAcids!: number;
 
-  @Property({ type: 'decimal', precision: 5, scale: 2 })
+  @Property({ type: 'double', precision: 5, scale: 2 })
   betaAcids!: number;
 
-  @Property({ type: 'decimal', nullable: true, precision: 5, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 5, scale: 2 })
   cohumulone!: number | null;
 
-  @Property({ type: 'decimal', nullable: true, precision: 4, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 4, scale: 2 })
   totalOils!: number | null;
 
   @Enum(() => HopForm)
@@ -63,10 +63,10 @@ export class Hop {
   @Property({ nullable: true })
   storageCondition!: string | null;
 
-  @Property({ type: 'decimal', nullable: true, precision: 3, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 3, scale: 2 })
   hsi!: number | null;
 
-  @Property({ type: 'decimal', nullable: true, precision: 7, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 7, scale: 2 })
   costPerKilogram!: number | null;
 
   @Property({ type: 'text', nullable: true })

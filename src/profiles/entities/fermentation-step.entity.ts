@@ -16,16 +16,16 @@ export class FermentationStep {
   @Property()
   name!: string;
 
-  @Property({ type: 'decimal' })
+  @Property({ type: 'double' })
   temperature!: number;
 
   @Property()
   duration!: number;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   targetGravity!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   pressureControl!: number | null;
 
   @Property({ default: false })
@@ -34,7 +34,7 @@ export class FermentationStep {
   @Property({ nullable: true })
   rampTime!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   rampToTemperature!: number | null;
 
   @Property({ nullable: true })

@@ -20,19 +20,19 @@ export class TastingNote {
   @Property({ type: 'date', default: 'now()' })
   tastingDate!: Date;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   appearanceScore!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   aromaScore!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   flavorScore!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   mouthfeelScore!: number | null;
 
-  @Property({ type: 'decimal' })
+  @Property({ type: 'double' })
   overallScore!: number;
 
   @Property({ type: 'text', nullable: true })

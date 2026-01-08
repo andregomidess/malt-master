@@ -23,9 +23,9 @@ export class RecipeCarbonation {
   @Property({ nullable: true })
   amountUsed!: string | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   temperature!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   co2Volumes!: number | null;
 }

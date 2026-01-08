@@ -25,19 +25,19 @@ export class MashStep {
   @Enum(() => MashStepType)
   stepType!: MashStepType;
 
-  @Property({ type: 'decimal' })
+  @Property({ type: 'double' })
   temperature!: number;
 
   @Property()
   duration!: number;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   infusionAmount!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   infusionTemp!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   decoctionAmount!: number | null;
 
   @Property({ nullable: true })

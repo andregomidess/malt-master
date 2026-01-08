@@ -19,7 +19,7 @@ export class HopInventoryItem extends BaseInventoryItem {
   @Property()
   unit!: HopInventoryUnit;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   alphaAcidsAtPurchase!: number | null;
 
   @Property({ nullable: true })

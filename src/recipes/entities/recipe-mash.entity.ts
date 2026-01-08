@@ -20,6 +20,6 @@ export class RecipeMash {
   @ManyToOne(() => MashProfile)
   mashProfile!: MashProfile;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   actualEfficiency!: number | null;
 }

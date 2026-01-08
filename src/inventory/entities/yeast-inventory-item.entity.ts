@@ -23,7 +23,7 @@ export class YeastInventoryItem extends BaseInventoryItem {
   @Property({ type: 'date', nullable: true })
   productionDate!: Date | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   viability!: number | null;
 
   @Property({ type: 'bigint', nullable: true })
@@ -32,7 +32,7 @@ export class YeastInventoryItem extends BaseInventoryItem {
   @Property({ nullable: true })
   starter!: boolean | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   pitchingRate!: number | null;
 
   constructor() {

@@ -69,10 +69,10 @@ export abstract class Equipment {
   @Property({ type: 'text', nullable: true })
   description!: string | null;
 
-  @Property({ type: 'decimal', precision: 10, scale: 2 })
+  @Property({ type: 'double', precision: 10, scale: 2 })
   totalCapacity!: number;
 
-  @Property({ type: 'decimal', precision: 10, scale: 2 })
+  @Property({ type: 'double', precision: 10, scale: 2 })
   usableVolume!: number;
 
   @Enum(() => EquipmentType)
@@ -109,19 +109,18 @@ export abstract class Equipment {
   }
 }
 
-// Com STI, todas as propriedades ficam na mesma tabela 'equipment'
 @Entity()
 export class KettleEquipment extends Equipment {
-  @Property({ type: 'decimal', precision: 8, scale: 2 })
+  @Property({ type: 'double', precision: 8, scale: 2 })
   kettleLoss!: number;
 
-  @Property({ type: 'decimal', precision: 5, scale: 2 })
+  @Property({ type: 'double', precision: 5, scale: 2 })
   evaporationRate!: number;
 
-  @Property({ type: 'decimal', precision: 5, scale: 2 })
+  @Property({ type: 'double', precision: 5, scale: 2 })
   boilOffRate!: number;
 
-  @Property({ type: 'decimal', precision: 8, scale: 0 })
+  @Property({ type: 'double', precision: 8, scale: 0 })
   heatingPower!: number;
 
   @Enum(() => HeatingSource)
@@ -133,28 +132,27 @@ export class KettleEquipment extends Equipment {
   }
 }
 
-// Com STI, todas as propriedades ficam na mesma tabela 'equipment'
 @Entity()
 export class FermenterEquipment extends Equipment {
-  @Property({ type: 'decimal', precision: 8, scale: 2 })
+  @Property({ type: 'double', precision: 8, scale: 2 })
   fermenterLoss!: number;
 
-  @Property({ type: 'decimal', precision: 8, scale: 2 })
+  @Property({ type: 'double', precision: 8, scale: 2 })
   coneBottomVolume!: number;
 
   @Property({ type: 'boolean' })
   hasTemperatureControl!: boolean;
 
-  @Property({ type: 'decimal', precision: 5, scale: 1 })
+  @Property({ type: 'double', precision: 5, scale: 1 })
   maxPressure!: number;
 
   @Enum(() => CoolingType)
   coolingType!: CoolingType;
 
-  @Property({ type: 'decimal', precision: 4, scale: 1 })
+  @Property({ type: 'double', precision: 4, scale: 1 })
   minTemperature!: number;
 
-  @Property({ type: 'decimal', precision: 4, scale: 1 })
+  @Property({ type: 'double', precision: 4, scale: 1 })
   maxTemperature!: number;
 
   constructor() {
@@ -166,25 +164,25 @@ export class FermenterEquipment extends Equipment {
 // Com STI, todas as propriedades ficam na mesma tabela 'equipment'
 @Entity()
 export class ChillerEquipment extends Equipment {
-  @Property({ type: 'decimal', precision: 8, scale: 0 })
+  @Property({ type: 'double', precision: 8, scale: 0 })
   coolingCapacity!: number;
 
-  @Property({ type: 'decimal', precision: 6, scale: 2 })
+  @Property({ type: 'double', precision: 6, scale: 2 })
   flowRate!: number;
 
-  @Property({ type: 'decimal', precision: 4, scale: 1 })
+  @Property({ type: 'double', precision: 4, scale: 1 })
   inletTemperature!: number;
 
-  @Property({ type: 'decimal', precision: 4, scale: 1 })
+  @Property({ type: 'double', precision: 4, scale: 1 })
   outletTemperature!: number;
 
   @Enum(() => ChillerType)
   chillerType!: ChillerType;
 
-  @Property({ type: 'decimal', precision: 6, scale: 2 })
+  @Property({ type: 'double', precision: 6, scale: 2 })
   tubeLength!: number;
 
-  @Property({ type: 'decimal', precision: 5, scale: 2 })
+  @Property({ type: 'double', precision: 5, scale: 2 })
   tubeDiameter!: number;
 
   constructor() {

@@ -39,10 +39,10 @@ export class Fermentable {
   @Enum(() => FermentableType)
   type!: FermentableType;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   color!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   yield!: number | null;
 
   @Property({ nullable: true })

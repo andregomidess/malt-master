@@ -46,22 +46,22 @@ export class Yeast {
   @Enum(() => YeastType)
   type!: YeastType;
 
-  @Property({ type: 'decimal', nullable: true, precision: 5, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 5, scale: 2 })
   attenuation!: number | null;
 
   @Enum(() => YeastFlocculation)
   flocculation!: YeastFlocculation;
 
-  @Property({ type: 'decimal', nullable: true, precision: 5, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 5, scale: 2 })
   minTemp!: number | null;
 
-  @Property({ type: 'decimal', nullable: true, precision: 5, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 5, scale: 2 })
   maxTemp!: number | null;
 
   @Enum(() => YeastFormat)
   format!: YeastFormat;
 
-  @Property({ type: 'decimal', nullable: true, precision: 5, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 5, scale: 2 })
   alcoholTolerance!: number | null;
 
   @Property({ nullable: true })

@@ -20,16 +20,16 @@ export class FermentableInventoryItem extends BaseInventoryItem {
   @Property()
   unit!: FermentableInventoryUnit;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   extractPotential!: number | null;
 
   @Property({ nullable: true })
   lotNumber!: string | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   moisture!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   protein!: number | null;
 
   constructor() {

@@ -21,7 +21,7 @@ export abstract class BaseInventoryItem {
   @Enum(() => InventoryItemType)
   type!: InventoryItemType;
 
-  @Property({ type: 'decimal' })
+  @Property({ type: 'double' })
   quantity!: number;
 
   @Property({ type: 'date', nullable: true })
@@ -30,7 +30,7 @@ export abstract class BaseInventoryItem {
   @Property({ type: 'date', nullable: true })
   bestBeforeDate!: Date | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   costPerUnit!: number | null;
 
   @Property({ type: 'text', nullable: true })

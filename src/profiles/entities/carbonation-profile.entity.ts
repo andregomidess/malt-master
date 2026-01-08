@@ -38,19 +38,19 @@ export class CarbonationProfile {
   @Enum(() => CarbonationType)
   type!: CarbonationType;
 
-  @Property({ type: 'decimal' })
+  @Property({ type: 'double' })
   targetCO2Volumes!: number;
 
-  @Property({ type: 'decimal', default: 4 })
+  @Property({ type: 'double', default: 4 })
   servingTemperature!: number;
 
   @Enum(() => PrimingSugarType)
   primingSugarType!: PrimingSugarType | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   primingSugarAmount!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   kegPressure!: number | null;
 
   @Property({ nullable: true })

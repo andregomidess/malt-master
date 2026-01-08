@@ -20,10 +20,10 @@ export class RecipeFermentation {
   @ManyToOne(() => FermentationProfile)
   fermentationProfile!: FermentationProfile;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   actualAttenuation!: number | null;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   finalAbv!: number | null;
 
   @Property({ type: 'text', nullable: true })

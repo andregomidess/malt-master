@@ -14,6 +14,6 @@ export class RecipeFermentable {
   @ManyToOne(() => Fermentable)
   fermentable!: Fermentable;
 
-  @Property({ type: 'decimal', nullable: true })
+  @Property({ type: 'double', nullable: true })
   amount!: number | null;
 }

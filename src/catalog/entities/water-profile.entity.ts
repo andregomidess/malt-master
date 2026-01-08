@@ -19,25 +19,25 @@ export class WaterProfile {
   @Property({ nullable: true })
   origin!: string | null;
 
-  @Property({ type: 'decimal', nullable: true, precision: 5, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 5, scale: 2 })
   ca!: number | null;
 
-  @Property({ type: 'decimal', nullable: true, precision: 5, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 5, scale: 2 })
   mg!: number | null;
 
-  @Property({ type: 'decimal', nullable: true, precision: 5, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 5, scale: 2 })
   na!: number | null;
 
-  @Property({ type: 'decimal', nullable: true, precision: 5, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 5, scale: 2 })
   so4!: number | null;
 
-  @Property({ type: 'decimal', nullable: true, precision: 5, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 5, scale: 2 })
   cl!: number | null;
 
-  @Property({ type: 'decimal', nullable: true, precision: 5, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 5, scale: 2 })
   hco3!: number | null;
 
-  @Property({ type: 'decimal', nullable: true, precision: 3, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 3, scale: 2 })
   ph!: number | null;
 
   @Property({ nullable: true })

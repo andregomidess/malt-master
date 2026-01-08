@@ -39,25 +39,25 @@ export class MashProfile {
   })
   steps = new Collection<MashStep>(this);
 
-  @Property({ type: 'decimal', nullable: true, precision: 5, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 5, scale: 2 })
   estimatedEfficiency!: number | null;
 
-  @Property({ type: 'decimal', default: 20, precision: 5, scale: 2 })
+  @Property({ type: 'double', default: 20, precision: 5, scale: 2 })
   grainTemperature!: number;
 
-  @Property({ type: 'decimal', default: 20, precision: 5, scale: 2 })
+  @Property({ type: 'double', default: 20, precision: 5, scale: 2 })
   tunTemperature!: number;
 
-  @Property({ type: 'decimal', default: 78, precision: 5, scale: 2 })
+  @Property({ type: 'double', default: 78, precision: 5, scale: 2 })
   spargeTemperature!: number;
 
-  @Property({ type: 'decimal', nullable: true, precision: 8, scale: 2 })
+  @Property({ type: 'double', nullable: true, precision: 8, scale: 2 })
   tunWeight!: number | null;
 
-  @Property({ type: 'decimal', default: 0.3, precision: 3, scale: 2 })
+  @Property({ type: 'double', default: 0.3, precision: 3, scale: 2 })
   tunSpecificHeat!: number;
 
-  @Property({ type: 'decimal', default: 3.0, precision: 4, scale: 2 })
+  @Property({ type: 'double', default: 3.0, precision: 4, scale: 2 })
   mashThickness!: number;
 
   @Property({ type: 'text', nullable: true })
