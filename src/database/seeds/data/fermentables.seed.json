@@ -1,0 +1,572 @@
+[
+  {
+    "name": "Pilsen Malt",
+    "type": "base",
+    "form": "grain",
+    "yield": 80,
+    "color": 1.7,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Malte base claro, alta conversão enzimática"
+  },
+  {
+    "name": "Pale Ale Malt",
+    "type": "base",
+    "form": "grain",
+    "yield": 79,
+    "color": 3.5,
+    "origin": "UK",
+    "supplier": "Thomas Fawcett",
+    "notes": "Malte base inglês, perfil maltado"
+  },
+  {
+    "name": "Vienna Malt",
+    "type": "base",
+    "form": "grain",
+    "yield": 78,
+    "color": 4,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Malte base com notas de pão"
+  },
+  {
+    "name": "Munich Malt",
+    "type": "base",
+    "form": "grain",
+    "yield": 77,
+    "color": 9,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Malte base escuro, intenso caráter maltado"
+  },
+  {
+    "name": "Caramel 20L",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 75,
+    "color": 20,
+    "origin": "USA",
+    "supplier": "Briess",
+    "notes": "Leve dulçor e corpo"
+  },
+  {
+    "name": "Caramel 60L",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 74,
+    "color": 60,
+    "origin": "USA",
+    "supplier": "Briess",
+    "notes": "Dulçor médio, cor âmbar"
+  },
+  {
+    "name": "Caramel 120L",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 73,
+    "color": 120,
+    "origin": "USA",
+    "supplier": "Briess",
+    "notes": "Dulçor intenso, notas de toffee"
+  },
+  {
+    "name": "Chocolate Malt",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 70,
+    "color": 350,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Notas de chocolate e café"
+  },
+  {
+    "name": "Roasted Barley",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 65,
+    "color": 500,
+    "origin": "Ireland",
+    "supplier": "Thomas Fawcett",
+    "notes": "Amargor tostado intenso"
+  },
+  {
+    "name": "Wheat Malt",
+    "type": "base",
+    "form": "grain",
+    "yield": 82,
+    "color": 2,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Aumenta espuma e corpo"
+  },
+  {
+    "name": "Flaked Oats",
+    "type": "adjunct",
+    "form": "grain",
+    "yield": 70,
+    "color": 2,
+    "origin": null,
+    "supplier": null,
+    "notes": "Cremosidade e mouthfeel"
+  },
+  {
+    "name": "Flaked Corn",
+    "type": "adjunct",
+    "form": "grain",
+    "yield": 75,
+    "color": 1,
+    "origin": null,
+    "supplier": null,
+    "notes": "Deixa a cerveja mais seca"
+  },
+  {
+    "name": "Rice Flakes",
+    "type": "adjunct",
+    "form": "grain",
+    "yield": 75,
+    "color": 1,
+    "origin": null,
+    "supplier": null,
+    "notes": "Alta fermentabilidade, corpo leve"
+  },
+  {
+    "name": "Corn Sugar (Dextrose)",
+    "type": "sugar",
+    "form": "syrup",
+    "yield": 100,
+    "color": 0,
+    "origin": null,
+    "supplier": null,
+    "notes": "Totalmente fermentável"
+  },
+  {
+    "name": "Table Sugar (Sucrose)",
+    "type": "sugar",
+    "form": "syrup",
+    "yield": 100,
+    "color": 0,
+    "origin": null,
+    "supplier": null,
+    "notes": "Açúcar comum, fermenta completamente"
+  },
+  {
+    "name": "Honey",
+    "type": "sugar",
+    "form": "syrup",
+    "yield": 95,
+    "color": 1,
+    "origin": null,
+    "supplier": null,
+    "notes": "Pode deixar aroma residual"
+  },
+  {
+    "name": "Dry Malt Extract (Light)",
+    "type": "base",
+    "form": "dry_extract",
+    "yield": 95,
+    "color": 3,
+    "origin": "USA",
+    "supplier": "Briess",
+    "notes": "Extrato seco claro"
+  },
+  {
+    "name": "Liquid Malt Extract (Amber)",
+    "type": "base",
+    "form": "liquid_extract",
+    "yield": 80,
+    "color": 10,
+    "origin": "USA",
+    "supplier": "Briess",
+    "notes": "Extrato líquido âmbar"
+  },
+  {
+    "name": "Munich Malt Type I",
+    "type": "base",
+    "form": "grain",
+    "yield": 78,
+    "color": 7,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Perfil maltado médio, notas de pão"
+  },
+  {
+    "name": "Munich Malt Type II",
+    "type": "base",
+    "form": "grain",
+    "yield": 77,
+    "color": 10,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Malte base escuro, maltado intenso"
+  },
+  {
+    "name": "Rye Malt",
+    "type": "base",
+    "form": "grain",
+    "yield": 76,
+    "color": 4,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Especiarias, aumenta viscosidade"
+  },
+  {
+    "name": "Smoked Malt (Beechwood)",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 75,
+    "color": 3,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Aroma defumado tradicional"
+  },
+  {
+    "name": "Biscuit Malt",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 75,
+    "color": 23,
+    "origin": "Belgium",
+    "supplier": "Castle Malting",
+    "notes": "Notas de biscoito e tostado"
+  },
+  {
+    "name": "Aromatic Malt",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 78,
+    "color": 26,
+    "origin": "Belgium",
+    "supplier": "Castle Malting",
+    "notes": "Realça aroma maltado"
+  },
+  {
+    "name": "Melanoidin Malt",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 77,
+    "color": 30,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Simula decocção, corpo e aroma"
+  },
+  {
+    "name": "Victory Malt",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 75,
+    "color": 25,
+    "origin": "USA",
+    "supplier": "Briess",
+    "notes": "Notas de nozes e biscoito"
+  },
+  {
+    "name": "Brown Malt",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 70,
+    "color": 65,
+    "origin": "UK",
+    "supplier": "Thomas Fawcett",
+    "notes": "Seco, tostado leve"
+  },
+  {
+    "name": "Amber Malt",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 72,
+    "color": 27,
+    "origin": "UK",
+    "supplier": "Thomas Fawcett",
+    "notes": "Notas de tostado e caramelo seco"
+  },
+  {
+    "name": "Special B",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 70,
+    "color": 180,
+    "origin": "Belgium",
+    "supplier": "Castle Malting",
+    "notes": "Passas, ameixa, caramelo intenso"
+  },
+  {
+    "name": "Carafa Special I",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 72,
+    "color": 340,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Torrado suave, baixo amargor"
+  },
+  {
+    "name": "Carafa Special II",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 71,
+    "color": 430,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Escurecimento intenso sem harshness"
+  },
+  {
+    "name": "Carafa Special III",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 70,
+    "color": 525,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Cor profunda, sabor limpo"
+  },
+  {
+    "name": "Black Patent Malt",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 65,
+    "color": 525,
+    "origin": "UK",
+    "supplier": "Thomas Fawcett",
+    "notes": "Torrado extremo, seco"
+  },
+  {
+    "name": "Lactose",
+    "type": "sugar",
+    "form": "syrup",
+    "yield": 0,
+    "color": 0,
+    "origin": null,
+    "supplier": null,
+    "notes": "Não fermentável, aumenta dulçor e corpo"
+  },
+  {
+    "name": "Invert Sugar No. 2",
+    "type": "sugar",
+    "form": "syrup",
+    "yield": 98,
+    "color": 10,
+    "origin": "UK",
+    "supplier": null,
+    "notes": "Usado em ales inglesas"
+  },
+  {
+    "name": "Invert Sugar No. 3",
+    "type": "sugar",
+    "form": "syrup",
+    "yield": 97,
+    "color": 50,
+    "origin": "UK",
+    "supplier": null,
+    "notes": "Notas de caramelo escuro"
+  },
+  {
+    "name": "Candi Sugar Clear",
+    "type": "sugar",
+    "form": "syrup",
+    "yield": 100,
+    "color": 0,
+    "origin": "Belgium",
+    "supplier": null,
+    "notes": "Totalmente fermentável"
+  },
+  {
+    "name": "Candi Sugar Dark",
+    "type": "sugar",
+    "form": "syrup",
+    "yield": 95,
+    "color": 180,
+    "origin": "Belgium",
+    "supplier": null,
+    "notes": "Açúcar belga escuro"
+  },
+  {
+    "name": "Golden Promise",
+    "type": "base",
+    "form": "grain",
+    "yield": 80,
+    "color": 2.5,
+    "origin": "UK",
+    "supplier": "Simpsons",
+    "notes": "Malte base escocês, suave e maltado"
+  },
+  {
+    "name": "Maris Otter",
+    "type": "base",
+    "form": "grain",
+    "yield": 79,
+    "color": 3,
+    "origin": "UK",
+    "supplier": "Crisp",
+    "notes": "Malte base inglês tradicional"
+  },
+  {
+    "name": "Heritage Malt",
+    "type": "base",
+    "form": "grain",
+    "yield": 78,
+    "color": 3.5,
+    "origin": "UK",
+    "supplier": "Crisp",
+    "notes": "Perfil rico e complexo"
+  },
+  {
+    "name": "Spelt Malt",
+    "type": "base",
+    "form": "grain",
+    "yield": 75,
+    "color": 4,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Trigo ancestral, especiado"
+  },
+  {
+    "name": "Oat Malt",
+    "type": "base",
+    "form": "grain",
+    "yield": 77,
+    "color": 3,
+    "origin": "UK",
+    "supplier": "Thomas Fawcett",
+    "notes": "Corpo e mouthfeel"
+  },
+  {
+    "name": "CaraMunich I",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 75,
+    "color": 34,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Caramelo leve, âmbar"
+  },
+  {
+    "name": "CaraMunich II",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 74,
+    "color": 56,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Caramelo médio"
+  },
+  {
+    "name": "CaraMunich III",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 73,
+    "color": 72,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Caramelo escuro"
+  },
+  {
+    "name": "CaraPils / Dextrin Malt",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 77,
+    "color": 2,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Espuma e corpo sem cor"
+  },
+  {
+    "name": "Acidulated Malt",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 70,
+    "color": 2,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Ajuste de pH da mostura"
+  },
+  {
+    "name": "Peated Malt",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 75,
+    "color": 3,
+    "origin": "UK",
+    "supplier": "Crisp",
+    "notes": "Defumado turfoso intenso"
+  },
+  {
+    "name": "Crystal Rye Malt",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 72,
+    "color": 75,
+    "origin": "USA",
+    "supplier": "Briess",
+    "notes": "Caramelo com especiarias"
+  },
+  {
+    "name": "CaraRed",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 76,
+    "color": 20,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Caramelo vermelho"
+  },
+  {
+    "name": "Smoked Malt (Oak)",
+    "type": "specialty",
+    "form": "grain",
+    "yield": 75,
+    "color": 4,
+    "origin": "Germany",
+    "supplier": "Weyermann",
+    "notes": "Defumado suave de carvalho"
+  },
+  {
+    "name": "Flaked Wheat",
+    "type": "adjunct",
+    "form": "grain",
+    "yield": 75,
+    "color": 2,
+    "origin": null,
+    "supplier": null,
+    "notes": "Espuma e turbidez"
+  },
+  {
+    "name": "Flaked Barley",
+    "type": "adjunct",
+    "form": "grain",
+    "yield": 72,
+    "color": 2,
+    "origin": null,
+    "supplier": null,
+    "notes": "Corpo e espuma"
+  },
+  {
+    "name": "Molasses",
+    "type": "sugar",
+    "form": "syrup",
+    "yield": 75,
+    "color": 80,
+    "origin": null,
+    "supplier": null,
+    "notes": "Açúcar escuro, notas de melaço"
+  },
+  {
+    "name": "Maple Syrup",
+    "type": "sugar",
+    "form": "syrup",
+    "yield": 66,
+    "color": 35,
+    "origin": "Canada",
+    "supplier": null,
+    "notes": "Aroma residual de maple"
+  },
+  {
+    "name": "Agave Syrup",
+    "type": "sugar",
+    "form": "syrup",
+    "yield": 95,
+    "color": 0,
+    "origin": "Mexico",
+    "supplier": null,
+    "notes": "Fermentação limpa"
+  }
+]

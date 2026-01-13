@@ -1,0 +1,434 @@
+[
+  {
+    "name": "Single Infusion – Standard Ale",
+    "user": null,
+    "type": "infusion",
+    "estimatedEfficiency": 75,
+    "grainTemperature": 20,
+    "tunTemperature": 20,
+    "spargeTemperature": 78,
+    "tunWeight": 6.5,
+    "tunSpecificHeat": 0.3,
+    "mashThickness": 3.0,
+    "observations": "Mostura simples para Ales",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Saccharification",
+        "stepType": "temperature",
+        "temperature": 66,
+        "duration": 60,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": null,
+        "description": "Conversão completa dos açúcares"
+      },
+      {
+        "stepOrder": 2,
+        "name": "Mash Out",
+        "stepType": "temperature",
+        "temperature": 78,
+        "duration": 10,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": 5,
+        "description": "Parar atividade enzimática"
+      }
+    ]
+  },
+  {
+    "name": "Step Mash – German Lager",
+    "user": null,
+    "type": "step_mash",
+    "estimatedEfficiency": 78,
+    "grainTemperature": 18,
+    "tunTemperature": 18,
+    "spargeTemperature": 78,
+    "tunWeight": 8.0,
+    "tunSpecificHeat": 0.3,
+    "mashThickness": 2.8,
+    "observations": "Perfil clássico alemão",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Beta-Glucan Rest",
+        "stepType": "temperature",
+        "temperature": 45,
+        "duration": 15,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": null,
+        "description": "Reduz viscosidade"
+      },
+      {
+        "stepOrder": 2,
+        "name": "Protein Rest",
+        "stepType": "temperature",
+        "temperature": 52,
+        "duration": 15,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": 10,
+        "description": "Clareza e estabilidade"
+      },
+      {
+        "stepOrder": 3,
+        "name": "Saccharification",
+        "stepType": "temperature",
+        "temperature": 65,
+        "duration": 45,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": 10,
+        "description": "Produção de açúcares fermentáveis"
+      },
+      {
+        "stepOrder": 4,
+        "name": "Mash Out",
+        "stepType": "temperature",
+        "temperature": 78,
+        "duration": 10,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": 5,
+        "description": "Finalização da mostura"
+      }
+    ]
+  },
+  {
+    "name": "Decoction Mash – Czech Pilsner",
+    "user": null,
+    "type": "decoction",
+    "estimatedEfficiency": 80,
+    "grainTemperature": 18,
+    "tunTemperature": 18,
+    "spargeTemperature": 78,
+    "tunWeight": 10,
+    "tunSpecificHeat": 0.3,
+    "mashThickness": 2.5,
+    "observations": "Decocção tradicional tcheca",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Acid Rest",
+        "stepType": "temperature",
+        "temperature": 44,
+        "duration": 20,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": null,
+        "description": "Ajuste de pH natural"
+      },
+      {
+        "stepOrder": 2,
+        "name": "First Decoction",
+        "stepType": "decoction",
+        "temperature": 62,
+        "duration": 30,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": 30,
+        "rampTime": null,
+        "description": "Decocção simples"
+      },
+      {
+        "stepOrder": 3,
+        "name": "Saccharification",
+        "stepType": "temperature",
+        "temperature": 66,
+        "duration": 45,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": null,
+        "description": "Conversão principal"
+      },
+      {
+        "stepOrder": 4,
+        "name": "Mash Out",
+        "stepType": "temperature",
+        "temperature": 78,
+        "duration": 10,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": 5,
+        "description": "Encerramento"
+      }
+    ]
+  },
+  {
+    "name": "BIAB – Full Body Ale",
+    "user": null,
+    "type": "biab",
+    "estimatedEfficiency": 70,
+    "grainTemperature": 20,
+    "tunTemperature": 20,
+    "spargeTemperature": 75,
+    "tunWeight": null,
+    "tunSpecificHeat": 0.3,
+    "mashThickness": 4.5,
+    "observations": "BIAB com corpo mais cheio",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Single Rest",
+        "stepType": "temperature",
+        "temperature": 68,
+        "duration": 60,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": null,
+        "description": "Corpo mais elevado"
+      },
+      {
+        "stepOrder": 2,
+        "name": "Mash Out",
+        "stepType": "temperature",
+        "temperature": 78,
+        "duration": 10,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": 5,
+        "description": "Finalização"
+      }
+    ]
+  },
+  {
+    "name": "Single Infusion – Dry IPA",
+    "user": null,
+    "type": "infusion",
+    "estimatedEfficiency": 75,
+    "grainTemperature": 20,
+    "tunTemperature": 20,
+    "spargeTemperature": 78,
+    "tunWeight": 6.0,
+    "tunSpecificHeat": 0.3,
+    "mashThickness": 3.0,
+    "observations": "Mostura para alta fermentabilidade",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Saccharification (Low)",
+        "stepType": "temperature",
+        "temperature": 64,
+        "duration": 60,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": null,
+        "description": "Geração de mosto mais seco"
+      },
+      {
+        "stepOrder": 2,
+        "name": "Mash Out",
+        "stepType": "temperature",
+        "temperature": 78,
+        "duration": 10,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": 5,
+        "description": "Encerramento"
+      }
+    ]
+  },
+  {
+    "name": "High Body Mash – Stout / Porter",
+    "user": null,
+    "type": "infusion",
+    "estimatedEfficiency": 74,
+    "grainTemperature": 20,
+    "tunTemperature": 20,
+    "spargeTemperature": 76,
+    "tunWeight": 7.0,
+    "tunSpecificHeat": 0.3,
+    "mashThickness": 2.7,
+    "observations": "Corpo elevado e mouthfeel",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Saccharification (High)",
+        "stepType": "temperature",
+        "temperature": 69,
+        "duration": 60,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": null,
+        "description": "Produz dextrinas"
+      },
+      {
+        "stepOrder": 2,
+        "name": "Mash Out",
+        "stepType": "temperature",
+        "temperature": 78,
+        "duration": 10,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": 5,
+        "description": "Finalização"
+      }
+    ]
+  },
+  {
+    "name": "Step Mash – Belgian Ale",
+    "user": null,
+    "type": "step_mash",
+    "estimatedEfficiency": 77,
+    "grainTemperature": 20,
+    "tunTemperature": 20,
+    "spargeTemperature": 78,
+    "tunWeight": 7.5,
+    "tunSpecificHeat": 0.3,
+    "mashThickness": 3.0,
+    "observations": "Perfil belga clássico",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Protein Rest",
+        "stepType": "temperature",
+        "temperature": 53,
+        "duration": 15,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": null,
+        "description": "Clarificação"
+      },
+      {
+        "stepOrder": 2,
+        "name": "Saccharification",
+        "stepType": "temperature",
+        "temperature": 66,
+        "duration": 45,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": 10,
+        "description": "Atenuação equilibrada"
+      },
+      {
+        "stepOrder": 3,
+        "name": "Mash Out",
+        "stepType": "temperature",
+        "temperature": 78,
+        "duration": 10,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": 5,
+        "description": "Encerramento"
+      }
+    ]
+  },
+  {
+    "name": "Wheat Mash – Weissbier",
+    "user": null,
+    "type": "step_mash",
+    "estimatedEfficiency": 76,
+    "grainTemperature": 18,
+    "tunTemperature": 18,
+    "spargeTemperature": 78,
+    "tunWeight": 8.0,
+    "tunSpecificHeat": 0.3,
+    "mashThickness": 3.2,
+    "observations": "Ênfase em fenóis e corpo",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Ferulic Acid Rest",
+        "stepType": "temperature",
+        "temperature": 44,
+        "duration": 20,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": null,
+        "description": "Produção de 4VG (cravo)"
+      },
+      {
+        "stepOrder": 2,
+        "name": "Protein Rest",
+        "stepType": "temperature",
+        "temperature": 52,
+        "duration": 15,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": 8,
+        "description": "Espuma e turbidez"
+      },
+      {
+        "stepOrder": 3,
+        "name": "Saccharification",
+        "stepType": "temperature",
+        "temperature": 66,
+        "duration": 45,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": 8,
+        "description": "Conversão"
+      }
+    ]
+  },
+  {
+    "name": "Ultra Fermentable Mash – Brut IPA",
+    "user": null,
+    "type": "step_mash",
+    "estimatedEfficiency": 78,
+    "grainTemperature": 20,
+    "tunTemperature": 20,
+    "spargeTemperature": 76,
+    "tunWeight": 6.5,
+    "tunSpecificHeat": 0.3,
+    "mashThickness": 3.0,
+    "observations": "Perfil extremamente seco",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Beta Amylase Rest",
+        "stepType": "temperature",
+        "temperature": 63,
+        "duration": 90,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": null,
+        "description": "Maximiza fermentabilidade"
+      },
+      {
+        "stepOrder": 2,
+        "name": "Mash Out",
+        "stepType": "temperature",
+        "temperature": 78,
+        "duration": 10,
+        "infusionAmount": null,
+        "infusionTemp": null,
+        "decoctionAmount": null,
+        "rampTime": 5,
+        "description": "Finalização"
+      }
+    ]
+  }
+]

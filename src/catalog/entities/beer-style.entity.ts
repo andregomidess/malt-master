@@ -34,6 +34,8 @@ export enum BeerTag {
   EARTHY = 'EARTHY',
   HERBAL = 'HERBAL',
   SMOKY = 'SMOKY',
+  BALANCED = 'BALANCED',
+  ROASTY = 'ROASTY',
 }
 
 export enum GlasswareType {

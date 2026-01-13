@@ -1,0 +1,331 @@
+[
+  {
+    "name": "American Ale – Clean Fermentation",
+    "user": null,
+    "type": "primary",
+    "yeastStrain": "SafAle US-05",
+    "targetFinalGravity": 1.010,
+    "estimatedAttenuation": 78,
+    "isMultiStage": false,
+    "observations": "Perfil limpo e neutro para Ales americanas",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Primary Fermentation",
+        "temperature": 19,
+        "duration": 10,
+        "targetGravity": 1.012,
+        "pressureControl": null,
+        "isRamping": false,
+        "rampTime": null,
+        "rampToTemperature": null,
+        "description": "Fermentação principal estável"
+      }
+    ]
+  },
+  {
+    "name": "English Ale – Traditional",
+    "user": null,
+    "type": "primary",
+    "yeastStrain": "SafAle S-04",
+    "targetFinalGravity": 1.012,
+    "estimatedAttenuation": 74,
+    "isMultiStage": true,
+    "observations": "Perfil clássico inglês, maltado e levemente frutado",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Primary Fermentation",
+        "temperature": 18,
+        "duration": 5,
+        "targetGravity": 1.018,
+        "pressureControl": null,
+        "isRamping": false,
+        "rampTime": null,
+        "rampToTemperature": null,
+        "description": "Início controlado para limitar ésteres"
+      },
+      {
+        "stepOrder": 2,
+        "name": "Warm Finish",
+        "temperature": 21,
+        "duration": 4,
+        "targetGravity": 1.012,
+        "pressureControl": null,
+        "isRamping": true,
+        "rampTime": 24,
+        "rampToTemperature": 21,
+        "description": "Finalização para atenuação completa"
+      }
+    ]
+  },
+  {
+    "name": "German Lager – Full Schedule",
+    "user": null,
+    "type": "lagering",
+    "yeastStrain": "SafLager W-34/70",
+    "targetFinalGravity": 1.010,
+    "estimatedAttenuation": 80,
+    "isMultiStage": true,
+    "observations": "Perfil completo de lager alemã tradicional",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Primary Fermentation",
+        "temperature": 10,
+        "duration": 10,
+        "targetGravity": 1.020,
+        "pressureControl": null,
+        "isRamping": false,
+        "rampTime": null,
+        "rampToTemperature": null,
+        "description": "Fermentação principal a baixa temperatura"
+      },
+      {
+        "stepOrder": 2,
+        "name": "Diacetyl Rest",
+        "temperature": 15,
+        "duration": 3,
+        "targetGravity": null,
+        "pressureControl": null,
+        "isRamping": true,
+        "rampTime": 24,
+        "rampToTemperature": 15,
+        "description": "Redução de diacetil"
+      },
+      {
+        "stepOrder": 3,
+        "name": "Lagering",
+        "temperature": 2,
+        "duration": 21,
+        "targetGravity": null,
+        "pressureControl": null,
+        "isRamping": true,
+        "rampTime": 48,
+        "rampToTemperature": 2,
+        "description": "Maturação e clarificação"
+      }
+    ]
+  },
+  {
+    "name": "NEIPA – Biotransformation",
+    "user": null,
+    "type": "primary",
+    "yeastStrain": "LalBrew Verdant IPA",
+    "targetFinalGravity": 1.014,
+    "estimatedAttenuation": 75,
+    "isMultiStage": true,
+    "observations": "Perfil focado em biotransformação e mouthfeel",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "High Kräusen",
+        "temperature": 20,
+        "duration": 4,
+        "targetGravity": 1.020,
+        "pressureControl": null,
+        "isRamping": false,
+        "rampTime": null,
+        "rampToTemperature": null,
+        "description": "Dry hop durante fermentação ativa"
+      },
+      {
+        "stepOrder": 2,
+        "name": "Finish Fermentation",
+        "temperature": 22,
+        "duration": 4,
+        "targetGravity": 1.014,
+        "pressureControl": null,
+        "isRamping": true,
+        "rampTime": 24,
+        "rampToTemperature": 22,
+        "description": "Finalização e limpeza sensorial"
+      }
+    ]
+  },
+  {
+    "name": "Bottle Conditioning – Standard",
+    "user": null,
+    "type": "bottle_conditioning",
+    "yeastStrain": null,
+    "targetFinalGravity": null,
+    "estimatedAttenuation": null,
+    "isMultiStage": false,
+    "observations": "Carbonatação natural em garrafa",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Bottle Conditioning",
+        "temperature": 22,
+        "duration": 14,
+        "targetGravity": null,
+        "pressureControl": null,
+        "isRamping": false,
+        "rampTime": null,
+        "rampToTemperature": null,
+        "description": "Refermentação e carbonatação"
+      }
+    ]
+  },
+  {
+    "name": "Belgian Ale – Abbey Strong",
+    "user": null,
+    "type": "primary",
+    "yeastStrain": "Belgian Abbey Ale",
+    "targetFinalGravity": 1.010,
+    "estimatedAttenuation": 82,
+    "isMultiStage": true,
+    "observations": "Ésteres e fenóis típicos belgas, fermentação quente",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Start Cool",
+        "temperature": 18,
+        "duration": 2,
+        "targetGravity": 1.030,
+        "pressureControl": null,
+        "isRamping": false,
+        "description": "Controle inicial para evitar solventes"
+      },
+      {
+        "stepOrder": 2,
+        "name": "Free Rise",
+        "temperature": 24,
+        "duration": 6,
+        "targetGravity": 1.012,
+        "isRamping": true,
+        "rampTime": 72,
+        "rampToTemperature": 24,
+        "description": "Aumento natural de temperatura"
+      }
+    ]
+  },
+  {
+    "name": "Saison – Rustic",
+    "user": null,
+    "type": "primary",
+    "yeastStrain": "Saison Ale",
+    "targetFinalGravity": 1.004,
+    "estimatedAttenuation": 90,
+    "isMultiStage": true,
+    "observations": "Alta atenuação, fermentação quente",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Primary Cool Start",
+        "temperature": 20,
+        "duration": 3,
+        "targetGravity": 1.020,
+        "isRamping": false,
+        "description": "Início controlado"
+      },
+      {
+        "stepOrder": 2,
+        "name": "Hot Finish",
+        "temperature": 30,
+        "duration": 7,
+        "targetGravity": 1.004,
+        "isRamping": true,
+        "rampTime": 96,
+        "rampToTemperature": 30,
+        "description": "Finalização quente para atenuação máxima"
+      }
+    ]
+  },
+  {
+    "name": "Weissbier – German Wheat",
+    "user": null,
+    "type": "primary",
+    "yeastStrain": "WB-06",
+    "targetFinalGravity": 1.012,
+    "estimatedAttenuation": 86,
+    "isMultiStage": false,
+    "observations": "Banana e cravo equilibrados",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Primary Fermentation",
+        "temperature": 19,
+        "duration": 7,
+        "targetGravity": 1.012,
+        "isRamping": false,
+        "description": "Fermentação estável para equilíbrio sensorial"
+      }
+    ]
+  },
+  {
+    "name": "Kveik – Voss High Temp",
+    "user": null,
+    "type": "primary",
+    "yeastStrain": "Voss Kveik",
+    "targetFinalGravity": 1.010,
+    "estimatedAttenuation": 78,
+    "isMultiStage": false,
+    "observations": "Fermentação extremamente rápida e quente",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "High Temperature Fermentation",
+        "temperature": 37,
+        "duration": 3,
+        "targetGravity": 1.010,
+        "isRamping": false,
+        "description": "Perfil cítrico limpo mesmo em altas temperaturas"
+      }
+    ]
+  },
+  {
+    "name": "Cold Crash – Standard",
+    "user": null,
+    "type": "conditioning",
+    "yeastStrain": null,
+    "targetFinalGravity": null,
+    "estimatedAttenuation": null,
+    "isMultiStage": true,
+    "observations": "Clarificação e compactação de levedura",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Cold Crash",
+        "temperature": 2,
+        "duration": 3,
+        "isRamping": true,
+        "rampTime": 24,
+        "rampToTemperature": 2,
+        "description": "Redução gradual para evitar choque térmico"
+      }
+    ]
+  },
+  {
+    "name": "Keg Conditioning – Force Carbonation",
+    "user": null,
+    "type": "keg_conditioning",
+    "yeastStrain": null,
+    "targetFinalGravity": null,
+    "estimatedAttenuation": null,
+    "isMultiStage": false,
+    "observations": "Carbonatação forçada em barril",
+    "isPublic": true,
+    "steps": [
+      {
+        "stepOrder": 1,
+        "name": "Force Carbonation",
+        "temperature": 2,
+        "duration": 5,
+        "pressureControl": 12,
+        "isRamping": false,
+        "description": "Carbonatação rápida a frio"
+      }
+    ]
+  }
+]

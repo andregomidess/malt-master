@@ -24,7 +24,17 @@
     "db:migration:down": "mikro-orm migration:down --config src/database/config/mikro-orm.config.ts",
     "db:schema:create": "mikro-orm schema:create --config src/database/config/mikro-orm.config.ts",
     "db:schema:update": "mikro-orm schema:update --config src/database/config/mikro-orm.config.ts",
-    "db:schema:drop": "mikro-orm schema:drop --config src/database/config/mikro-orm.config.ts"
+    "db:schema:drop": "mikro-orm schema:drop --config src/database/config/mikro-orm.config.ts",
+    "seed:beer-styles": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts beer-styles",
+    "seed:hops": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts hops",
+    "seed:carbonation-profiles": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts carbonation-profiles",
+    "seed:equipment": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts equipment",
+    "seed:fermentables": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts fermentables",
+    "seed:fermentation-profiles": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts fermentation-profiles",
+    "seed:mash-profiles": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts mash-profiles",
+    "seed:water-profiles": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts water-profiles",
+    "seed:yeast": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts yeast",
+    "seed:all": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts all"
   },
   "dependencies": {
     "@mikro-orm/core": "6.5.6",
