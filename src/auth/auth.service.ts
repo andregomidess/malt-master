@@ -49,7 +49,7 @@ export class AuthService {
 
     const accessToken = this.jwtService.sign(
       { id: user.id, email: user.email },
-      { expiresIn: '30d' },
+      { expiresIn: '15m' },
     );
 
     const refreshToken = randomBytes(64).toString('hex');
