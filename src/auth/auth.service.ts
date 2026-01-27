@@ -2,6 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import {
   BadRequestException,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -20,6 +21,8 @@ export interface JwtPayload {
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly usersService: UsersService,
     private readonly em: EntityManager,
@@ -138,11 +141,15 @@ export class AuthService {
 
     await this.em.persistAndFlush(user);
 
-    await this.mailService.sendForgotPasswordEmail(
-      user.email,
-      user.username,
-      resetToken,
-    );
+    this.mailService
+      .sendForgotPasswordEmail(user.email, user.username, resetToken)
+      .catch((err: unknown) =>
+        this.logger.error(
+          `Failed to send forgot password email to ${user.email}`,
+          err instanceof Error ? err.stack : String(err),
+        ),
+      );
+
     return { message: 'Recovery email sent successfully' };
   }
 

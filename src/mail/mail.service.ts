@@ -1,27 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 import { renderFile } from 'pug';
 import { join } from 'path';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const sgMail = require('@sendgrid/mail') as typeof import('@sendgrid/mail');
+import { Resend } from 'resend';
 
 @Injectable()
 export class MailService {
-  private useSendGrid: boolean;
+  private resend: Resend;
   private fromEmail: string;
 
-  constructor(
-    private readonly mailer: MailerService,
-    private readonly configService: ConfigService,
-  ) {
-    const sendGridApiKey = this.configService.get<string>('SENDGRID_API_KEY');
-    this.useSendGrid = !!sendGridApiKey;
+  constructor(private readonly configService: ConfigService) {
+    const apiKey = this.configService.get<string>('RESEND_API_KEY');
+    this.resend = new Resend(apiKey);
     this.fromEmail = this.configService.get<string>('EMAIL_FROM') || '';
-
-    if (this.useSendGrid && sendGridApiKey) {
-      sgMail.setApiKey(sendGridApiKey);
-    }
   }
 
   private renderTemplate(
@@ -35,22 +26,21 @@ export class MailService {
       'templates',
       `${templateName}.pug`,
     );
+
     return renderFile(templatePath, context);
   }
 
-  private async sendWithSendGrid(
+  private async sendEmail(
     to: string,
     subject: string,
     html: string,
   ): Promise<void> {
-    const msg = {
-      to,
+    await this.resend.emails.send({
       from: this.fromEmail,
+      to,
       subject,
       html,
-    };
-
-    await sgMail.send(msg);
+    });
   }
 
   async sendVerificationEmail(
@@ -61,19 +51,12 @@ export class MailService {
     const frontendUrl = this.configService.get<string>('CLIENT_URL');
     const verifyUrl = `${frontendUrl}/verify-email?token=${encodeURIComponent(token)}`;
 
-    const context = { username, verifyUrl };
+    const html = this.renderTemplate('verify', {
+      username,
+      verifyUrl,
+    });
 
-    if (this.useSendGrid) {
-      const html = this.renderTemplate('verify', context);
-      await this.sendWithSendGrid(to, 'Confirme seu e-mail', html);
-    } else {
-      await this.mailer.sendMail({
-        to,
-        subject: 'Confirme seu e-mail',
-        template: 'verify',
-        context,
-      });
-    }
+    await this.sendEmail(to, 'Confirme seu e-mail', html);
   }
 
   async sendForgotPasswordEmail(
@@ -84,18 +67,11 @@ export class MailService {
     const frontendUrl = this.configService.get<string>('CLIENT_URL');
     const forgotPasswordUrl = `${frontendUrl}/change-password?token=${encodeURIComponent(token)}`;
 
-    const context = { username, forgotPasswordUrl };
+    const html = this.renderTemplate('forgot-password', {
+      username,
+      forgotPasswordUrl,
+    });
 
-    if (this.useSendGrid) {
-      const html = this.renderTemplate('forgot-password', context);
-      await this.sendWithSendGrid(to, 'Recuperação de senha', html);
-    } else {
-      await this.mailer.sendMail({
-        to,
-        subject: 'Recuperação de senha',
-        template: 'forgot-password',
-        context,
-      });
-    }
+    await this.sendEmail(to, 'Recuperação de senha', html);
   }
 }
