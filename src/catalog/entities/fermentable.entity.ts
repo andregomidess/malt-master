@@ -45,6 +45,9 @@ export class Fermentable {
   @Property({ type: 'double', nullable: true })
   yield!: number | null;
 
+  @Property({ type: 'double', nullable: true })
+  ppg!: number | null;
+
   @Property({ nullable: true })
   origin!: string | null;
 

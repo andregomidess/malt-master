@@ -39,6 +39,11 @@ export class FermentableInput {
   yield?: number;
 
   @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  ppg?: number;
+
+  @IsOptional()
   @IsString()
   origin?: string;
 
