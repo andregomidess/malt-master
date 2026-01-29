@@ -95,12 +95,27 @@ export class RecipeInput {
   @Type(() => Number)
   @IsNumber({ maxDecimalPlaces: 1 })
   @IsOptional()
-  plannedEfficiency?: number | null;
+  actualEfficiency?: number | null;
 
   @Type(() => Number)
   @IsNumber({ maxDecimalPlaces: 1 })
   @IsOptional()
-  actualEfficiency?: number | null;
+  mashEfficiency?: number | null;
+
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 1 })
+  @IsOptional()
+  brewhouseEfficiency?: number | null;
+
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 3 })
+  @IsOptional()
+  preBoilVolume?: number | null;
+
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 3 })
+  @IsOptional()
+  postBoilVolume?: number | null;
 
   @IsDateString()
   @IsOptional()

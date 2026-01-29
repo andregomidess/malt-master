@@ -88,7 +88,6 @@ export class RecipesController {
       estimatedColor: recipe.estimatedColor,
       estimatedAbv: recipe.estimatedAbv,
       plannedVolume: recipe.plannedVolume,
-      plannedEfficiency: recipe.plannedEfficiency,
       createdAt: recipe.createdAt,
     };
   }

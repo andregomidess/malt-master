@@ -126,6 +126,9 @@ export class KettleEquipment extends Equipment {
   @Enum(() => HeatingSource)
   heatingSource!: HeatingSource;
 
+  @Property({ type: 'double', precision: 4, scale: 2, default: 4 })
+  thermalShrinkagePercent!: number;
+
   constructor() {
     super();
     this.type = EquipmentType.KETTLE;

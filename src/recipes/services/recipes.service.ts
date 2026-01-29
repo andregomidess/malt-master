@@ -272,13 +272,22 @@ export class RecipesService extends BaseEntityService<Recipe> {
       if (recipeData.estimatedAbv !== undefined) {
         recipe.estimatedAbv = convertToNumber(recipeData.estimatedAbv);
       }
-      if (recipeData.plannedEfficiency !== undefined) {
-        recipe.plannedEfficiency = convertToNumber(
-          recipeData.plannedEfficiency,
-        );
-      }
       if (recipeData.actualEfficiency !== undefined) {
         recipe.actualEfficiency = convertToNumber(recipeData.actualEfficiency);
+      }
+      if (recipeData.mashEfficiency !== undefined) {
+        recipe.mashEfficiency = convertToNumber(recipeData.mashEfficiency);
+      }
+      if (recipeData.brewhouseEfficiency !== undefined) {
+        recipe.brewhouseEfficiency = convertToNumber(
+          recipeData.brewhouseEfficiency,
+        );
+      }
+      if (recipeData.preBoilVolume !== undefined) {
+        recipe.preBoilVolume = convertToNumber(recipeData.preBoilVolume);
+      }
+      if (recipeData.postBoilVolume !== undefined) {
+        recipe.postBoilVolume = convertToNumber(recipeData.postBoilVolume);
       }
     }
   }

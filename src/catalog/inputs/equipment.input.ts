@@ -68,6 +68,11 @@ export class KettleEquipmentInput extends EquipmentInput<EquipmentType.KETTLE> {
   @IsEnum(HeatingSource)
   heatingSource!: HeatingSource;
 
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @IsOptional()
+  thermalShrinkagePercent?: number;
+
   constructor() {
     super();
     this.type = EquipmentType.KETTLE;

@@ -27,6 +27,7 @@ interface EquipmentData {
   boilOffRate?: number;
   heatingPower?: number;
   heatingSource?: string;
+  thermalShrinkagePercent?: number;
   // Fermenter fields
   fermenterLoss?: number;
   coneBottomVolume?: number;
@@ -146,6 +147,7 @@ export async function seedEquipment(em: EntityManager): Promise<void> {
           boilOffRate: eqData.boilOffRate!,
           heatingPower: eqData.heatingPower!,
           heatingSource: mapHeatingSource(eqData.heatingSource!),
+          thermalShrinkagePercent: eqData.thermalShrinkagePercent ?? 4,
         });
       } else if (eqData.type === 'fermenter') {
         em.create(FermenterEquipment, {
