@@ -66,6 +66,10 @@ export class RecipesController {
           'waters.waterProfile',
           'mash',
           'mash.mashProfile',
+          'fermentation',
+          'fermentation.fermentationProfile',
+          'carbonation',
+          'carbonation.carbonationProfile',
         ],
       },
     );

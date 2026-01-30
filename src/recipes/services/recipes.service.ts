@@ -94,7 +94,24 @@ export class RecipesService extends BaseEntityService<Recipe> {
       orderBy,
       limit: query.limit,
       offset: query.offset,
-      populate: ['beerStyle', 'equipment'],
+      populate: [
+        'beerStyle',
+        'equipment',
+        'fermentables',
+        'fermentables.fermentable',
+        'hops',
+        'hops.hop',
+        'yeasts',
+        'yeasts.yeast',
+        'waters',
+        'waters.waterProfile',
+        'mash',
+        'mash.mashProfile',
+        'fermentation',
+        'fermentation.fermentationProfile',
+        'carbonation',
+        'carbonation.carbonationProfile',
+      ],
     });
 
     return {
