@@ -61,7 +61,7 @@ export class BatchesController {
           'recipe.fermentation',
           'recipe.fermentation.fermentationProfile',
           'recipe.fermentation.fermentationProfile.steps',
-          'recipe.hops',
+          'recipe.hops.hop',
         ],
       },
     );

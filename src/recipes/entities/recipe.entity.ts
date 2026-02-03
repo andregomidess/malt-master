@@ -128,19 +128,15 @@ export class Recipe {
   @Property({ type: 'double', nullable: true })
   actualEfficiency!: number | null;
 
-  /** Mash efficiency: extração do grão. Usada no cálculo de OG. */
   @Property({ type: 'double', nullable: true })
   mashEfficiency!: number | null;
 
-  /** Brewhouse efficiency: o que chega no fermentador. Derivada, não manual. */
   @Property({ type: 'double', nullable: true })
   brewhouseEfficiency!: number | null;
 
-  /** Volume pré-fervura (L). Ponto de partida para cálculo OG. */
   @Property({ type: 'double', nullable: true })
   preBoilVolume!: number | null;
 
-  /** Volume pós-fervura quente (L). Se não existir, calcula. */
   @Property({ type: 'double', nullable: true })
   postBoilVolume!: number | null;
 

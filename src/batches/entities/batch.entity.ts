@@ -77,7 +77,6 @@ export class Batch {
   @Property({ type: 'decimal', nullable: true })
   actualCarbonation!: number | null;
 
-  // Valores medidos durante a sessão
   @Property({ type: 'decimal', nullable: true })
   mashPh!: number | null;
 
