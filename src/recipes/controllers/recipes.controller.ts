@@ -65,7 +65,7 @@ export class RecipesController {
           'waters',
           'waters.waterProfile',
           'mash',
-          'mash.mashProfile',
+          'mash.mashProfile.steps',
           'fermentation',
           'fermentation.fermentationProfile',
           'carbonation',
