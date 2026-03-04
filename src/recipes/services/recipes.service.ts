@@ -155,7 +155,7 @@ export class RecipesService extends BaseEntityService<Recipe> {
 
       this.updateRecipeProperties(em as EntityManager, recipe, input);
       this.replaceCollectionRelations(recipe, input, em as EntityManager);
-      this.createOneToOneRelations(em as EntityManager, recipe, input);
+      this.updateOrCreateOneToOneRelations(em as EntityManager, recipe, input);
 
       return recipe;
     });
@@ -207,6 +207,10 @@ export class RecipesService extends BaseEntityService<Recipe> {
           'waters.waterProfile',
           'mash',
           'mash.mashProfile',
+          'fermentation',
+          'fermentation.fermentationProfile',
+          'carbonation',
+          'carbonation.carbonationProfile',
         ],
       },
     );
@@ -478,6 +482,80 @@ export class RecipesService extends BaseEntityService<Recipe> {
     this.createMash(em, recipe, input.mash);
     this.createFermentation(em, recipe, input.fermentation);
     this.createCarbonation(em, recipe, input.carbonation);
+  }
+
+  private updateOrCreateOneToOneRelations(
+    em: EntityManager,
+    recipe: Recipe,
+    input: RecipeUpsertInput,
+  ): void {
+    this.updateOrCreateMash(em, recipe, input.mash);
+    this.updateOrCreateFermentation(em, recipe, input.fermentation);
+    this.updateOrCreateCarbonation(em, recipe, input.carbonation);
+  }
+
+  private updateOrCreateMash(
+    em: EntityManager,
+    recipe: Recipe,
+    input?: RecipeMashInput,
+  ): void {
+    if (!input) {
+      if (recipe.mash) {
+        em.remove(recipe.mash);
+        recipe.mash = undefined;
+      }
+      return;
+    }
+    if (recipe.mash) {
+      recipe.mash.mashProfile = input.mashProfile;
+      recipe.mash.actualEfficiency = input.actualEfficiency ?? null;
+    } else {
+      this.createMash(em, recipe, input);
+    }
+  }
+
+  private updateOrCreateFermentation(
+    em: EntityManager,
+    recipe: Recipe,
+    input?: RecipeFermentationInput,
+  ): void {
+    if (!input) {
+      if (recipe.fermentation) {
+        em.remove(recipe.fermentation);
+        recipe.fermentation = undefined;
+      }
+      return;
+    }
+    if (recipe.fermentation) {
+      recipe.fermentation.fermentationProfile = input.fermentationProfile;
+      recipe.fermentation.actualAttenuation = input.actualAttenuation ?? null;
+      recipe.fermentation.finalAbv = input.finalAbv ?? null;
+      recipe.fermentation.observations = input.observations ?? null;
+    } else {
+      this.createFermentation(em, recipe, input);
+    }
+  }
+
+  private updateOrCreateCarbonation(
+    em: EntityManager,
+    recipe: Recipe,
+    input?: RecipeCarbonationInput,
+  ): void {
+    if (!input) {
+      if (recipe.carbonation) {
+        em.remove(recipe.carbonation);
+        recipe.carbonation = undefined;
+      }
+      return;
+    }
+    if (recipe.carbonation) {
+      recipe.carbonation.carbonationProfile = input.carbonationProfile;
+      recipe.carbonation.amountUsed = input.amountUsed ?? null;
+      recipe.carbonation.temperature = input.temperature ?? null;
+      recipe.carbonation.co2Volumes = input.co2Volumes ?? null;
+    } else {
+      this.createCarbonation(em, recipe, input);
+    }
   }
 
   private createMash(
