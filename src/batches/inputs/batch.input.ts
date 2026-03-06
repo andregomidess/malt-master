@@ -108,6 +108,10 @@ export class BatchInput {
 
   @IsOptional()
   @IsNumber()
+  actualStrikeTemp?: number | null;
+
+  @IsOptional()
+  @IsNumber()
   preBoilGravity?: number | null;
 
   @IsOptional()
