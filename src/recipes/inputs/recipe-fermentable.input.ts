@@ -1,8 +1,9 @@
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 import { IsEntity } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
 import { Fermentable } from 'src/catalog/entities/fermentable.entity';
 import { PrimaryKeyUUID } from 'src/database/common/helpers/PrimaryKeyUUID';
+import { FermentableUsageType } from '../entities/recipe-fermentable.entity';
 
 export class RecipeFermentableInput {
   @IsOptional()
@@ -16,4 +17,8 @@ export class RecipeFermentableInput {
   @IsNumber({ maxDecimalPlaces: 3 })
   @IsOptional()
   amount?: number | null;
+
+  @IsOptional()
+  @IsEnum(FermentableUsageType)
+  usageType?: FermentableUsageType | null;
 }

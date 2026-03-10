@@ -55,6 +55,21 @@ export class RecipeInput {
   @Type(() => Number)
   @IsNumber({ maxDecimalPlaces: 3 })
   @IsOptional()
+  targetVolume?: number | null;
+
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 3 })
+  @IsOptional()
+  volumeIntoFermenter?: number | null;
+
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 3 })
+  @IsOptional()
+  packagedVolume?: number | null;
+
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 3 })
+  @IsOptional()
   finalVolume?: number | null;
 
   @Type(() => Number)

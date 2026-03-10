@@ -310,6 +310,17 @@ export class RecipesService extends BaseEntityService<Recipe> {
       if (recipeData.postBoilVolume !== undefined) {
         recipe.postBoilVolume = convertToNumber(recipeData.postBoilVolume);
       }
+      if (recipeData.targetVolume !== undefined) {
+        recipe.targetVolume = convertToNumber(recipeData.targetVolume);
+      }
+      if (recipeData.volumeIntoFermenter !== undefined) {
+        recipe.volumeIntoFermenter = convertToNumber(
+          recipeData.volumeIntoFermenter,
+        );
+      }
+      if (recipeData.packagedVolume !== undefined) {
+        recipe.packagedVolume = convertToNumber(recipeData.packagedVolume);
+      }
     }
   }
 
@@ -350,6 +361,7 @@ export class RecipesService extends BaseEntityService<Recipe> {
         recipe,
         fermentable: input.fermentable,
         amount: input.amount ?? null,
+        usageType: input.usageType ?? null,
       });
       em.persist(entity);
     }
@@ -366,6 +378,7 @@ export class RecipesService extends BaseEntityService<Recipe> {
           recipe,
           fermentable: input.fermentable,
           amount: input.amount ?? null,
+          usageType: input.usageType ?? null,
         }),
       );
     }

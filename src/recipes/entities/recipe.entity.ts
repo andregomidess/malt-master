@@ -102,6 +102,15 @@ export class Recipe {
   plannedVolume!: number | null;
 
   @Property({ type: 'double', nullable: true })
+  targetVolume!: number | null;
+
+  @Property({ type: 'double', nullable: true })
+  volumeIntoFermenter!: number | null;
+
+  @Property({ type: 'double', nullable: true })
+  packagedVolume!: number | null;
+
+  @Property({ type: 'double', nullable: true })
   finalVolume!: number | null;
 
   @Property({ type: 'double', nullable: true })

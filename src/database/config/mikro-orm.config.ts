@@ -1,5 +1,6 @@
 import { defineConfig } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 import { SoftDeleteHandler } from 'mikro-orm-soft-delete';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import * as dns from 'dns';
@@ -91,7 +92,10 @@ export default defineConfig({
   debug: process.env.NODE_ENV !== 'production',
   highlighter: new SqlHighlighter(),
 
+  metadataProvider: TsMorphMetadataProvider,
   entities: ['dist/**/*.entity.js'],
+  entitiesTs: ['src/**/*.entity.ts'],
+  baseDir: process.cwd(),
 
   migrations: {
     path: 'dist/database/migrations',
