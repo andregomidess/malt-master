@@ -140,5 +140,17 @@ export class BatchInput {
 
   @IsOptional()
   @IsString()
+  spargeMethod?: string | null;
+
+  @IsOptional()
+  @IsNumber()
+  spargeVolume?: number | null;
+
+  @IsOptional()
+  @IsNumber()
+  spargeTemperature?: number | null;
+
+  @IsOptional()
+  @IsString()
   observations?: string | null;
 }

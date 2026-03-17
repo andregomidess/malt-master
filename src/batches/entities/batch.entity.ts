@@ -104,6 +104,15 @@ export class Batch {
   @Property({ type: 'double', nullable: true })
   bottlingVolume!: number | null;
 
+  @Property({ length: 20, nullable: true })
+  spargeMethod!: string | null;
+
+  @Property({ type: 'double', nullable: true })
+  spargeVolume!: number | null;
+
+  @Property({ type: 'double', nullable: true })
+  spargeTemperature!: number | null;
+
   @Property({ type: 'text', nullable: true })
   observations!: string | null;
 }
