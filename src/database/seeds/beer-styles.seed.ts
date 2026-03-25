@@ -31,17 +31,13 @@ interface BJCPBeerStyle {
   tags?: string;
 }
 
-// Função para converter SRM para EBC
 const srmToEbc = (srm: number): number => {
   return srm * 1.97;
 };
 
-// Função para mapear tags do BJCP para o enum BeerTag
-// Mapeia apenas tags sensoriais, ignorando metadados estruturais
 const mapTagsToBeerTags = (tagsString: string): BeerTag[] => {
   const tags: BeerTag[] = [];
   const tagMap: Record<string, BeerTag> = {
-    // Tags sensoriais diretas
     hoppy: BeerTag.HOPPY,
     malty: BeerTag.MALTY,
     fruity: BeerTag.FRUITY,
@@ -72,7 +68,6 @@ const mapTagsToBeerTags = (tagsString: string): BeerTag[] => {
     smoky: BeerTag.SMOKY,
     smoke: BeerTag.SMOKY,
     balanced: BeerTag.BALANCED,
-    // Mapeamentos indiretos (ignorando tags estruturais)
     'session-strength': BeerTag.SESSIONABLE,
     'standard-strength': BeerTag.SESSIONABLE,
   };
@@ -89,20 +84,17 @@ const mapTagsToBeerTags = (tagsString: string): BeerTag[] => {
   return tags;
 };
 
-// Função para extrair subcategoria do número (ex: "7B" -> "B")
 const extractSubCategory = (number: string): string | null => {
   const match = number.match(/^\d+([A-Z])$/);
   return match ? match[1] : null;
 };
 
-// Função para converter string de gravity para number (ex: "1.044" -> 1.044)
 const parseGravity = (value?: string): number | null => {
   if (!value) return null;
   const parsed = parseFloat(value);
   return isNaN(parsed) ? null : parsed;
 };
 
-// Função para converter string para number
 const parseNumber = (value?: string): number | null => {
   if (!value) return null;
   const parsed = parseFloat(value);
@@ -112,14 +104,12 @@ const parseNumber = (value?: string): number | null => {
 export async function seedBeerStyles(em: EntityManager): Promise<void> {
   console.log('🌱 Iniciando seed de estilos de cerveja BJCP...');
 
-  // Ler o arquivo JSON (tentar pasta data primeiro, depois raiz)
   let jsonPath = path.join(
     process.cwd(),
     'src/database/seeds/data/styles.seed.json',
   );
 
   if (!fs.existsSync(jsonPath)) {
-    // Fallback para o arquivo na raiz (compatibilidade)
     jsonPath = path.join(process.cwd(), 'styles.seed.json');
     if (!fs.existsSync(jsonPath)) {
       throw new Error(
@@ -139,7 +129,6 @@ export async function seedBeerStyles(em: EntityManager): Promise<void> {
 
   for (const bjcpStyle of bjcpStyles) {
     try {
-      // Verificar se o estilo já existe
       const existing = await em.findOne(BeerStyle, { name: bjcpStyle.name });
 
       if (existing) {
@@ -148,7 +137,6 @@ export async function seedBeerStyles(em: EntityManager): Promise<void> {
         continue;
       }
 
-      // Converter SRM para EBC
       const minColorEbc = bjcpStyle.srmmin
         ? srmToEbc(parseNumber(bjcpStyle.srmmin)!)
         : null;
@@ -180,9 +168,9 @@ export async function seedBeerStyles(em: EntityManager): Promise<void> {
         ingredients: bjcpStyle.characteristicingredients || null,
         tags: bjcpStyle.tags ? mapTagsToBeerTags(bjcpStyle.tags) : [],
         examples: bjcpStyle.commercialexamples || null,
-        origin: null, // Não disponível no JSON BJCP
-        glassware: null, // Não disponível no JSON BJCP, pode ser mapeado depois
-        user: null, // Estilos do BJCP são públicos
+        origin: null,
+        glassware: null,
+        user: null,
         createdAt: new Date(),
       });
 
@@ -194,7 +182,6 @@ export async function seedBeerStyles(em: EntityManager): Promise<void> {
     }
   }
 
-  // Persistir todas as mudanças
   if (created > 0) {
     console.log('\n💾 Persistindo mudanças no banco de dados...');
     await em.flush();

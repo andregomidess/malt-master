@@ -9,6 +9,7 @@ import { seedFermentationProfiles } from './fermentation-profile.seed';
 import { seedMashProfiles } from './mash-profile.seed';
 import { seedWaterProfiles } from './water-profile.seed';
 import { seedYeast } from './yeast.seed';
+import { seedRecipes } from './recipes.seed';
 
 async function runSeed() {
   const seedType = process.argv[2] || 'all';
@@ -72,6 +73,12 @@ async function runSeed() {
       console.log('\n📦 Seed de leveduras...\n');
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await seedYeast(em as any);
+    }
+
+    if (seedType === 'recipes' || seedType === 'all') {
+      console.log('\n📦 Seed de receitas...\n');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      await seedRecipes(em as any);
     }
 
     console.log('\n✅ Seed executado com sucesso!');

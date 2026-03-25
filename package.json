@@ -34,6 +34,7 @@
     "seed:mash-profiles": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts mash-profiles",
     "seed:water-profiles": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts water-profiles",
     "seed:yeast": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts yeast",
+    "seed:recipes": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts recipes",
     "seed:all": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts all"
   },
   "dependencies": {

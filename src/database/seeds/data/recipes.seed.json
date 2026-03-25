@@ -1,0 +1,171 @@
+[
+  {
+    "name": "Demo – American Pale Ale",
+    "beerStyleName": "American Pale Ale",
+    "equipmentName": "Panela Inox 30L – BIAB",
+    "type": "all_grain",
+    "about": "Receita de demonstração: APA clássica com maltes claros e lúpulos cítricos.",
+    "notes": "Seed de exemplo — volumes e números são aproximados.",
+    "plannedVolume": 20,
+    "targetVolume": 19,
+    "volumeIntoFermenter": 18.5,
+    "packagedVolume": 18,
+    "finalVolume": 18,
+    "mashVolume": 14,
+    "boilTime": 60,
+    "originalGravity": 1.052,
+    "finalGravity": 1.012,
+    "estimatedIbu": 38,
+    "estimatedColor": 8,
+    "estimatedAbv": 5.2,
+    "mashEfficiency": 76,
+    "brewhouseEfficiency": 72,
+    "preBoilVolume": 24,
+    "postBoilVolume": 20,
+    "mash": {
+      "mashProfileName": "Single Infusion – Standard Ale",
+      "actualEfficiency": null
+    },
+    "fermentation": {
+      "fermentationProfileName": "American Ale – Clean Fermentation",
+      "actualAttenuation": null,
+      "finalAbv": null,
+      "observations": null
+    },
+    "carbonation": {
+      "carbonationProfileName": "American Ale – Bottle Conditioning",
+      "amountUsed": null,
+      "temperature": 20,
+      "co2Volumes": 2.4
+    },
+    "fermentables": [
+      {
+        "fermentableName": "Pale Ale Malt",
+        "amount": 4.5,
+        "usageType": "mash"
+      },
+      {
+        "fermentableName": "Caramel 20L",
+        "amount": 0.35,
+        "usageType": "mash"
+      }
+    ],
+    "hops": [
+      {
+        "hopName": "Magnum",
+        "amount": 0.02,
+        "boilTime": 60,
+        "stage": "boil"
+      },
+      {
+        "hopName": "Cascade",
+        "amount": 0.03,
+        "boilTime": 10,
+        "stage": "boil"
+      },
+      {
+        "hopName": "Centennial",
+        "amount": 0.04,
+        "boilTime": null,
+        "stage": "whirlpool"
+      }
+    ],
+    "yeasts": [
+      {
+        "yeastName": "SafAle US-05",
+        "yeastSupplier": "Fermentis",
+        "amount": "11.5 g",
+        "pitchingRate": null,
+        "stage": "primary"
+      }
+    ],
+    "waters": [
+      {
+        "waterProfileName": "Hoppy Water Profile",
+        "volume": 20,
+        "adjustments": "Ajustar conforme análise local"
+      }
+    ]
+  },
+  {
+    "name": "Demo – Czech Premium Pale Lager",
+    "beerStyleName": "Czech Premium Pale Lager",
+    "equipmentName": "Caldeira Alumínio 50L – Gás",
+    "type": "all_grain",
+    "about": "Demonstração de lager tcheca: mostura em degraus, Saaz e levedura lager.",
+    "plannedVolume": 45,
+    "targetVolume": 42,
+    "volumeIntoFermenter": 40,
+    "packagedVolume": 39,
+    "finalVolume": 39,
+    "mashVolume": 28,
+    "boilTime": 90,
+    "originalGravity": 1.048,
+    "finalGravity": 1.012,
+    "estimatedIbu": 35,
+    "estimatedColor": 4,
+    "estimatedAbv": 4.8,
+    "mashEfficiency": 78,
+    "brewhouseEfficiency": 74,
+    "preBoilVolume": 52,
+    "postBoilVolume": 45,
+    "mash": {
+      "mashProfileName": "Step Mash – German Lager",
+      "actualEfficiency": null
+    },
+    "fermentation": {
+      "fermentationProfileName": "German Lager – Full Schedule",
+      "actualAttenuation": null,
+      "finalAbv": null,
+      "observations": null
+    },
+    "carbonation": {
+      "carbonationProfileName": "Lager – Keg Standard",
+      "amountUsed": null,
+      "temperature": 2,
+      "co2Volumes": 2.5
+    },
+    "fermentables": [
+      {
+        "fermentableName": "Pilsen Malt",
+        "amount": 9,
+        "usageType": "mash"
+      },
+      {
+        "fermentableName": "Munich Malt",
+        "amount": 0.6,
+        "usageType": "mash"
+      }
+    ],
+    "hops": [
+      {
+        "hopName": "Saaz",
+        "amount": 0.06,
+        "boilTime": 60,
+        "stage": "boil"
+      },
+      {
+        "hopName": "Saaz",
+        "amount": 0.04,
+        "boilTime": 15,
+        "stage": "boil"
+      }
+    ],
+    "yeasts": [
+      {
+        "yeastName": "SafLager W-34/70",
+        "yeastSupplier": "Fermentis",
+        "amount": "2 pacotes",
+        "pitchingRate": null,
+        "stage": "primary"
+      }
+    ],
+    "waters": [
+      {
+        "waterProfileName": "Pilsen",
+        "volume": 45,
+        "adjustments": null
+      }
+    ]
+  }
+]

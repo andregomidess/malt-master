@@ -33,7 +33,7 @@ export class Fermentable {
   @ManyToOne(() => User, { nullable: true })
   user!: User | null;
 
-  @Property({ unique: true })
+  @Property()
   name!: string;
 
   @Enum(() => FermentableType)
