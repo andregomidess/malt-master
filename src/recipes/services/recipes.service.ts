@@ -179,9 +179,13 @@ export class RecipesService extends BaseEntityService<Recipe> {
   ): Recipe {
     const userRef = em.getReference(User, userId);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { user, ...recipeData } = input.recipe;
+    const { user, beerStyle, isDraft, ...recipeData } = input.recipe;
+    const style = beerStyle ?? null;
+    const draft = !style ? true : (isDraft ?? false);
     return em.create(Recipe, {
       ...recipeData,
+      beerStyle: style,
+      isDraft: draft,
       user: userRef,
     });
   }
@@ -241,7 +245,13 @@ export class RecipesService extends BaseEntityService<Recipe> {
         recipe.type = recipeData.type;
       }
       if (recipeData.beerStyle !== undefined) {
-        recipe.beerStyle = recipeData.beerStyle;
+        recipe.beerStyle = recipeData.beerStyle ?? null;
+      }
+      if (recipeData.isDraft !== undefined) {
+        recipe.isDraft = recipeData.isDraft;
+      }
+      if (!recipe.beerStyle) {
+        recipe.isDraft = true;
       }
       if (recipeData.equipment !== undefined) {
         recipe.equipment = recipeData.equipment;

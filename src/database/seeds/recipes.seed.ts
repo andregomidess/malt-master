@@ -321,6 +321,7 @@ export async function seedRecipes(em: EntityManager): Promise<void> {
         user: null,
         beerStyle,
         equipment,
+        isDraft: false,
         name: row.name,
         imageUrl: row.imageUrl ?? null,
         about: row.about ?? null,

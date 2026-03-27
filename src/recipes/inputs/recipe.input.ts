@@ -1,11 +1,15 @@
 import {
+  IsBoolean,
   IsDateString,
   IsEnum,
   IsNumber,
   IsOptional,
   IsString,
+  MinLength,
+  ValidateIf,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+
 import { RecipeType } from '../entities/recipe.entity';
 import { IsEntity } from 'src/database/common/decorators/transform-if-entity-exists.decorator';
 import { User } from 'src/users/entities/user.entity';
@@ -22,14 +26,21 @@ export class RecipeInput {
   @IsEntity({ entity: User })
   user?: User;
 
+  @ValidateIf((_object, value) => value != null && value !== '')
   @IsEntity({ entity: BeerStyle })
-  beerStyle!: BeerStyle;
+  beerStyle?: BeerStyle | null;
+
+  @IsOptional()
+  @Type(() => Boolean)
+  @IsBoolean()
+  isDraft?: boolean;
 
   @IsOptional()
   @IsEntity({ entity: Equipment })
   equipment?: Equipment | null;
 
   @IsString()
+  @MinLength(1)
   name!: string;
 
   @IsString()

@@ -36,8 +36,11 @@ export class Recipe {
   @ManyToOne(() => User, { nullable: true })
   user!: User | null;
 
-  @ManyToOne(() => BeerStyle)
-  beerStyle!: BeerStyle;
+  @ManyToOne(() => BeerStyle, { nullable: true })
+  beerStyle!: BeerStyle | null;
+
+  @Property({ default: false })
+  isDraft!: boolean;
 
   @ManyToOne(() => Equipment, { nullable: true })
   equipment!: Equipment | null;
@@ -158,5 +161,5 @@ export class Recipe {
   @Property({ type: 'date', nullable: true })
   brewDate!: Date | null;
 
-  public readonly [OptionalProps]!: 'createdAt' | 'updatedAt';
+  public readonly [OptionalProps]!: 'createdAt' | 'updatedAt' | 'isDraft';
 }
